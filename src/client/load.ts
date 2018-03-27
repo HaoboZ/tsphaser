@@ -8,35 +8,17 @@ export default class Load extends Phaser.State {
 		// socket
 		new Socket(this.game);
 		
-		this.setup();
-		// load assets
+		// loading bar
 		this.preloadBar = this.drawLoadBar();
 		this.load.setPreloadSprite(this.preloadBar);
-		this.load.pack('assets', 'assets/assets.json');
-		$('#overlay').text('Loading...');
+		
+		// load assets
+		// pack needs to include tilesets for tilemap since there's no reference to frame
+		this.load.pack('pack', 'assets/assets-pack.json');
+		this.load.atlas('atlas', 'assets/assets-atlas.png', 'assets/assets-atlas.json', Phaser.Loader.TEXTURE_ATLAS_JSON_ARRAY);
 	}
 	
 	public create() {
-	
-	}
-	
-	/**
-	 * Sets up environment.
-	 *
-	 * Keep scale, expand and shrink based on window size.
-	 * No pausing on loss of focus, track fps.
-	 */
-	public setup() {
-		// limits phaser to use 1 input (no double touch)
-		this.input.maxPointers = 1;
-		// scales screen to fit screen dimensions
-		this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-		this.scale.pageAlignHorizontally = true;
-		this.scale.pageAlignVertically = true;
-		// prevents pausing on loss of focus
-		this.stage.disableVisibilityChange = true;
-		// fps timing
-		this.time.advancedTiming = true;
 	}
 	
 	/**
