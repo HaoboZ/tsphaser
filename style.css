@@ -1,0 +1,24 @@
+* {
+	box-sizing: border-box;
+}
+
+body {
+	background: dimgray;
+	padding: auto;
+	margin: auto;
+	overflow: hidden;
+}
+
+#screen {
+	position: absolute;
+	overflow: hidden;
+	z-index: 100;
+	top: 50%;
+	left: 50%;
+}
+
+#overlay {
+	position: absolute;
+	overflow: hidden;
+	z-index: 200;
+}

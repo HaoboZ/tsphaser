@@ -19,6 +19,7 @@ export default class Load extends Phaser.State {
 	}
 	
 	public create() {
+		this.state.start('Menu');
 	}
 	
 	/**

@@ -1,7 +1,7 @@
 import * as express from 'express';
-import * as path from 'path';
-// import * as io from 'socket.io';
-import * as http from 'http';
+import * as path    from 'path';
+import * as http    from 'http';
+import * as io      from 'socket.io';
 
 declare let __basedir;
 
@@ -23,4 +23,8 @@ app.get('/', (req, res) => {
 app.use('/', express.static(__basedir));
 
 // socket.io
-// const sio: SocketIO.Server = io(server);
+const sio: SocketIO.Server = io(server);
+
+import Main from './main';
+
+new Main(sio);
