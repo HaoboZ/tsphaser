@@ -1,1 +1,10 @@
-{}
+{
+	"pack":[
+		{
+			"type": "image",
+			"key": "none",
+			"url": "assets/none.png",
+			"overwrite": false
+		}
+	]
+}

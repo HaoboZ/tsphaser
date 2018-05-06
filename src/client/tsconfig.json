@@ -2,9 +2,6 @@
 	"include": [
 		"main.ts"
 	],
-	"files": [
-		"../../node_modules/phaser-ce/typescript/phaser.comments.d.ts"
-	],
 	"exclude": [
 		"../../node_modules"
 	],
@@ -13,7 +10,7 @@
 		"moduleResolution": "classic",
 		"noImplicitAny": false,
 		"strictNullChecks": false,
-//		"allowSyntheticDefaultImports": true,
+		"allowSyntheticDefaultImports": true,
 		"sourceMap": true,
 		"allowJs": true,
 		"jsx": "react",
@@ -21,7 +18,11 @@
 			"../../node_modules/@types"
 		],
 		"types": [
+			"jasmine",
 			"jquery",
+			"phaser-ce",
+			"react",
+			"react-dom",
 			"socket.io-client"
 		]
 	}
