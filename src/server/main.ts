@@ -1,9 +1,9 @@
+import Socket from './connect/socket';
+
 export default class Main {
 	
-	io: SocketIO.Server;
-	
 	constructor(io: SocketIO.Server) {
-		this.io = io;
+		new Socket(io);
 	}
 	
 }

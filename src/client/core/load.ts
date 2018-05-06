@@ -1,4 +1,4 @@
-import Socket from './socket';
+import Socket from '../connect/socket';
 
 export default class Load extends Phaser.State {
 	

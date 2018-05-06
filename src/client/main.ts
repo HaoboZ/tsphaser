@@ -1,5 +1,5 @@
-import Load from './load';
-import Menu from './menu';
+import Load from './core/load';
+import Menu from './menu/menu';
 
 import config from './config';
 
