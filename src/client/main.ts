@@ -5,7 +5,7 @@ import Menu from './menu/menu';
 
 import config from './config';
 
-if (window['jasmine']) {
+if (window.hasOwnProperty('jasmine')) {
 	// tester
 	const game = new Phaser.Game(config.width, config.height, Phaser.HEADLESS);
 	Test(game);
