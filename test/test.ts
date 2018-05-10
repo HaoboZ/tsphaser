@@ -1,8 +1,8 @@
 export default (game: Phaser.Game) => {
 	
-	describe("Suite", function () {
-		
-		it("test", function () {
+	describe('Suite', () => {
+		``
+		it('test', () => {
 			let a = false;
 			
 			expect(a).toBe(false);
