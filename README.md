@@ -2,14 +2,13 @@
 
 A start guide for a server/client project using typescript, phaser, nodejs, and socket.io.
 
-Libraries
-    Phaser
-    React
-    JQuery
-    LESS
-    TypeScript
-    Babel
-    Webpack
-    Socket.IO
-    underscore
-    Express
+#### Libraries
+* Phaser
+* React
+* JQuery
+* LESS
+* TypeScript
+* Babel
+* Webpack
+* Socket.IO
+* Express

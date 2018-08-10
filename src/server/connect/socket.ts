@@ -1,9 +1,12 @@
-export default class Socket {
+import * as SocketIO from 'socket.io';
+
+const Socket = new class {
 	
-	public static io: SocketIO.Server;
+	public io: SocketIO.Server;
 	
-	constructor( io: SocketIO.Server ) {
-		Socket.io = io;
+	init( io: SocketIO.Server ) {
+		this.io = io;
 	}
 	
-}
+};
+export default Socket;

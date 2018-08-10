@@ -9699,7 +9699,7 @@ declare namespace Phaser {
              * @param context Only remove the listeners that have this context.
              * @param once Only remove one-time listeners.
              */
-            off(event: string | symbol, fn: Function, context: any, once: boolean): Phaser.Events.EventEmitter;
+            off(event: string | symbol, fn: Function, context?: any, once?: boolean): Phaser.Events.EventEmitter;
 
             /**
              * Remove all listeners, or those of the specified event.
@@ -56877,7 +56877,7 @@ declare namespace Phaser {
              * @param args [description]
              * @param callbackScope [description]
              */
-            delayedCall(delay: number, callback: Function, args: any[], callbackScope: any): Phaser.Time.TimerEvent;
+            delayedCall(delay: number, callback: Function, args: any[], callbackScope?: any): Phaser.Time.TimerEvent;
 
             /**
              * [description]
@@ -58554,7 +58554,7 @@ declare namespace Phaser {
              * @param pad The string to pad it out with (defaults to a space). Default " ".
              * @param dir The direction dir = 1 (left), 2 (right), 3 (both). Default 3.
              */
-            function Pad(str: string, len?: integer, pad?: string, dir?: integer): string;
+            function Pad(str: string | number, len?: integer, pad?: string, dir?: integer): string;
 
             /**
              * Takes the given string and reverses it, returning the reversed string.

@@ -1,12 +1,10 @@
-export default class Socket {
+const Socket = new class {
 	
-	public static game: Phaser.Game;
+	public socket: SocketIOClient.Socket;
 	
-	public static socket: SocketIOClient.Socket;
-	
-	constructor( game: Phaser.Game ) {
-		Socket.game = game;
-		// Socket.socket = io.connect();
+	constructor() {
+		this.socket = io.connect();
 	}
 	
-}
+};
+export default Socket;

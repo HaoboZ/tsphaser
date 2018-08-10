@@ -1,18 +1,22 @@
 import * as express from 'express';
 import * as path from 'path';
 import * as http from 'http';
-import * as io from 'socket.io';
-// load settings
-import config from './config';
+import * as SocketIO from 'socket.io';
+
 import Main from './main';
+import Socket from './connect/socket';
+
+import config from './config';
 
 declare let __basedir;
 
 // set up server
 const app: express.Application = express();
 const port = process.env.PORT || config.port;
-const server: http.Server = app.listen( port, () =>
-	console.log( `Listening on port ${port}` )
+const server: http.Server = app.listen( port, () => {
+		if ( config.debug )
+			console.log( `Listening on port ${port}` );
+	}
 );
 
 app.get( '/', ( req, res ) => {
@@ -23,6 +27,6 @@ app.get( '/', ( req, res ) => {
 app.use( '/', express.static( __basedir ) );
 
 // socket.io
-const sio: SocketIO.Server = io( server );
+Socket.init( SocketIO( server ) );
 
-new Main( sio );
+Main.init();

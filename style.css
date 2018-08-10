@@ -22,4 +22,9 @@ body {
 	position: absolute;
 	overflow: hidden;
 	z-index: 200;
+	pointer-events: none;
+}
+
+#overlay * {
+	pointer-events: all;
 }

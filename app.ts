@@ -1,4 +1,3 @@
-// noinspection JSUndefinedPropertyAssignment
-global['__basedir'] = __dirname;
+global[ '__basedir' ] = __dirname;
 
-require('./src/server/app');
+require( './src/server/app' );

@@ -1,9 +1,12 @@
-import Socket from './connect/socket';
+import config from './config';
 
-export default class Main {
+const Main = new class {
 	
-	constructor( io: SocketIO.Server ) {
-		new Socket( io );
+	init() {
+		if ( config.debug )
+			console.log( 'main program' );
 	}
 	
-}
+	
+};
+export default Main;
