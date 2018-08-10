@@ -4,7 +4,7 @@ export default class Socket {
 	
 	public static socket: SocketIOClient.Socket;
 	
-	constructor(game: Phaser.Game) {
+	constructor( game: Phaser.Game ) {
 		Socket.game = game;
 		// Socket.socket = io.connect();
 	}

@@ -8,18 +8,13 @@ module.exports = {
 		filename: 'bundle.js'
 	},
 	devtool:   'inline-source-map',
+	mode:      'development',
+	watch:     true,
 	module:    {
 		rules: [
-			// ts-loader: convert typescript (es6) to javascript (es6),
-			// babel-loader: converts javascript (es6) to javascript (es5)
 			{
 				test:   /\.tsx?$/,
-				loader: ['babel-loader', 'ts-loader']
-			},
-			// babel-loader for pure javascript (es6) => javascript (es5)
-			{
-				test:   /\.jsx?$/,
-				loader: ['babel-loader']
+				loader: ['ts-loader']
 			},
 			{
 				test:   /\.less$/,
@@ -32,10 +27,9 @@ module.exports = {
 		]
 	},
 	externals: {
-		'react':     'React',
-		'react-dom': 'ReactDOM',
-		'jquery':    'jQuery',
-		'phaser':    'Phaser'
+		'react':  'React',
+		'jquery': 'jQuery',
+		'phaser': 'Phaser'
 	},
 	plugins:   [
 		new BrowserSyncPlugin({

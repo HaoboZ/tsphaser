@@ -1,25 +1,25 @@
 import Socket from '../connect/socket';
 
-export default class Load extends Phaser.State {
+export default class Load extends Phaser.Scene {
 	
 	public preloadBar: Phaser.Sprite;
 	
 	public preload() {
 		// socket
-		new Socket(this.game);
+		new Socket( this.game );
 		
 		// loading bar
 		this.preloadBar = this.drawLoadBar();
-		this.load.setPreloadSprite(this.preloadBar);
+		this.load.setPreloadSprite( this.preloadBar );
 		
 		// load assets
 		// pack needs to include tilesets for tilemap since there's no reference to frame
-		this.load.pack('pack', 'assets/assets-pack.json');
-		this.load.atlas('atlas', 'assets/assets-atlas.png', 'assets/assets-atlas.json', Phaser.Loader.TEXTURE_ATLAS_JSON_ARRAY);
+		this.load.pack( 'pack', 'assets/assets-pack.json' );
+		this.load.atlas( 'atlas', 'assets/assets-atlas.png', 'assets/assets-atlas.json', Phaser.Loader.TEXTURE_ATLAS_JSON_ARRAY );
 	}
 	
 	public create() {
-		this.state.start('Menu');
+		this.state.start( 'Menu' );
 	}
 	
 	/**
@@ -30,13 +30,13 @@ export default class Load extends Phaser.State {
 	 * @returns {Phaser.Sprite}
 	 */
 	private drawLoadBar() {
-		const g = this.make.graphics(0, 0);
-		g.beginFill(0xffffff);
-		g.drawRect(0, 0, this.game.width, this.game.height / 32);
+		const g = this.make.graphics( 0, 0 );
+		g.beginFill( 0xffffff );
+		g.drawRect( 0, 0, this.game.width, this.game.height / 32 );
 		g.endFill();
 		const t = g.generateTexture();
 		g.destroy();
-		return this.game.add.sprite(0, this.game.height - t.height, t);
+		return this.game.add.sprite( 0, this.game.height - t.height, t );
 	}
 	
 }

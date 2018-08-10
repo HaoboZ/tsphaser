@@ -8,7 +8,6 @@ Libraries
     JQuery
     LESS
     TypeScript
-    Jasmine
     Babel
     Webpack
     Socket.IO
