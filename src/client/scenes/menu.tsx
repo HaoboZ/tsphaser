@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Interface from '../interface/interface';
 
-import './style.less';
+import { Button } from 'react-bootstrap/lib';
 
 export default class Menu extends Phaser.Scene {
 	
@@ -10,23 +10,30 @@ export default class Menu extends Phaser.Scene {
 	}
 	
 	public create() {
-		Interface.render( <div className='center'>
-			<button
-				className='txt'
-				onClick={() => {
-					this.scene.start( 'Flood' );
-					Interface.clean();
-				}}>
-				Flood
-			</button>
-			<button
-				className='txt'
-				onClick={() => {
-					this.scene.start( 'Topdown' );
-					Interface.clean();
-				}}>
-				Topdown
-			</button>
+		Interface.render( <div className='h-100 row align-items-center'>
+			<div className='mx-auto'>
+				<Button
+					onClick={() => {
+						this.scene.start( 'Flood' );
+						Interface.unmount();
+					}}>
+					Flood
+				</Button>
+				<Button
+					onClick={() => {
+						this.scene.start( 'Topdown' );
+						Interface.unmount();
+					}}>
+					Topdown
+				</Button>
+				<Button
+					onClick={() => {
+						this.scene.start( 'Multi' );
+						Interface.unmount();
+					}}>
+					Multi
+				</Button>
+			</div>
 		</div> );
 	}
 	

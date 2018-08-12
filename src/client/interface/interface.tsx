@@ -10,38 +10,20 @@ const Interface = new class {
 	}
 	
 	/**
-	 * Unmounts container and listeners.
-	 * Default container is the main overlay.
-	 *
-	 * @param {HTMLElement} container
+	 * Unmounts container.
 	 */
-	public clean( container: HTMLElement = this.overlay[ 0 ] ): void {
-		ReactDOM.unmountComponentAtNode( container );
-		this.overlay.empty();
+	public unmount(): void {
+		ReactDOM.unmountComponentAtNode( this.overlay[ 0 ] );
 	}
 	
 	/**
 	 * Renders a React component to the container.
-	 * Default container is the main overlay.
-	 *
-	 * May need to call clean in order to remove listeners.
 	 *
 	 * @param {JSX.Element} component
-	 * @param {HTMLElement} container
 	 */
-	public render( component: JSX.Element, container: HTMLElement = this.overlay[ 0 ] ): void {
-		ReactDOM.render( component, container );
+	public render( component: JSX.Element ): void {
+		ReactDOM.render( component, this.overlay[ 0 ] );
 	}
 	
-	/**
-	 * Finds the parent HTML container.
-	 * Default container is the main overlay.
-	 *
-	 * @param {HTMLElement} instance
-	 * @returns {Element | Text | null}
-	 */
-	public find( instance: HTMLElement = this.overlay[ 0 ] ): Element | Text | null {
-		return ReactDOM.findDOMNode( instance );
-	}
 };
 export default Interface;

@@ -54,7 +54,9 @@ export default class Flood extends Phaser.Scene {
 		this.createIcon( this.icon5, 'blue', 688, 312 );
 		this.createIcon( this.icon6, 'purple', 688, 458 );
 		
-		this.cursor = this.add.image( 16, 156, 'flood', 'cursor-over' ).setOrigin( 0 ).setVisible( false );
+		this.cursor = this.add.image( 16, 156, 'flood', 'cursor-over' )
+			.setOrigin( 0 )
+			.setVisible( false );
 		
 		//  The game is played in a 14x14 grid with 6 different colors
 		
@@ -98,11 +100,15 @@ export default class Flood extends Phaser.Scene {
 		
 		this.createArrow();
 		
-		this.text1 = this.add.bitmapText( 684, 30, 'atari', 'Moves', 20 ).setAlpha( 0 );
-		this.text2 = this.add.bitmapText( 694, 60, 'atari', '00', 40 ).setAlpha( 0 );
-		this.text3 = this.add.bitmapText( 180, 200, 'atari', 'So close!\n\nClick to\ntry again', 48 ).setAlpha( 0 );
+		this.text1 = this.add.bitmapText( 684, 30, 'atari', 'Moves', 20 )
+			.setAlpha( 0 );
+		this.text2 = this.add.bitmapText( 694, 60, 'atari', '00', 40 )
+			.setAlpha( 0 );
+		this.text3 = this.add.bitmapText( 180, 200, 'atari', 'So close!\n\nClick to\ntry again', 48 )
+			.setAlpha( 0 );
 		
-		this.instructions = this.add.image( 400, 300, 'flood', 'instructions' ).setAlpha( 0 );
+		this.instructions = this.add.image( 400, 300, 'flood', 'instructions' )
+			.setAlpha( 0 );
 		
 		this.revealGrid();
 	}
@@ -124,24 +130,25 @@ export default class Flood extends Phaser.Scene {
 	}
 	
 	private createArrow() {
-		this.arrow = this.add.image( 109 - 24, 48, 'flood', 'arrow-white' ).setOrigin( 0 ).setAlpha( 0 );
+		this.arrow = this.add.image( 109 - 24, 48, 'flood', 'arrow-white' )
+			.setOrigin( 0 )
+			.setAlpha( 0 );
 		
 		this.tweens.add( {
-			
 			targets:  this.arrow,
 			x:        '+=24',
 			ease:     'Sine.easeInOut',
 			duration: 900,
 			yoyo:     true,
 			repeat:   -1
-			
 		} );
 	}
 	
 	private createIcon( icon, color, x, y ) {
 		let sx = ( x < 400 ) ? -200 : 1000;
 		
-		icon.monster = this.add.image( sx, y, 'flood', 'icon-' + color ).setOrigin( 0 );
+		icon.monster = this.add.image( sx, y, 'flood', 'icon-' + color )
+			.setOrigin( 0 );
 		
 		let shadow = this.add.image( sx, y, 'flood', 'shadow' );
 		
@@ -267,13 +274,13 @@ export default class Flood extends Phaser.Scene {
 			delay:   i
 		} );
 		
-		this.time.delayedCall( i, this.startInputEvents, [], this );
+		this.time.delayedCall( i, this.startInputEvents, [] );
 	}
 	
-	private startInputEvents() {
-		this.input.on( 'gameobjectover', this.onIconOver, this );
-		this.input.on( 'gameobjectout', this.onIconOut, this );
-		this.input.on( 'gameobjectdown', this.onIconDown, this );
+	private startInputEvents = () => {
+		this.input.on( 'gameobjectover', this.onIconOver );
+		this.input.on( 'gameobjectout', this.onIconOut );
+		this.input.on( 'gameobjectdown', this.onIconDown );
 		
 		//  Cheat mode :)
 		
@@ -290,7 +297,7 @@ export default class Flood extends Phaser.Scene {
 			this.text2.setText( Phaser.Utils.String.Pad( this.moves, 2, '0', 1 ) );
 			
 		}, this );
-	}
+	};
 	
 	private stopInputEvents() {
 		this.input.off( 'gameobjectover', this.onIconOver );
@@ -298,7 +305,7 @@ export default class Flood extends Phaser.Scene {
 		this.input.off( 'gameobjectdown', this.onIconDown );
 	}
 	
-	private onIconOver( pointer, gameObject ) {
+	private onIconOver = ( pointer, gameObject ) => {
 		let icon = gameObject;
 		
 		let newColor = icon.getData( 'color' );
@@ -336,9 +343,9 @@ export default class Flood extends Phaser.Scene {
 			duration: 300,
 			ease:     'Power2'
 		} );
-	}
+	};
 	
-	private onIconOut( pointer, gameObject ) {
+	private onIconOut = ( pointer, gameObject ) => {
 		// console.log(this.monsterTween.targets[0].y);
 		
 		this.monsterTween.stop( 0 );
@@ -354,9 +361,9 @@ export default class Flood extends Phaser.Scene {
 		} );
 		
 		this.arrow.setFrame( 'arrow-white' );
-	}
+	};
 	
-	private onIconDown( pointer, gameObject ) {
+	private onIconDown = ( pointer, gameObject ) => {
 		if ( !this.allowClick ) {
 			return;
 		}
@@ -394,7 +401,7 @@ export default class Flood extends Phaser.Scene {
 				this.startFlow();
 			}
 		}
-	}
+	};
 	
 	private createEmitter( color ) {
 		this.emitters[ color ] = this.particles.createEmitter( {
@@ -536,10 +543,10 @@ export default class Flood extends Phaser.Scene {
 			delay:    i
 		} );
 		
-		this.input.once( 'pointerdown', this.resetGame, this );
+		this.input.once( 'pointerdown', this.resetGame );
 	}
 	
-	private resetGame() {
+	private resetGame = () => {
 		this.text1.setText( "Moves" );
 		this.text2.setText( "00" );
 		this.text3.setVisible( false );
@@ -619,8 +626,8 @@ export default class Flood extends Phaser.Scene {
 		
 		this.moves = 25;
 		
-		this.time.delayedCall( i, this.startInputEvents, [], this );
-	}
+		this.time.delayedCall( i, this.startInputEvents, [] );
+	};
 	
 	private gameWon() {
 		this.stopInputEvents();
@@ -645,10 +652,10 @@ export default class Flood extends Phaser.Scene {
 			delay:    i
 		} );
 		
-		this.time.delayedCall( 2000, this.boom, [], this );
+		this.time.delayedCall( 2000, this.boom, [] );
 	}
 	
-	private boom() {
+	private boom = () => {
 		let color = Phaser.Math.RND.pick( this.frames );
 		
 		this.emitters[ color ].explode( 8, Phaser.Math.Between( 128, 672 ), Phaser.Math.Between( 28, 572 ) );
@@ -657,8 +664,8 @@ export default class Flood extends Phaser.Scene {
 		
 		this.emitters[ color ].explode( 8, Phaser.Math.Between( 128, 672 ), Phaser.Math.Between( 28, 572 ) );
 		
-		this.time.delayedCall( 100, this.boom, [], this );
-	}
+		this.time.delayedCall( 100, this.boom, [] );
+	};
 	
 	private floodFill( oldColor, newColor, x, y ) {
 		if ( oldColor === newColor || this.grid[ x ][ y ].getData( 'color' ) !== oldColor ) {

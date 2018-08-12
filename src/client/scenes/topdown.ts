@@ -9,12 +9,12 @@ export default class Topdown extends Phaser.Scene {
 	hp2;
 	hp3;
 	
-	reticle;
+	reticle: Phaser.Physics.Arcade.Sprite;
 	
 	moveKeys;
 	
-	playerBullets;
-	enemyBullets;
+	playerBullets: Phaser.GameObjects.Group;
+	enemyBullets: Phaser.GameObjects.Group;
 	// time = 0;
 	
 	constructor() {
@@ -22,6 +22,7 @@ export default class Topdown extends Phaser.Scene {
 	}
 	
 	public preload() {
+		
 		// Load in images and sprites
 		this.load.spritesheet( 'player_handgun', 'assets/sprites/player_handgun.png',
 			{ frameWidth: 66, frameHeight: 60 }
@@ -49,15 +50,15 @@ export default class Topdown extends Phaser.Scene {
 		this.hp3 = this.add.image( -250, -250, 'target' ).setScrollFactor( 0 );
 		
 		// Set image/sprite properties
-		background.setOrigin( 0.5, 0.5 ).setDisplaySize( 1600, 1200 );
-		this.player.setOrigin( 0.5, 0.5 ).setDisplaySize( 132, 120 ).setCollideWorldBounds( true ).setDrag( 500, 500 );
-		this.enemy.setOrigin( 0.5, 0.5 ).setDisplaySize( 132, 120 ).setCollideWorldBounds( true );
-		this.reticle.setOrigin( 0.5, 0.5 ).setDisplaySize( 25, 25 ).setCollideWorldBounds( true );
-		this.hp1.setOrigin( 0.5, 0.5 ).setDisplaySize( 50, 50 );
-		this.hp2.setOrigin( 0.5, 0.5 ).setDisplaySize( 50, 50 );
-		this.hp3.setOrigin( 0.5, 0.5 ).setDisplaySize( 50, 50 );
+		background.setOrigin( 0.5 ).setDisplaySize( 1600, 1200 );
+		this.player.setOrigin( 0.5 ).setDisplaySize( 132, 120 ).setCollideWorldBounds( true ).setDrag( 500, 500 );
+		this.enemy.setOrigin( 0.5 ).setDisplaySize( 132, 120 ).setCollideWorldBounds( true );
+		this.reticle.setOrigin( 0.5 ).setDisplaySize( 25, 25 ).setCollideWorldBounds( true );
+		this.hp1.setOrigin( 0.5 ).setDisplaySize( 50, 50 );
+		this.hp2.setOrigin( 0.5 ).setDisplaySize( 50, 50 );
+		this.hp3.setOrigin( 0.5 ).setDisplaySize( 50, 50 );
 		
-		// Set sprite letiables
+		// Set sprite variables
 		this.player.health = 3;
 		this.enemy.health = 3;
 		this.enemy.lastFired = 0;
