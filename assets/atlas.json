@@ -1,19 +1,19 @@
 {
 	"textures": [
 		{
-			"image": "atlas.png",
+			"image": "atlas-0.png",
 			"format": "RGBA8888",
 			"size": {
-				"w": 5,
-				"h": 5
+				"w": 3,
+				"h": 3
 			},
 			"scale": 1,
 			"frames": [
 				{
 					"filename": "none.png",
 					"frame": {
-						"x": 1,
-						"y": 1,
+						"x": 0,
+						"y": 0,
 						"w": 3,
 						"h": 3
 					},
@@ -36,6 +36,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:04b09ae5afaf0d2974dbbee31630da95:589fec169d5e5c373a1c51b6ea67c866:cbce6b53f0f49e0bf15173c25c41f876$"
+		"smartupdate": "$TexturePacker:SmartUpdate:775771dcd8440de0860d0de0aac4399f:589fec169d5e5c373a1c51b6ea67c866:cf935fe037ea9b5d3744d532996e235e$"
 	}
 }

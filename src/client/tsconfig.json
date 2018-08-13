@@ -8,7 +8,8 @@
 		"../typings/string.d.ts"
 	],
 	"exclude": [
-		"../../node_modules"
+		"../../node_modules",
+		"../../node_modules/popper.js/dist/esm/popper.js"
 	],
 	/* Basic Options */
 	"compilerOptions": {
@@ -31,9 +32,9 @@
 		/* Skip type checking of declaration files. */
 		"skipLibCheck": true,
 		/* Concatenate and emit output to single file. */
-		//		"outFile": "./",
+		//		"outFile": "../../build/bundle.js",
 		/* Redirect output structure to the directory. */
-		//		"outDir": "build/dest",
+		//		"outDir": "build",
 		/* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
 		//		"rootDir": "./",
 		/* Do not emit comments to output. */

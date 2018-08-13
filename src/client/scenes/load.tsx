@@ -17,7 +17,7 @@ export default class Load extends Phaser.Scene {
 		this.loadBar( 24 );
 		
 		// load assets
-		this.load.multiatlas( 'atlas', 'assets/atlas.json', 'assets' );
+		this.load.pack( 'pack', 'assets/pack.json' );
 	}
 	
 	public create() {

@@ -8,7 +8,7 @@ A start guide for a server/client project using typescript, phaser, nodejs, and 
 * JQuery
 * LESS
 * TypeScript
-* Babel
 * Webpack
 * Socket.IO
 * Express
+* Bootstrap

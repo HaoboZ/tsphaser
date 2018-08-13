@@ -27,9 +27,8 @@ module.exports = {
 		]
 	},
 	externals: {
-		'react':  'React',
-		'jquery': 'jQuery',
-		'phaser': 'Phaser'
+		'react':     'React',
+		'react-dom': 'ReactDOM'
 	},
 	plugins:   [
 		new BrowserSyncPlugin({
