@@ -1,15 +1,14 @@
 {
 	"include": [
 		"main.ts",
+		"**/*",
 		"../common/**/*"
 	],
 	"files": [
-		"../typings/phaser.d.ts",
-		"../typings/string.d.ts"
+		"../typings/phaser.d.ts"
 	],
 	"exclude": [
-		"../../node_modules",
-		"../../node_modules/popper.js/dist/esm/popper.js"
+		"../../node_modules"
 	],
 	/* Basic Options */
 	"compilerOptions": {
@@ -89,11 +88,9 @@
 		],
 		/* Type declaration files to be included in compilation. */
 		"types": [
-			"bootstrap",
 			"jquery",
 			"react",
 			"react-dom",
-			"react-bootstrap",
 			"socket.io-client"
 		],
 		/* Allow default imports from modules with no default export. This does not affect code emit, just typechecking. */

@@ -4,13 +4,21 @@ import Interface from '../interface/interface';
 export default class Menu extends Phaser.Scene {
 	
 	constructor() {
-		super( { key: 'Menu' } );
+		super( 'Menu' );
 	}
 	
 	public create() {
 		Interface.render(
 			<div className='d-flex justify-content-center w-100 h-100 align-items-center'>
-				<h1 className='text-white'>Hello World</h1>
+				<button
+					style={{ fontSize: 30 }}
+					onClick={() => {
+						Interface.unmount();
+						this.scene.start( 'Game' );
+					}}
+				>
+					Play
+				</button>
 			</div>
 		);
 	}

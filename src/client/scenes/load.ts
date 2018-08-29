@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Interface from '../interface/interface';
 
 import config from '../config';
@@ -6,7 +5,7 @@ import config from '../config';
 export default class Load extends Phaser.Scene {
 	
 	constructor() {
-		super( { key: 'Load' } );
+		super( 'Load' );
 		
 		Interface.init();
 	}
@@ -59,7 +58,7 @@ export default class Load extends Phaser.Scene {
 			loadingText.setText( `Loading... ${ Math.floor( value * 100 ) }%` );
 			
 			progressBar.clear();
-			progressBar.fillStyle( '#bbbbbb'.toColor(), 1 );
+			progressBar.fillStyle( Phaser.Display.Color.HexStringToColor( '#bbbbbb' ).color, 1 );
 			
 			progressBar.fillRect( 0, config.height - height - 2, config.width * value, height + 4 );
 		} );
