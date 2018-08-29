@@ -1,0 +1,12 @@
+{
+	"pack": {
+		"files": [
+			{
+				"type": "multiatlas",
+				"key": "atlas",
+				"url": "assets/atlas.json",
+				"path": "assets/"
+			}
+		]
+	}
+}

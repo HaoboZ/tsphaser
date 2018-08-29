@@ -1,21 +1,13 @@
-* {
-	box-sizing: border-box;
-}
-
 body {
-	background: dimgray;
-	padding: auto;
-	margin: auto;
+	background: dimgray !important;
 	overflow: hidden;
 }
 
 #screen {
 	position: absolute;
-	overflow: hidden;
 	z-index: 100;
 	top: 50%;
 	left: 50%;
-	transform: translate(-50%, -50%);
 }
 
 #overlay {
@@ -25,6 +17,6 @@ body {
 	pointer-events: none;
 }
 
-#overlay * {
-	pointer-events: all;
+#overlay button, #overlay input {
+	pointer-events: auto;
 }
