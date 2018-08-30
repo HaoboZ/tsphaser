@@ -10,32 +10,28 @@ const Socket = new class {
 		this.socket = io.connect();
 		this.socket.on( 'connect', () => this.game.events.emit( 'connect' ) );
 		this.socket.on( 'disconnect', () => this.game.events.emit( 'disconnect' ) );
-		this.socket.on( 'currentPlayers', ( players ) => {
-			Object.keys( players ).forEach( ( id ) => {
-				if ( players[ id ].playerId === Socket.socket.id ) {
-					this.addPlayer( this, players[ id ] );
-				} else {
-					this.addOtherPlayers( this, players[ id ] );
-				}
-			} );
+		this.socket.on( 'join', ( room, players ) => {
+			// create a room object
+			// add players to room
+			// emit event
 		} );
-		this.socket.on( 'newPlayer', ( playerInfo ) => {
-			this.addOtherPlayers( this, playerInfo );
+		this.socket.on( 'leave', ( room ) => {
+			// remove self from room
+			// delete room
+			// emit event
 		} );
-		this.socket.on( 'playerMoved', ( playerInfo ) => {
-			this.otherPlayers.getChildren().forEach( ( otherPlayer ) => {
-				if ( playerInfo.playerId === otherPlayer.playerId ) {
-					otherPlayer.setPosition( playerInfo.x, playerInfo.y );
-				}
-			} );
+		this.socket.on( 'enter', ( player, room ) => {
+			// add player to room
+			// emit event
 		} );
-		this.socket.on( 'disconnect', ( playerId ) => {
-			this.otherPlayers.getChildren().forEach( ( otherPlayer ) => {
-				if ( playerId === otherPlayer.playerId ) {
-					otherPlayer.destroy();
-				}
-			} );
+		this.socket.on( 'exit', ( player, room ) => {
+			// remove player from room
+			// if no room, remove from all rooms
 		} );
+		this.socket.on( 'sync', ( room, data ) => {
+			// sync room and player info
+		} );
+		
 		this.socket.emit( 'start' );
 	}
 	

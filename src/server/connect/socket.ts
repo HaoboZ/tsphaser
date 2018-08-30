@@ -1,5 +1,5 @@
 import * as SocketIO from 'socket.io';
-import Client from '../client';
+import Client from './client';
 
 const Socket = new class {
 	
