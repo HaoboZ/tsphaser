@@ -3,7 +3,7 @@ import Menu from './scenes/menu';
 
 import config from './config';
 
-const gameConfig: GameConfig = {
+new Phaser.Game( {
 	type:    Phaser.AUTO,
 	width:   config.width,
 	height:  config.height,
@@ -11,10 +11,8 @@ const gameConfig: GameConfig = {
 	physics: {
 		default: 'arcade',
 		arcade:  {
-			debug:   false
+			debug: false
 		}
 	},
 	scene:   [ Load, Menu ]
-};
-
-new Phaser.Game( gameConfig );
+} );

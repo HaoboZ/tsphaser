@@ -3,9 +3,12 @@ import * as ReactDOM from 'react-dom';
 
 const Interface = new class {
 	
+	private game: Phaser.Game;
+	
 	public overlay: JQuery;
 	
-	init() {
+	init( game: Phaser.Game ) {
+		this.game = game;
 		this.overlay = $( '#overlay' );
 	}
 	

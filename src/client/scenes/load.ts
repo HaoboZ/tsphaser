@@ -6,16 +6,14 @@ export default class Load extends Phaser.Scene {
 	
 	constructor() {
 		super( 'Load' );
-		
-		Interface.init();
 	}
 	
 	public preload() {
+		Interface.init( this.sys.game );
 		this.resize();
 		
-		this.loadBar( 24 );
-		
 		// load assets
+		this.loadBar( 24 );
 		this.load.pack( 'pack', 'assets/pack.json' );
 	}
 	

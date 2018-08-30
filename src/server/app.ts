@@ -14,8 +14,7 @@ declare let __basedir;
 const app: express.Application = express();
 const port = process.env.PORT || config.port;
 const server: http.Server = app.listen( port, () => {
-		if ( config.debug )
-			console.log( `Listening on port ${port}` );
+		if ( config.debug ) console.log( `Listening on port ${port}` );
 	}
 );
 
