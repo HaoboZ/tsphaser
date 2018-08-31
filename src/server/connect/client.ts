@@ -1,7 +1,10 @@
 import * as SocketIO from 'socket.io';
+import { ERROR, error } from './socket';
+
+import Main from '../main';
+import Room from './room';
 
 import config from '../config';
-import Room from './room';
 
 export default class Client {
 	
@@ -24,7 +27,9 @@ export default class Client {
 		Client.list[ this.id ] = this;
 		
 		socket.on( 'disconnect', this.disconnect );
+		socket.on( 'create', this.create );
 		socket.on( 'join', this.join );
+		socket.on( 'start', () => this.join( Main.global.id ) );
 	}
 	
 	private disconnect = () => {
@@ -38,12 +43,14 @@ export default class Client {
 		delete Client.list[ this.id ];
 	};
 	
-	private join = ( roomId: string, password: string ) => {
-		let room = Room.list[ roomId ];
-		
-		// creates a new room
-		// TODO: verify client can create one
-		if ( !room ) room = new Room( roomId, password, this.id );
+	private create = ( name: string, password?: string ) => {
+		// TODO: verify client can create one and whether to set admin
+		new Room( name, password, this.id );
+	};
+	
+	private join = ( id: string, password?: string ) => {
+		let room = Room.list[ id ];
+		if ( !room ) error( this.socket, ERROR.NoRoom );
 		
 		room.join( this, password );
 	};

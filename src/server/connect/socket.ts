@@ -20,5 +20,6 @@ export function error( socket, err?: ERROR ) {
 }
 
 export enum ERROR {
+	NoRoom,
 	Join
 }
