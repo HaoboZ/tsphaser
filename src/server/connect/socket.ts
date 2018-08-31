@@ -14,3 +14,11 @@ const Socket = new class {
 	
 };
 export default Socket;
+
+export function error( socket, err?: ERROR ) {
+	socket.emit( 'err', err );
+}
+
+export enum ERROR {
+	Join
+}

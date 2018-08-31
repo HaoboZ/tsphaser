@@ -32,7 +32,8 @@ module.exports = {
 	},
 	plugins:   [
 		new BrowserSyncPlugin({
-			host: 'localhost'
+			host:      'localhost',
+			ghostMode: false
 		})
 	],
 	resolve:   {

@@ -4,6 +4,8 @@ import Interface from '../interface/interface';
 
 export default class Menu extends Phaser.Scene {
 	
+	room = 'test';
+	
 	constructor() {
 		super( 'Menu' );
 	}
@@ -13,14 +15,22 @@ export default class Menu extends Phaser.Scene {
 		
 		Interface.render(
 			<div className='d-flex justify-content-center w-100 h-100 align-items-center'>
+				<input type='text' onChange={( e ) => this.room = e.target.value}/>
 				<button
 					style={{ fontSize: 30 }}
 					onClick={() => {
-						Interface.unmount();
-						this.scene.start( 'Game' );
+						Socket.socket.emit( 'join', this.room );
 					}}
 				>
-					Play
+					Join
+				</button>
+				<button
+					style={{ fontSize: 30 }}
+					onClick={() => {
+						Socket.socket.emit( 'leave', Socket.room );
+					}}
+				>
+					Leave
 				</button>
 			</div>
 		);

@@ -1,5 +1,4 @@
 import * as SocketIO from 'socket.io';
-import Socket from './socket';
 
 import config from '../config';
 import Room from './room';
@@ -9,47 +8,44 @@ export default class Client {
 	private static list: { [ id: string ]: Client } = {};
 	
 	public socket: SocketIO.Socket;
+	public id: string;
+	public rooms: { [ id: string ]: Room } = {};
 	
-	public data: any = {};
+	public data;
 	
 	constructor( socket: SocketIO.Socket ) {
 		this.socket = socket;
-		if ( config.debug ) console.log( `${this.socket.id} connected` );
-		
-		Client.list[ this.socket.id ] = this;
+		this.id = this.socket.id;
+		if ( config.debug ) console.log( `${this.id} connected` );
 		
 		// initial data
-		this.data.id = this.socket.id;
+		this.data = { id: this.id };
+		
+		Client.list[ this.id ] = this;
 		
 		socket.on( 'disconnect', this.disconnect );
 		socket.on( 'join', this.join );
 	}
 	
-	private join = ( id: string, password: string ) => {
-		// verify if possible to join
-		let room = Room.list[ id ];
-		if ( !room )
-			room = new Room( id, password );
-		
-		if ( !room || room.canJoin( password ) )
-			this.socket.join( id, ( err ) => {
-				if ( err ) {
-					this.error( err );
-					return;
-				}
-				
-				room.join( this );
-			} );
-	};
-	
 	private disconnect = () => {
-		if ( config.debug ) console.log( `${this.socket.id} disconnected` );
+		if ( config.debug ) console.log( `${this.id} disconnected` );
+		
+		// leave all rooms
+		for ( let room in this.rooms )
+			this.rooms[ room ].leave( this, true );
 		
 		// remove this player from our clients list
-		delete Client.list[ this.socket.id ];
+		delete Client.list[ this.id ];
+	};
+	
+	private join = ( roomId: string, password: string ) => {
+		let room = Room.list[ roomId ];
 		
-		// emit leave to all clients
-		Socket.io.emit( 'leave', this.socket.id );
+		// creates a new room
+		// TODO: verify client can create one
+		if ( !room ) room = new Room( roomId, password, this.id );
+		
+		room.join( this, password );
 	};
 	
 	public modify( obj: any, remove?: boolean ) {
@@ -58,11 +54,6 @@ export default class Client {
 				delete this.data[ p ];
 		else
 			Object.assign( this.data, obj );
-	}
-	
-	
-	private error( err? ) {
-		this.socket.emit( 'error', err );
 	}
 	
 }
