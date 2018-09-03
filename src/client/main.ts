@@ -1,5 +1,5 @@
 import Load from './scenes/load';
-import Menu from './scenes/menu';
+import Menu from './menu/menu';
 
 import config from './config';
 

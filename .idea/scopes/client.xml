@@ -1,3 +1,0 @@
-<component name="DependencyValidationManager">
-  <scope name="client" pattern="file[tsphaser]:src/client//*||file:index.html||file:style.css||file[tsphaser]:assets//*||file[tsphaser]:src/common//*" />
-</component>

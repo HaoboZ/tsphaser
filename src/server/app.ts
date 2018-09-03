@@ -3,7 +3,6 @@ import * as path from 'path';
 import * as http from 'http';
 import * as SocketIO from 'socket.io';
 
-import Main from './main';
 import Socket from './connect/socket';
 
 import config from './config';
@@ -27,5 +26,3 @@ app.use( '/', express.static( __basedir ) );
 
 // socket.io
 Socket.init( SocketIO( server ) );
-
-Main.init();

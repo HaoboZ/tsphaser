@@ -4,33 +4,32 @@ import Client from './client';
 
 import config from '../config';
 
-export default class Room {
+export default abstract class Room {
 	
 	public static list: { [ id: string ]: Room } = {};
 	
 	public id: string;
 	private password: string;
+	private name: string;
+	private admin: string;
 	
-	public data;
+	private remove: boolean;
+	
+	private timestamp: number;
 	
 	public clients: { [ id: string ]: Client } = {};
-	private clientData = {};
 	
 	private _events: { [ id: string ]: { [ event: string ]: any } } = {};
 	
-	constructor( name: string, password?: string, admin?: string ) {
+	constructor( name: string, password?: string, remove: boolean = true, admin?: string ) {
 		this.id = ( function ( a, b ) {
 			// noinspection StatementWithEmptyBodyJS
 			for ( b = a = ''; a++ < 36; b += a * 51 & 52 ? ( a ^ 15 ? 8 ^ Math.random() * ( a ^ 20 ? 16 : 4 ) : 4 ).toString( 16 ) : '-' ) ;
 			return b
 		} )();
 		this.password = password;
-		
-		this.data = {
-			id: this.id,
-			name,
-			admin
-		};
+		this.remove = remove;
+		this.timestamp = Date.now();
 		
 		Room.list[ this.id ] = this;
 		
@@ -56,22 +55,19 @@ export default class Room {
 			}
 			
 			this._events[ client.id ] = {};
-			let event;
-			
-			client.socket.on( 'leave', event = ( room: string ) => {
+			this._events[ client.id ][ 'leave' ] = ( room: string ) => {
 				if ( room === this.id ) this.leave( client );
-			} );
-			this._events[ client.id ][ 'leave' ] = event;
+			};
+			client.socket.on( 'leave', this._events[ client.id ][ 'leave' ] );
 			
 			this.clients[ client.id ] = client;
-			this.clientData[ client.id ] = client.data;
 			client.rooms[ this.id ] = this;
 			
 			// confirm joined room
-			client.socket.emit( 'join', this.data, this.clientData );
+			client.socket.emit( 'join', this.id );
 			// tell other clients
-			client.socket.in( this.id ).emit( 'enter', this.id, client.data );
-			if ( config.debug ) console.log( `${client.id} joined room ${this.data.name}` );
+			client.socket.in( this.id ).emit( 'enter', this.id, client.id );
+			if ( config.debug ) console.log( `${client.id} joined room ${this.name}` );
 		} );
 	}
 	
@@ -83,7 +79,6 @@ export default class Room {
 			}
 			
 			delete this.clients[ client.id ];
-			delete this.clientData[ client.id ];
 			
 			// remove all events
 			if ( !disconnect )
@@ -91,15 +86,18 @@ export default class Room {
 					client.socket.removeListener( event, this._events[ client.id ][ event ] );
 			
 			// remove all clients if admin leaves
-			if ( this.data.admin === client.id )
+			if ( this.admin === client.id )
 				for ( let client in this.clients )
 					this.leave( this.clients[ client ], false, true );
+			
+			// removes room if all clients leave
+			if ( this.remove && !Object.keys( this.clients ).length ) delete Room.list[ this.id ];
 			
 			// confirm leave room
 			if ( !disconnect ) client.socket.emit( 'leave', this.id );
 			// tell other clients
 			if ( !close ) client.socket.in( this.id ).emit( 'exit', this.id, client.id );
-			if ( config.debug ) console.log( `${client.id} left room ${this.data.name}` );
+			if ( config.debug ) console.log( `${client.id} left room ${this.name}` );
 		} );
 	}
 	

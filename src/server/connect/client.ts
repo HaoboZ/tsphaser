@@ -1,7 +1,5 @@
 import * as SocketIO from 'socket.io';
-import { ERROR, error } from './socket';
-
-import Main from '../main';
+import Socket, { ERROR, error } from './socket';
 import Room from './room';
 
 import config from '../config';
@@ -14,22 +12,16 @@ export default class Client {
 	public id: string;
 	public rooms: { [ id: string ]: Room } = {};
 	
-	public data;
-	
 	constructor( socket: SocketIO.Socket ) {
 		this.socket = socket;
 		this.id = this.socket.id;
 		if ( config.debug ) console.log( `${this.id} connected` );
-		
-		// initial data
-		this.data = { id: this.id };
 		
 		Client.list[ this.id ] = this;
 		
 		socket.on( 'disconnect', this.disconnect );
 		socket.on( 'create', this.create );
 		socket.on( 'join', this.join );
-		socket.on( 'start', () => this.join( Main.global.id ) );
 	}
 	
 	private disconnect = () => {
@@ -45,7 +37,7 @@ export default class Client {
 	
 	private create = ( name: string, password?: string ) => {
 		// TODO: verify client can create one and whether to set admin
-		new Room( name, password, this.id );
+		new Socket.room( name, password, true, this.id );
 	};
 	
 	private join = ( id: string, password?: string ) => {
@@ -54,13 +46,5 @@ export default class Client {
 		
 		room.join( this, password );
 	};
-	
-	public modify( obj: any, remove?: boolean ) {
-		if ( remove )
-			for ( let p in obj )
-				delete this.data[ p ];
-		else
-			Object.assign( this.data, obj );
-	}
 	
 }
