@@ -1,13 +1,9 @@
 import * as SocketIO from 'socket.io';
 import Client from './client';
 
-import Tictactoe from '../game/tictactoe';
-
 const Socket = new class {
 	
 	public io: SocketIO.Server;
-	
-	public room = Tictactoe;
 	
 	init( io: SocketIO.Server ) {
 		this.io = io;
@@ -17,7 +13,7 @@ const Socket = new class {
 };
 export default Socket;
 
-export function error( socket, err?: ERROR ) {
+export function error( socket: SocketIO.Socket, err?: ERROR ) {
 	socket.emit( 'err', err );
 }
 

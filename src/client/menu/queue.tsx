@@ -15,7 +15,7 @@ export default class Queue extends React.Component {
 	private interval;
 	
 	componentDidMount() {
-		Socket.socket.emit( 'queue' );
+		Socket.socket.emit( 'createNewRoom' );
 		
 		this.interval = setInterval(
 			() => {
