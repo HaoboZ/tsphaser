@@ -1,5 +1,6 @@
 import * as SocketIO from 'socket.io';
 import Room from './room';
+import Game from '../game/game';
 
 import config from '../config';
 
@@ -20,6 +21,7 @@ export default class Client {
 		
 		socket.on( 'disconnect', this.disconnect );
 		Room.init( this );
+		Game.init( this );
 	}
 	
 	private disconnect = () => {

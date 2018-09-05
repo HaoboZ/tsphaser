@@ -1,5 +1,4 @@
-import Socket, { ERROR, error } from './socket';
-
+import { ERROR, error } from './socket';
 import Client from './client';
 
 import config from '../config';
@@ -19,16 +18,9 @@ export default class Room {
 	public clients: { [ id: string ]: Client } = {};
 	
 	public static init( client: Client ) {
-		client.socket.on( 'createRoom', this.createRoom );
 		client.socket.on( 'joinRoom', this.joinRoom );
 		client.socket.on( 'leaveRoom', this.leaveRoom );
 	}
-	
-	private static createRoom( name: string, password?: string ) {
-		let socket = this as any as SocketIO.Socket;
-		// TODO: verify client can create one and whether to set admin
-		new Room( name, password, true, socket.id );
-	};
 	
 	private static joinRoom( id: string, password?: string ) {
 		let socket = this as any as SocketIO.Socket;
