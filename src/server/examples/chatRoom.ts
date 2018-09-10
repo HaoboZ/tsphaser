@@ -1,6 +1,6 @@
+import Socket, { ERROR, error } from '../connect/socket';
 import Room from '../connect/room';
 import Client from '../connect/client';
-import Socket, { ERROR, error } from '../connect/socket';
 
 export default class ChatRoom extends Room {
 	
@@ -21,14 +21,17 @@ export default class ChatRoom extends Room {
 	private static message( id, type, message ) {
 		let socket = this as any as SocketIO.Socket,
 			 room   = Room.list[ id ] as ChatRoom;
-		if ( !room ) {
-			error( socket, ERROR.RoomExist );
-			return;
-		}
+		if ( !room ) return error( socket, ERROR.RoomExist );
 		
 		room.log.push( { type, message } );
 		
 		Socket.io.to( room.id ).emit( id, type, message );
+	}
+	
+	constructor( name: string, password?: string, remove?: boolean, admin?: string ) {
+		super( name, password, remove, admin );
+		
+		this.data.type = 'chat';
 	}
 	
 }

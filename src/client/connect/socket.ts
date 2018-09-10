@@ -13,6 +13,7 @@ const Socket = new class {
 		
 		this.socket.on( 'connect', () => this.game.events.emit( 'connect' ) );
 		this.socket.on( 'disconnect', () => this.game.events.emit( 'disconnect' ) );
+		this.socket.on( 'err', ( err ) => console.log( err ) );
 		Room.init();
 	}
 	

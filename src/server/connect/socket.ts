@@ -19,5 +19,6 @@ export function error( socket: SocketIO.Socket, err?: ERROR ) {
 
 export enum ERROR {
 	RoomExist,
-	Permission
+	Permission,
+	ClientInRoom
 }

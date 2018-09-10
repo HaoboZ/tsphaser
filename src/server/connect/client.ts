@@ -8,9 +8,13 @@ export default class Client {
 	
 	public static list: { [ id: string ]: Client } = {};
 	
+	private static _name = 0;
+	
 	public socket: SocketIO.Socket;
 	public id: string;
 	public rooms: { [ id: string ]: Room } = {};
+	
+	public data = { name: `client ${++Client._name}` };
 	
 	constructor( socket: SocketIO.Socket ) {
 		this.socket = socket;
@@ -24,6 +28,9 @@ export default class Client {
 		ChatRoom.init( this );
 	}
 	
+	/**
+	 * @event disconnect
+	 */
 	private disconnect() {
 		let socket = this as any as SocketIO.Socket,
 			 client = Client.list[ socket.id ];

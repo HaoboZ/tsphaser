@@ -15,3 +15,5 @@ A start guide for a server/client project using typescript, phaser, and socket.i
 * synced mouse and/or character
  * interpolate values
  * max change error values?
+* database player data
+ * google login/logout
