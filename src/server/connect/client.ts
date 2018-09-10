@@ -1,6 +1,6 @@
 import * as SocketIO from 'socket.io';
 import Room from './room';
-import Game from '../game/game';
+import ChatRoom from '../examples/chatRoom';
 
 import config from '../config';
 
@@ -21,18 +21,20 @@ export default class Client {
 		
 		socket.on( 'disconnect', this.disconnect );
 		Room.init( this );
-		Game.init( this );
+		ChatRoom.init( this );
 	}
 	
-	private disconnect = () => {
-		if ( config.debug ) console.log( `${this.id} disconnected` );
+	private disconnect() {
+		let socket = this as any as SocketIO.Socket,
+			 client = Client.list[ socket.id ];
+		if ( config.debug ) console.log( `${client.id} disconnected` );
 		
 		// leave all rooms
-		for ( let room in this.rooms )
-			this.rooms[ room ].leave( this.id, true );
+		for ( let room in client.rooms )
+			client.rooms[ room ].leave( client.id, true );
 		
 		// remove this player from our clients list
-		delete Client.list[ this.id ];
+		delete Client.list[ client.id ];
 	};
 	
 }

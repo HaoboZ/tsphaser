@@ -18,6 +18,6 @@ export function error( socket: SocketIO.Socket, err?: ERROR ) {
 }
 
 export enum ERROR {
-	NoRoom,
-	Join
+	RoomExist,
+	Permission
 }

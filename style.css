@@ -1,5 +1,6 @@
 body {
-	background: dimgray !important;
+	background: dimgray;
+	color: white;
 	overflow: hidden;
 }
 

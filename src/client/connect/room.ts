@@ -1,60 +1,71 @@
 import Socket from './socket';
+
 import config from '../config';
 
 export default class Room {
 	
-	private game: Phaser.Game;
+	game: Phaser.Game;
 	
 	private static list: { [ id: string ]: Room } = {};
 	
 	public id: string;
-	public data;
-	public clients: { [ id: string ]: any };
+	public data: any;
+	public clients: Array<any>;
 	
-	constructor( game: Phaser.Game, data, clients ) {
-		this.game = game;
-		
-		this.id = data.id;
-		this.data = data;
-		this.clients = clients;
-		
-		if ( Room.list[ this.id ] ) Room.list[ this.id ].leave( this.id );
-		
-		Room.list[ this.id ] = this;
-		
-		Socket.socket.on( 'leave', this.leave );
-		Socket.socket.on( 'enter', this.enter );
-		Socket.socket.on( 'exit', this.exit );
+	public static init() {
+		Socket.socket.on( 'roomJoin', this.join );
+		Socket.socket.on( 'roomLeave', this.leave );
+		Socket.socket.on( 'clientEnter', this.enter );
+		Socket.socket.on( 'clientExit', this.exit );
 	}
 	
-	private leave = ( id ) => {
-		if ( this.id !== id ) return;
+	private static join( id, clients ) {
+		let room = Room.list[ id ];
+		if ( !room ) {
+			room = Room.list[ id ] = new Room( Socket.game, id, clients );
+		}
+		room.game.events.emit( 'join', room.id );
+		if ( config.debug ) console.log( `joined room ${room.data.name}` )
+	}
+	
+	private static leave( id ) {
+		let room = Room.list[ id ];
+		if ( !room ) return;
 		
-		delete Room.list[ this.id ];
-		Socket.socket.removeListener( 'leave', this.leave );
-		Socket.socket.removeListener( 'enter', this.enter );
-		Socket.socket.removeListener( 'exit', this.exit );
+		delete Room.list[ room.id ];
 		
-		this.game.events.emit( 'leave', this.id );
-		if ( config.debug ) console.log( `left room ${this.data.name}` )
+		room.game.events.emit( 'leave', room.id );
+		if ( config.debug ) console.log( `left room ${room.data.name}` )
+	}
+	
+	private static enter( id, client ) {
+		let room = Room.list[ id ];
+		if ( !room ) return;
+		
+		room.clients[ client.id ] = client;
+		
+		room.game.events.emit( 'enter', room.id, client.id );
+		if ( config.debug ) console.log( `${client.id} joined room ${room.data.name}` );
 	};
 	
-	private enter = ( id, client ) => {
-		if ( this.id !== id ) return;
+	private static exit( id, client ) {
+		let room = Room.list[ id ];
+		if ( !room || !room.clients.hasOwnProperty( client.id ) ) return;
 		
-		this.clients[ client.id ] = client;
+		delete room.clients[ client.id ];
 		
-		this.game.events.emit( 'enter', this.id, client.id );
-		if ( config.debug ) console.log( `${client.id} joined room ${this.data.name}` );
+		room.game.events.emit( 'exit', room.id, client.id );
+		if ( config.debug ) console.log( `${client.id} left room ${room.data.name}` );
 	};
 	
-	private exit = ( id, client ) => {
-		if ( this.id !== id && this.clients.hasOwnProperty( client.id ) ) return;
+	constructor( game: Phaser.Game, id, clients ) {
+		this.game = game;
 		
-		delete this.clients[ client.id ];
+		this.id = id;
+		this.data = {};
+		this.clients = clients;
 		
-		this.game.events.emit( 'exit', this.id, client.id );
-		if ( config.debug ) console.log( `${client.id} left room ${this.data.name}` );
-	};
+		Room.list[ this.id ] = this;
+	}
 	
 }
