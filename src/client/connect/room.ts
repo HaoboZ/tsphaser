@@ -6,7 +6,9 @@ export default class Room {
 	
 	game: Phaser.Game;
 	
-	private static list: { [ id: string ]: Room } = {};
+	protected static types: { [ name: string ]: any } = {};
+	
+	protected static list: { [ id: string ]: Room } = {};
 	
 	public id: string;
 	public data: any;
@@ -28,7 +30,7 @@ export default class Room {
 	 */
 	private static join( id: string, data: any, clients: any ) {
 		let room = Room.list[ id ];
-		if ( !room ) room = Room.list[ id ] = new Room( Socket.game, id, data, clients );
+		if ( !room ) room = Room.list[ id ] = new this.types[ data.type ]( Socket.game, id, data, clients );
 		
 		room.game.events.emit( 'join', room.id );
 		if ( config.debug ) console.log( `joined room ${room.data.name}` );

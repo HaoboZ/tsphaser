@@ -1,4 +1,5 @@
 import Room from './room';
+import ChatRoom from '../chatRoom/chatRoom';
 
 const Socket = new class {
 	
@@ -15,6 +16,7 @@ const Socket = new class {
 		this.socket.on( 'disconnect', () => this.game.events.emit( 'disconnect' ) );
 		this.socket.on( 'err', ( err ) => console.log( err ) );
 		Room.init();
+		ChatRoom.init();
 	}
 	
 };

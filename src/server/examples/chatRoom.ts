@@ -18,14 +18,14 @@ export default class ChatRoom extends Room {
 		room.join( socket.id, room.password );
 	}
 	
-	private static message( id, type, message ) {
+	private static message( id, ...args ) {
 		let socket = this as any as SocketIO.Socket,
 			 room   = Room.list[ id ] as ChatRoom;
 		if ( !room ) return error( socket, ERROR.RoomExist );
 		
-		room.log.push( { type, message } );
+		room.log.push( args );
 		
-		Socket.io.to( room.id ).emit( id, type, message );
+		Socket.io.to( room.id ).emit( id, ...args );
 	}
 	
 	constructor( name: string, password?: string, remove?: boolean, admin?: string ) {
