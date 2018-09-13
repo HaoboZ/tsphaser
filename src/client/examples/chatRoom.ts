@@ -3,11 +3,10 @@ import Socket from '../connect/socket';
 
 export default class ChatRoom extends Room {
 	
-	private log = [];
-	
 	public static init() {
 		this.types[ 'chat' ] = ChatRoom;
-		Socket.socket.on( 'chatMessage', this.message );
+		Socket.socket.on( 'message', this.message );
+		
 	}
 	
 	private static message( id, ...args ) {
@@ -15,8 +14,10 @@ export default class ChatRoom extends Room {
 		room.log.push( args );
 	}
 	
+	private log = [];
+	
 	public send( ...args ) {
-		Socket.socket.emit( 'chatMessage', ...args );
+		this.emit( 'message', ...args );
 	}
 	
 }

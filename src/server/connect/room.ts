@@ -51,10 +51,12 @@ export default abstract class Room {
 		room.leave( socket.id );
 	}
 	
-	constructor( name: string, password?: string, remove: boolean = true, admin?: string ) {
-		do {
+	constructor( name: string, password?: string, remove: boolean = true, admin?: string, id?: string ) {
+		this.id = id;
+		while ( !this.id && !Room.list.hasOwnProperty( this.id ) ) {
 			this.id = Math.random().toString( 36 ).substring( 2, 7 );
-		} while ( Room.list.hasOwnProperty( this.id ) );
+			console.log( this.id );
+		}
 		this.password = password;
 		this.data = { name };
 		this.admin = admin;
@@ -86,7 +88,6 @@ export default abstract class Room {
 		// verify password
 		if ( !this.canJoin( id, password ) )
 			return error( socket, ERROR.Permission );
-		
 		socket.join( this.id, ( err ) => {
 			if ( err ) return error( socket, err );
 			
@@ -98,7 +99,7 @@ export default abstract class Room {
 			for ( let client in this.clients ) {
 				clients[ client ] = this.clients[ client ].data;
 			}
-			socket.emit( 'roomJoin', this.id, this.data, this.clients );
+			socket.emit( 'roomJoin', this.id, this.data, clients );
 			// tell other clients
 			socket.in( this.id ).emit( 'clientEnter', this.id, id, client.data );
 			if ( config.debug ) console.log( `${id} joined room ${this.data.name}` );

@@ -8,7 +8,9 @@ export default class ChatRoom extends Room {
 	
 	public static init( client: Client ) {
 		client.socket.on( 'createChatRoom', this.create );
-		client.socket.on( 'chatMessage', this.message );
+		client.socket.on( 'message', this.message );
+		
+		new ChatRoom( 'chat', undefined, false, undefined, 'chatTest' );
 	}
 	
 	private static create( name: string, password?: string ) {
@@ -25,11 +27,11 @@ export default class ChatRoom extends Room {
 		
 		room.log.push( args );
 		
-		Socket.io.to( room.id ).emit( id, ...args );
+		Socket.io.to( room.id ).send( id, socket.id, ...args );
 	}
 	
-	constructor( name: string, password?: string, remove?: boolean, admin?: string ) {
-		super( name, password, remove, admin );
+	constructor( name: string, password?: string, remove?: boolean, admin?: string, id?: string ) {
+		super( name, password, remove, admin, id );
 		
 		this.data.type = 'chat';
 	}
