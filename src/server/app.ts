@@ -1,11 +1,11 @@
 import * as express from 'express';
-import * as path from 'path';
 import * as http from 'http';
+import * as path from 'path';
 import * as SocketIO from 'socket.io';
 
-import Socket from './connect/socket';
-
 import config from './config';
+
+import Socket from './connect/socket';
 
 declare let __basedir;
 

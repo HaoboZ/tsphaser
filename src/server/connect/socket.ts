@@ -1,24 +1,25 @@
 import * as SocketIO from 'socket.io';
+import { socketEvents } from '../../shared/events';
+import ChatRoom from '../examples/chat/chatRoom';
 import Client from './client';
 
-const Socket = new class {
+let Socket = new class {
 	
 	public io: SocketIO.Server;
 	
-	init( io: SocketIO.Server ) {
+	public init( io: SocketIO.Server ) {
 		this.io = io;
-		this.io.on( 'connect', ( socket ) => new Client( socket ) );
+		
+		this.io.on( socketEvents.connect,
+			( socket ) => new Client( socket )
+		);
+		
+		new ChatRoom( {
+			id:     'chatTest',
+			remove: false
+		} );
 	}
 	
 };
+
 export default Socket;
-
-export function error( socket: SocketIO.Socket, err?: ERROR ) {
-	socket.emit( 'err', err );
-}
-
-export enum ERROR {
-	RoomExist,
-	Permission,
-	ClientInRoom
-}

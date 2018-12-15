@@ -1,148 +1,167 @@
-import { ERROR, error } from './socket';
-import Client from './client';
-
+import { ERROR, error } from '../../shared/error';
+import { roomEvents, socketEvents } from '../../shared/events';
 import config from '../config';
+import Client from './client';
+import RoomGroup from './room.group';
+import Socket from './socket';
 
-export default abstract class Room {
+export function RoomEvents( client: Client ) {
+	client.socket.on( socketEvents.disconnect,
+		() => {
+			// leave all rooms
+			for ( let room in client.rooms )
+				client.rooms[ room ].leave( client, true );
+		}
+	);
+	client.socket.on( roomEvents.join,
+		( { roomId, password }: { roomId: string, password?: string } ) => {
+			let room = RoomGroup.get( roomId );
+			if ( !room ) return error( client.socket, ERROR.RoomExist );
+			
+			room.join( client, password );
+		}
+	);
+	client.socket.on( roomEvents.leave,
+		( { roomId }: { roomId: string } ) => {
+			let room = RoomGroup.get( roomId );
+			if ( !room ) return error( client.socket, ERROR.RoomExist );
+			if ( !room.hasClient( client ) ) return error( client.socket, ERROR.ClientNotInRoom );
+			
+			room.leave( client );
+		}
+	);
+}
+
+export default class Room {
 	
-	public static list: { [ id: string ]: Room } = {};
+	public type = roomEvents.type;
 	
 	public id: string;
 	protected password: string;
-	protected admin: string;
+	public admin: string;
+	public maxClients: number;
+	public remove: boolean;
 	
-	public data: any;
+	public timeCreated: number;
 	
-	protected remove: boolean;
-	protected timestamp: number;
+	protected clients: { [ id: string ]: Client } = {};
 	
-	public clients: { [ id: string ]: Client } = {};
-	
-	public static init( client: Client ) {
-		client.socket.on( 'joinRoom', this.join );
-		client.socket.on( 'leaveRoom', this.leave );
-	}
-	
-	/**
-	 * @event joinRoom
-	 *
-	 * @param id
-	 * @param password
-	 */
-	private static join( id: string, password?: string ) {
-		let socket = this as any as SocketIO.Socket,
-			 room   = Room.list[ id ];
-		if ( !room ) return error( socket, ERROR.RoomExist );
-		
-		room.join( socket.id, password );
-	}
-	
-	/**
-	 * @event leaveRoom
-	 *
-	 * @param id
-	 */
-	private static leave( id: string ) {
-		let socket = this as any as SocketIO.Socket,
-			 room   = Room.list[ id ];
-		if ( !room ) return error( socket, ERROR.RoomExist );
-		if ( !room.clients[ socket.id ] ) return error( socket, ERROR.ClientInRoom );
-		
-		room.leave( socket.id );
-	}
-	
-	constructor( name: string, password?: string, remove: boolean = true, admin?: string, id?: string ) {
+	constructor( { id, password, admin, maxClients = 50, remove = true }: { id?, password?, admin?, maxClients?, remove? } ) {
 		this.id = id;
-		while ( !this.id && !Room.list.hasOwnProperty( this.id ) ) {
+		while ( !this.id && !RoomGroup.get( this.id ) )
 			this.id = Math.random().toString( 36 ).substring( 2, 7 );
-			console.log( this.id );
-		}
 		this.password = password;
-		this.data = { name };
 		this.admin = admin;
-		
+		this.maxClients = maxClients;
 		this.remove = remove;
-		this.timestamp = Date.now();
 		
-		Room.list[ this.id ] = this;
+		this.timeCreated = Date.now();
+		RoomGroup.add( this );
+		
 		if ( config.debug ) console.log( `room ${this.id} created` );
 	}
 	
+	get data() {
+		let clients = {};
+		for ( let client in this.clients ) {
+			clients[ client ] = ( this.clients[ client ] as Client ).data;
+		}
+		
+		return {
+			roomId:           this.id,
+			roomType:         this.type,
+			roomAdmin:        this.admin,
+			roomMaxClients:   this.maxClients,
+			roomCreationTime: this.timeCreated,
+			clientsData:      clients
+		};
+	}
+	
 	/**
-	 * @emits roomJoin
-	 *   room id
-	 *   room data
-	 *   all client data
-	 * @emits clientEnter
-	 *   room id
-	 *   client id
-	 *   client data
-	 *
-	 * @param id
+	 * @param client
 	 * @param password
 	 */
-	public join( id: string, password: string ) {
-		let client     = Client.list[ id ],
-			 { socket } = client;
+	public join( client: Client, password?: string ) {
+		let { socket } = client;
 		
 		// verify password
-		if ( !this.canJoin( id, password ) )
-			return error( socket, ERROR.Permission );
+		if ( !this.canJoin( client, password ) )
+			return error( socket, ERROR.UnableJoinRoom );
+		
 		socket.join( this.id, ( err ) => {
 			if ( err ) return error( socket, err );
 			
-			this.clients[ id ] = client;
+			this.clients[ client.id ] = client;
 			client.rooms[ this.id ] = this;
 			
 			// confirm joined room
-			let clients = {};
-			for ( let client in this.clients ) {
-				clients[ client ] = this.clients[ client ].data;
-			}
-			socket.emit( 'roomJoin', this.id, this.data, clients );
+			socket.emit( roomEvents.join, this.data );
+			
 			// tell other clients
-			socket.in( this.id ).emit( 'clientEnter', this.id, id, client.data );
-			if ( config.debug ) console.log( `${id} joined room ${this.data.name}` );
+			this.socketRoomEmit( client, roomEvents.client.join, client.data );
+			
+			if ( config.debug ) console.log( `${client.id} joined room ${this.id}` );
 		} );
 	}
 	
 	/**
-	 * @emits roomLeave
-	 *   room id
-	 * @emits clientExit
-	 *   room id
-	 *   client id
-	 *
-	 * @param id
+	 * @param client
 	 * @param disconnect
 	 * @param close
 	 */
-	public leave( id: string, disconnect?: boolean, close?: boolean ) {
-		let { socket } = Client.list[ id ];
-		socket.leave( this.id, ( err ) => {
-			if ( err ) return error( socket, err );
+	public leave( client: Client, disconnect?: boolean, close?: boolean ) {
+		client.socket.leave( this.id, ( err ) => {
+			if ( err ) return error( client.socket, err );
 			
-			delete this.clients[ id ];
+			delete this.clients[ client.id ];
 			
 			// remove all clients if admin leaves
-			if ( this.admin === id )
+			if ( this.admin === client.id )
 				for ( let client in this.clients )
-					this.leave( this.clients[ client ].id, false, true );
+					this.leave( this.clients[ client ], false, true );
 			
 			// removes room if all clients leave
-			if ( this.remove && !Object.keys( this.clients ).length ) delete Room.list[ this.id ];
+			if ( this.remove && !Object.keys( this.clients ).length ) RoomGroup.remove( this );
 			
 			// confirm leave room
-			if ( !disconnect ) socket.emit( 'roomLeave', this.id );
+			if ( !disconnect ) this.socketEmit( client, roomEvents.leave );
+			
 			// tell other clients
-			if ( !close ) socket.in( this.id ).emit( 'clientExit', this.id, id );
-			if ( config.debug ) console.log( `${id} left room ${this.data.name}` );
+			if ( !close ) this.socketRoomEmit( client, roomEvents.client.leave, client.data );
+			
+			if ( config.debug ) console.log( `${client.id} left room ${this.id}` );
 		} );
 	}
 	
-	private canJoin( id: string, password: string ) {
-		return !this.clients.hasOwnProperty( id )
-			&& ( !this.password || this.password === password );
+	public canJoin( client: Client, password: string ) {
+		return !this.hasClient( client )
+			&& ( !this.password || this.password === password )
+			&& ( this.maxClients > Object.keys( this.clients ).length );
+	}
+	
+	public hasClient( client: Client ) {
+		return this.clients.hasOwnProperty( client.id );
+	}
+	
+	public roomEmit( event: string, args? ) {
+		Socket.io.in( this.id ).emit( event, {
+			roomId: this.id,
+			...args
+		} );
+	}
+	
+	public socketEmit( client: Client, event: string, args? ) {
+		client.socket.emit( event, {
+			roomId: this.id,
+			...args
+		} );
+	}
+	
+	public socketRoomEmit( client: Client, event: string, args? ) {
+		client.socket.in( this.id ).emit( event, {
+			roomId: this.id,
+			...args
+		} );
 	}
 	
 }

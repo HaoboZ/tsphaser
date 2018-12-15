@@ -1,6 +1,6 @@
-import Interface from '../interface/interface';
-
-import config from '../config';
+import config from './config';
+import Socket from './connect/socket';
+import Interface from './interface/interface';
 
 export default class Load extends Phaser.Scene {
 	
@@ -18,12 +18,13 @@ export default class Load extends Phaser.Scene {
 	}
 	
 	public create() {
-		this.scene.start( 'Menu' );
+		Socket.init();
+		this.scene.start( 'Chat' );
 	}
 	
 	private resize() {
 		// sets overlay width height
-		Interface.overlay.width( config.width ).height( config.height );
+		Interface.root().width( config.width ).height( config.height );
 		
 		// scales screen to fit screen dimensions
 		const w = $( window );

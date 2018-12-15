@@ -1,7 +1,6 @@
-import Load from './scenes/load';
-import Menu from './menu/menu';
-
 import config from './config';
+import Chat from './examples/chat/chat';
+import Load from './load';
 
 new Phaser.Game( {
 	type:    Phaser.AUTO,
@@ -14,5 +13,5 @@ new Phaser.Game( {
 			debug: false
 		}
 	},
-	scene:   [ Load, Menu ]
+	scene:   [ Load, Chat ]
 } );

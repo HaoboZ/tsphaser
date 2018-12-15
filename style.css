@@ -1,6 +1,5 @@
 body {
 	background: dimgray;
-	color: white;
 	overflow: hidden;
 }
 
@@ -18,6 +17,6 @@ body {
 	pointer-events: none;
 }
 
-#overlay button, #overlay input {
+.pEvents {
 	pointer-events: auto;
 }

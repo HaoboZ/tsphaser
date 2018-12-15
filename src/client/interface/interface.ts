@@ -1,31 +1,42 @@
 import * as ReactDOM from 'react-dom';
 
-const Interface = new class {
+let Interface = new class {
 	
-	private game: Phaser.Game;
+	public game: Phaser.Game;
 	
-	public overlay: JQuery;
+	private overlay: JQuery;
 	
-	init( game: Phaser.Game ) {
+	public init( game: Phaser.Game ) {
 		this.game = game;
 		this.overlay = $( '#overlay' );
 	}
 	
 	/**
-	 * Unmounts container.
+	 * Retrieves the default overlay.
 	 */
-	public unmount(): void {
-		ReactDOM.unmountComponentAtNode( this.overlay[ 0 ] );
+	public root() {
+		return this.overlay;
 	}
 	
 	/**
-	 * Renders a React component to the container.
+	 * Unmounts the JQuery container.
 	 *
-	 * @param {JSX.Element} component
+	 * @param {JQuery} container The container to clean.
 	 */
-	public render( component: JSX.Element ): void {
-		ReactDOM.render( component, this.overlay[ 0 ] );
+	public unmount( container: JQuery = this.overlay ): void {
+		ReactDOM.unmountComponentAtNode( container[ 0 ] );
+	}
+	
+	/**
+	 * Renders a React component to the JQuery container.
+	 *
+	 * @param {JSX.Element} component The react component to render.
+	 * @param {JQuery} container Where to place the component.
+	 */
+	public render( component: JSX.Element, container: JQuery = this.overlay ): void {
+		ReactDOM.render( component, container[ 0 ] );
 	}
 	
 };
+
 export default Interface;

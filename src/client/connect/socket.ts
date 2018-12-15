@@ -1,35 +1,35 @@
-import Room from './room';
-import ChatRoom from '../examples/chatRoom';
+import { socketEvents } from '../../shared/events';
+import config from '../config';
+import { ChatEvents } from '../examples/chat/chatRoom';
+import { RoomEvents } from './room';
 
-const Socket = new class {
+export function SocketEvents() {
+	Socket.socket.on( socketEvents.connect, () => {
+		Socket.events.emit( 'connect' );
+		if ( config.debug ) console.log( 'connected' );
+	} );
+	Socket.socket.on( socketEvents.disconnect, () => {
+		Socket.events.emit( 'disconnect' );
+		if ( config.debug ) console.log( 'disconnected' );
+	} );
+	Socket.socket.on( socketEvents.error, ( err ) => {
+		if ( config.debug ) console.log( err );
+	} );
+}
+
+let Socket = new class {
 	
-	game: Phaser.Game;
+	public events = new Phaser.Events.EventEmitter();
 	
 	public socket: SocketIOClient.Socket;
 	
-	public init( game: Phaser.Game ) {
-		this.game = game;
-		
+	public init() {
 		this.socket = io.connect();
 		
-		this.socket.on( 'connect', this.events.connect );
-		this.socket.on( 'disconnect', this.events.disconnect );
-		this.socket.on( 'err', this.events.error );
-		Room.init();
-		ChatRoom.init();
+		ChatEvents();
+		RoomEvents();
+		SocketEvents();
 	}
-	
-	private events = {
-		connect() {
-			this.game.events.emit( 'connect' );
-		},
-		disconnect() {
-			this.game.events.emit( 'disconnect' );
-		},
-		error( err ) {
-			console.log( err );
-		}
-	};
 	
 };
 export default Socket;

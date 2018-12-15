@@ -1,17 +1,44 @@
 import * as React from 'react';
+import { CSSProperties } from 'react';
 
-export class CenterV extends React.PureComponent {
+export class Centered extends React.PureComponent {
 	
 	props: {
-		width: number,
+		className?: string,
+		style?: CSSProperties,
 		children: any
 	};
 	
 	render() {
-		return <div className='d-flex h-100 align-items-center'>
-			<div style={{ width: this.props.width }} className='container-fluid border'>
-				{this.props.children}
-			</div>
+		return <div
+			className={'position-absolute d-flex w-100 h-100 align-items-center justify-content-center ' + this.props.className}
+			style={this.props.style}
+		>
+			{this.props.children}
+		</div>;
+	}
+	
+}
+
+export class List extends React.PureComponent {
+	
+	props: {
+		style?: CSSProperties,
+		className?: string,
+		data: Array<any>,
+		renderItem: ( { item, index } ) => string | React.ReactElement<any>
+	};
+	
+	render() {
+		const listItems = this.props.data.map( ( item, index ) =>
+			this.props.renderItem( { item, index } )
+		);
+		
+		return <div
+			style={this.props.style}
+			className={this.props.className}
+		>
+			{listItems}
 		</div>;
 	}
 	
