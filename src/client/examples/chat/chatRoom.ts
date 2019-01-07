@@ -1,59 +1,65 @@
-import { chatEvents, roomEvents } from '../../../shared/events';
+import { chatInfo, roomInfo } from '../../../shared/events';
+import Group from '../../../shared/group';
 import config from '../../config';
 import Room from '../../connect/room';
-import RoomGroup from '../../connect/room.group';
 import Socket from '../../connect/socket';
 
 export function ChatEvents() {
-	Socket.socket.on( roomEvents.join,
-		( { roomId, roomType, roomAdmin, roomMaxClients, roomCreationTime, clientsData } ) => {
-			let room = RoomGroup.get( roomId );
-			if ( room || roomType !== chatEvents.type ) return;
+	Socket.socket.on( roomInfo.join,
+		( roomId, { roomType, roomAdmin, roomMaxClients, roomCreationTime, clientsData }: roomInfo.roomData ) => {
+			let room = Room.Group.get( roomId );
+			if ( room || roomType !== chatInfo.type ) return;
 			
-			room = new ChatRoom( roomId, clientsData );
+			room = new ChatRoom( roomId, roomAdmin, roomMaxClients, roomCreationTime, clientsData );
 			
-			Socket.events.emit( roomEvents.join, room );
+			Socket.events.emit( roomInfo.join, room );
 			if ( config.debug ) console.log( `joined room ${room.id}` );
 		}
 	);
-	Socket.socket.on( roomEvents.client.join,
-		( { roomId, clientId, clientName } ) => {
-			let room = RoomGroup.get( roomId ) as ChatRoom;
-			if ( !room ) return;
-			
-			let message = `${clientName} joined the room`,
-				 data    = { clientId, message };
-			room.log.push( data );
-			room.events.emit( chatEvents.message, data );
-		}
-	);
-	Socket.socket.on( roomEvents.client.leave,
-		( { roomId, clientId, clientName } ) => {
-			let room = RoomGroup.get( roomId ) as ChatRoom;
-			if ( !room ) return;
-			
-			let message = `${clientName} left the room`,
-				 data    = { clientId, message };
-			room.log.push( data );
-			room.events.emit( chatEvents.message, data );
-		}
-	);
-	Socket.socket.on( chatEvents.message, ( { roomId, clientId, name, message } ) => {
-		let room = RoomGroup.get( roomId ) as ChatRoom;
-		if ( !room ) return;
-		
-		let data = { clientId, name, message };
-		room.log.push( data );
-		room.events.emit( chatEvents.message, data );
-	} );
 }
 
 export default class ChatRoom extends Room {
 	
-	public log = [];
+	public clients: Group<chatInfo.clientData>;
+	
+	public log: Array<chatInfo.message> = [];
+	
+	constructor( id: string, admin: string, maxClients: number, timeCreated: number, clients: { [ id: string ]: chatInfo.clientData } ) {
+		super( id, admin, maxClients, timeCreated, clients );
+		
+		this.events.on( roomInfo.clientJoin,
+			( client ) => {
+				let message = `${client.clientName} joined the room`,
+				    data    = { clientId: client.clientId, message };
+				this.log.unshift( data );
+				this.events.emit( chatInfo.message, data );
+			}
+		);
+		this.events.on( roomInfo.clientLeave,
+			( client ) => {
+				let message = `${client.clientName} left the room`,
+				    data    = { clientId: client.id, message };
+				this.log.unshift( data );
+				this.events.emit( chatInfo.message, data );
+			}
+		);
+	}
+	
+	protected roomEvents() {
+		return {
+			...super.roomEvents(),
+			[ chatInfo.message ]: ( roomId, args: chatInfo.message ) => {
+				if ( this.id !== roomId ) return;
+				
+				let data = args;
+				this.log.unshift( data );
+				this.events.emit( chatInfo.message, data );
+			}
+		};
+	}
 	
 	public send( message ) {
-		this.emit( chatEvents.message, { message } );
+		this.emit( chatInfo.message, { message } );
 	}
 	
 }

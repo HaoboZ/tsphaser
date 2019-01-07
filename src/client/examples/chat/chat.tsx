@@ -11,7 +11,9 @@ export default class Chat extends Phaser.Scene {
 	
 	public create() {
 		Interface.render( <Centered>
-			<ChatComponent roomId='chatTest'/>
+			<div style={{ width: '50%', height: '80%' }}>
+				<ChatComponent roomId='chatTest'/>
+			</div>
 		</Centered> );
 	}
 	

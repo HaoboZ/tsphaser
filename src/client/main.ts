@@ -1,5 +1,6 @@
 import config from './config';
 import Chat from './examples/chat/chat';
+import Tictactoe from './examples/tictactoe/tictactoe';
 import Load from './load';
 
 new Phaser.Game( {
@@ -13,5 +14,5 @@ new Phaser.Game( {
 			debug: false
 		}
 	},
-	scene:   [ Load, Chat ]
+	scene:   [ Load, Chat, Tictactoe ]
 } );

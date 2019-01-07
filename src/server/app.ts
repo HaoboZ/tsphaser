@@ -4,8 +4,12 @@ import * as path from 'path';
 import * as SocketIO from 'socket.io';
 
 import config from './config';
+import Client, { ClientEvents } from './connect/client';
 
 import Socket from './connect/socket';
+import ChatRoom from './examples/chat/chatRoom';
+import { TictactoeEvents } from './examples/tictactoe/tictactoeRoom';
+import { RoomEvents } from './room/room';
 
 declare let __basedir;
 
@@ -26,3 +30,12 @@ app.use( '/', express.static( __basedir ) );
 
 // socket.io
 Socket.init( SocketIO( server ) );
+
+new ChatRoom( {
+	id:     'chatTest',
+	remove: false
+} );
+
+Socket.events.on( 'connect', ( client: Client ) => {
+	TictactoeEvents( client );
+} );

@@ -4,15 +4,41 @@ import { CSSProperties } from 'react';
 export class Centered extends React.PureComponent {
 	
 	props: {
-		className?: string,
-		style?: CSSProperties,
+		className?: string
+		style?: CSSProperties
 		children: any
 	};
 	
 	render() {
 		return <div
-			className={'position-absolute d-flex w-100 h-100 align-items-center justify-content-center ' + this.props.className}
+			className={'position-absolute d-flex w-100 h-100 align-items-center justify-content-center ' + ( this.props.className ? this.props.className : '' )}
 			style={this.props.style}
+		>
+			{this.props.children}
+		</div>;
+	}
+	
+}
+
+export class Pos extends React.PureComponent {
+	
+	props: {
+		x?: number
+		y?: number
+		width?: number
+		height?: number
+		children: any
+	};
+	
+	render() {
+		return <div
+			className='position-absolute'
+			style={{
+				left:   this.props.x,
+				top:    this.props.y,
+				width:  this.props.width,
+				height: this.props.height
+			}}
 		>
 			{this.props.children}
 		</div>;
@@ -23,9 +49,9 @@ export class Centered extends React.PureComponent {
 export class List extends React.PureComponent {
 	
 	props: {
-		style?: CSSProperties,
-		className?: string,
-		data: Array<any>,
+		style?: CSSProperties
+		className?: string
+		data: Array<any>
 		renderItem: ( { item, index } ) => string | React.ReactElement<any>
 	};
 	
@@ -47,7 +73,7 @@ export class List extends React.PureComponent {
 export class Button extends React.PureComponent {
 	
 	props: {
-		onClick: () => void,
+		onClick: () => void
 		children: any
 	};
 	

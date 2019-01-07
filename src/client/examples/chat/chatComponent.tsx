@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { chatEvents, roomEvents } from '../../../shared/events';
-import RoomGroup from '../../connect/room.group';
+import { chatInfo, roomInfo } from '../../../shared/events';
 import Socket from '../../connect/socket';
 import { List } from '../../interface/components';
 import ChatRoom from './chatRoom';
@@ -8,12 +7,11 @@ import ChatRoom from './chatRoom';
 export default class ChatComponent extends React.Component {
 	
 	props: {
-		roomId: string,
-		password?: string
+		roomId: string
 	};
 	
 	state: {
-		room: ChatRoom,
+		room: ChatRoom
 		input: string
 	} = {
 		room:  null,
@@ -21,11 +19,13 @@ export default class ChatComponent extends React.Component {
 	};
 	
 	componentDidMount() {
-		RoomGroup.join( this.props.roomId, this.props.password );
-		Socket.events.on( roomEvents.join, ( room: ChatRoom ) => {
+		Socket.emit( roomInfo.join, { roomId: this.props.roomId } );
+		Socket.events.on( roomInfo.join, ( room: ChatRoom ) => {
+			if ( !( room instanceof ChatRoom ) ) return;
+			
 			this.setState( { room } );
 			
-			room.events.on( chatEvents.message,
+			room.events.on( chatInfo.message,
 				() => this.setState( {} )
 			);
 		} );
@@ -34,23 +34,20 @@ export default class ChatComponent extends React.Component {
 	render() {
 		if ( !this.state.room ) return null;
 		
-		let { log } = this.state.room;
-		log = new Array( 10 ).fill( null ).concat( log ).slice( -10 );
-		
 		return <div
 			className='border pEvents text-white'
-			style={{ width: '50%', height: '80%', fontSize: 26 }}
+			style={{ height: '100%', fontSize: 26 }}
 		>
 			<List
-				style={{ height: '90%', paddingLeft: 15, paddingRight: 15 }}
-				data={log}
-				renderItem={( { item, index } ) => <div style={{ height: '10%' }} key={index}>
-					{item ? `${item.name ? `${item.name}: ` : ''}${item.message}` : ''}
+				style={{ overflowY: 'scroll', height: '90%', paddingLeft: 15, paddingRight: 15 }}
+				data={this.state.room.log}
+				renderItem={( { item, index } ) => <div style={{ height: 60 }} key={index}>
+					{item ? `${item.clientName ? `${item.clientName}: ` : ''}${item.message}` : ''}
 				</div>}
 			/>
 			<div className='input-group row' style={{ height: '10%', margin: 0 }}>
-				<div className='col-3'>
-					{this.state.room.clients[ Socket.socket.id ].clientName}
+				<div className='col-3 border text-center align-items-center' style={{ lineHeight: 2 }}>
+					{this.state.room.clients.get( Socket.id ).clientName}
 				</div>
 				<input
 					className='col-6 text-dark'

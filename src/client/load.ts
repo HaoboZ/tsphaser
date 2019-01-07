@@ -1,5 +1,7 @@
 import config from './config';
 import Socket from './connect/socket';
+import { ChatEvents } from './examples/chat/chatRoom';
+import { TictactoeEvents } from './examples/tictactoe/tictactoeRoom';
 import Interface from './interface/interface';
 
 export default class Load extends Phaser.Scene {
@@ -19,7 +21,11 @@ export default class Load extends Phaser.Scene {
 	
 	public create() {
 		Socket.init();
-		this.scene.start( 'Chat' );
+		
+		ChatEvents();
+		TictactoeEvents();
+		
+		this.scene.start( 'Tictactoe' );
 	}
 	
 	private resize() {
@@ -31,10 +37,10 @@ export default class Load extends Phaser.Scene {
 		function onResize() {
 			let s = $( '#screen' );
 			let width       = w.width(),
-				 height      = w.height(),
-				 widthRatio  = width / config.width,
-				 heightRatio = height / config.height,
-				 scale       = Math.min( widthRatio, heightRatio );
+			    height      = w.height(),
+			    widthRatio  = width / config.width,
+			    heightRatio = height / config.height,
+			    scale       = Math.min( widthRatio, heightRatio );
 			
 			s.css( 'transform', `translate(-50%, -50%) scale(${scale}, ${scale})` );
 			return onResize;
@@ -44,17 +50,17 @@ export default class Load extends Phaser.Scene {
 	
 	private loadBar( height: number ) {
 		let progressBar = this.add.graphics(),
-			 loadingText = this.add.text(
-				 2, config.height - height,
-				 'Loading...',
-				 {
-					 font: `${height * 0.9}px monospace`,
-					 fill: '#ffffff'
-				 }
-			 );
+		    loadingText = this.add.text(
+			    2, config.height - height,
+			    'Loading...',
+			    {
+				    font: `${height * 0.9}px monospace`,
+				    fill: '#ffffff'
+			    }
+		    );
 		
 		this.load.on( 'progress', ( value ) => {
-			loadingText.setText( `Loading... ${ Math.floor( value * 100 ) }%` );
+			loadingText.setText( `Loading... ${Math.floor( value * 100 )}%` );
 			
 			progressBar.clear();
 			progressBar.fillStyle( Phaser.Display.Color.HexStringToColor( '#bbbbbb' ).color, 1 );

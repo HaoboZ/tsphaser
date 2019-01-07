@@ -1,29 +1,34 @@
-import { ERROR, error } from '../../../shared/error';
-import { chatEvents } from '../../../shared/events';
+import { chatInfo } from '../../../shared/events';
 import Client from '../../connect/client';
-import Room from '../../connect/room';
-import RoomGroup from '../../connect/room.group';
+import Room from '../../room/room';
+import ChatClient from './chatClient';
 
-export function ChatEvents( client: Client ) {
-	client.socket.on( chatEvents.message, ( { roomId, message } ) => {
-		let room = RoomGroup.get( roomId ) as ChatRoom;
-		if ( !room ) return error( client.socket, ERROR.RoomExist );
+export default class ChatRoom extends Room<ChatClient> {
+	
+	public type = chatInfo.type;
+	protected baseClient = ChatClient;
+	
+	public log = [];
+	
+	protected roomEvents( chatClient: ChatClient ) {
+		let client = chatClient.client;
+		return {
+			...super.roomEvents( chatClient ),
+			[ chatInfo.message ]: ( roomId, { message } ) => {
+				if ( this.id !== roomId ) return;
+				
+				this.send( client, message );
+			}
+		};
+	}
+	
+	public send( client: Client, message ) {
+		let chatClient = this.clients.get( client.id );
 		
-		room.send( client, message );
-	} );
-}
-
-export default class ChatRoom extends Room {
-	
-	public type = chatEvents.type;
-	
-	protected log = [];
-	
-	public send( client, message ) {
-		let data = { clientId: client.id, name: client.name, message };
+		let data: chatInfo.message = { ...chatClient.data, message };
 		
 		this.log.push( data );
-		this.roomEmit( chatEvents.message, data );
+		this.roomEmit( chatInfo.message, data );
 	}
 	
 }

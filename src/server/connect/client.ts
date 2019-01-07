@@ -1,51 +1,59 @@
 import * as SocketIO from 'socket.io';
-import { socketEvents } from '../../shared/events';
-import names from '../../shared/names';
+import { clientInfo } from '../../shared/events';
+import Group from '../../shared/group';
 import config from '../config';
-import { ChatEvents } from '../examples/chat/chatRoom';
-import ClientGroup from './client.group';
-import Room, { RoomEvents } from './room';
+import Room, { RoomEvents } from '../room/room';
 
-function ClientEvents( client: Client ) {
-	client.socket.on( socketEvents.disconnect,
+export function ClientEvents( client: Client ) {
+	client.socket.on( clientInfo.disconnect,
 		() => {
 			// remove this player from our clients list
-			ClientGroup.remove( client );
+			Client.Group.remove( client.id );
 			
 			if ( config.debug ) console.log( `${client.id} disconnected` );
 		}
 	);
 }
 
+/**
+ * Socket wrapper.
+ * Stores extra data for rooms.
+ */
 export default class Client {
+	
+	public static Group = new Group<Client>();
 	
 	public socket: SocketIO.Socket;
 	
-	public id: string;
-	public rooms: { [ id: string ]: Room } = {};
+	/**
+	 * Reference to this.socket.id.
+	 */
+	public id: clientInfo.id;
 	
-	public name: string;
+	/**
+	 * List of rooms that client is currently in.
+	 */
+	public rooms: { [ id: string ]: Room<any> } = {};
+	
+	/**
+	 * All client data.
+	 */
+	get data(): clientInfo.clientData {
+		return {
+			clientId: this.id
+		};
+	}
 	
 	constructor( socket: SocketIO.Socket ) {
 		this.socket = socket;
 		this.id = this.socket.id;
-		this.name = names[ Math.floor( Math.random() * names.length ) ];
 		
-		ClientGroup.add( this );
+		Client.Group.add( this.id, this );
 		
-		// TictactoeEvents( this );
-		ChatEvents( this );
-		RoomEvents( this );
 		ClientEvents( this );
+		RoomEvents( this );
 		
 		if ( config.debug ) console.log( `${this.id} connected` );
-	}
-	
-	get data() {
-		return {
-			clientId:   this.id,
-			clientName: this.name
-		};
 	}
 	
 }

@@ -5,8 +5,7 @@ export function error( socket: SocketIO.Socket, err?: ERROR ) {
 }
 
 export enum ERROR {
-	RoomExist,
 	UnableJoinRoom,
-	ClientNotInRoom,
-	ClientInRoom
+	UnableLeaveRoom,
+	ClientNotInRoom
 }

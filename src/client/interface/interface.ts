@@ -19,11 +19,11 @@ let Interface = new class {
 	}
 	
 	/**
-	 * Unmounts the JQuery container.
+	 * Clears the JQuery container.
 	 *
 	 * @param {JQuery} container The container to clean.
 	 */
-	public unmount( container: JQuery = this.overlay ): void {
+	public clear( container: JQuery = this.overlay ): void {
 		ReactDOM.unmountComponentAtNode( container[ 0 ] );
 	}
 	
