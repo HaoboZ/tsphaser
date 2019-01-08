@@ -5,8 +5,7 @@ import config from '../config';
 import Room, { RoomEvents } from '../room/room';
 
 export function ClientEvents( client: Client ) {
-	client.socket.on( clientInfo.disconnect,
-		() => {
+	client.socket.on( clientInfo.disconnect, () => {
 			// remove this player from our clients list
 			Client.Group.remove( client.id );
 			
@@ -33,7 +32,7 @@ export default class Client {
 	/**
 	 * List of rooms that client is currently in.
 	 */
-	public rooms: { [ id: string ]: Room<any> } = {};
+	public rooms = new Group<Room<any>>();
 	
 	/**
 	 * All client data.
@@ -51,9 +50,14 @@ export default class Client {
 		Client.Group.add( this.id, this );
 		
 		ClientEvents( this );
-		RoomEvents( this );
+		this.multiOn( RoomEvents( this ) );
 		
 		if ( config.debug ) console.log( `${this.id} connected` );
+	}
+	
+	public multiOn( events: { [ name: string ]: ( ...any ) => void } ) {
+		for ( let name in events )
+			this.socket.on( name, events[ name ] );
 	}
 	
 }

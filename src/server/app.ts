@@ -4,12 +4,11 @@ import * as path from 'path';
 import * as SocketIO from 'socket.io';
 
 import config from './config';
-import Client, { ClientEvents } from './connect/client';
+import Client from './connect/client';
 
 import Socket from './connect/socket';
 import ChatRoom from './examples/chat/chatRoom';
 import { TictactoeEvents } from './examples/tictactoe/tictactoeRoom';
-import { RoomEvents } from './room/room';
 
 declare let __basedir;
 
@@ -37,5 +36,5 @@ new ChatRoom( {
 } );
 
 Socket.events.on( 'connect', ( client: Client ) => {
-	TictactoeEvents( client );
+	client.multiOn( TictactoeEvents( client ) );
 } );

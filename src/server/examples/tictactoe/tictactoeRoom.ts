@@ -8,26 +8,28 @@ enum tictactoeState {
 	PLAY
 }
 
-export function TictactoeEvents( client: Client ) {
-	client.socket.on( tictactoeInfo.room.join, ( args, returnId ) => {
-		let room = Room.Group.getFirst( ( room: TictactoeRoom ) =>
-			room.type !== tictactoeInfo.room.type ? false : room.clients.count === 1
-		) as TictactoeRoom;
-		if ( !room ) room = new TictactoeRoom( { maxClients: 2 } );
-		
-		room.join( client, undefined, returnId );
-	} );
+export function TictactoeEvents( client: Client ): tictactoeInfo.events.server.global {
+	return {
+		[ tictactoeInfo.join ]: ( args, returnId ) => {
+			let room = Room.Group.getFirst( ( room: TictactoeRoom ) =>
+				room.type !== tictactoeInfo.type ? false : room.clients.count === 1
+			) as TictactoeRoom;
+			if ( !room ) room = new TictactoeRoom( { maxClients: 2 } );
+			
+			room.join( client, undefined, returnId );
+		}
+	};
 }
 
 class TictactoeRoom extends Room<TictactoeClient> {
 	
-	public type = tictactoeInfo.room.type;
+	public type = tictactoeInfo.type;
 	protected baseClient = TictactoeClient;
 	
 	public state: tictactoeState;
 	
 	public board = [];
-	public first: string;
+	public x: string;
 	public turn: string;
 	
 	get data() {
@@ -37,7 +39,7 @@ class TictactoeRoom extends Room<TictactoeClient> {
 		};
 	}
 	
-	protected roomEvents( tttClient: TictactoeClient ) {
+	protected roomEvents( tttClient: TictactoeClient ): tictactoeInfo.events.server.local {
 		let client = tttClient.client;
 		return {
 			...super.roomEvents( tttClient ),
@@ -69,13 +71,13 @@ class TictactoeRoom extends Room<TictactoeClient> {
 		for ( let y = 0; y < 3; ++y ) {
 			this.board[ y ] = [ 0, 0, 0 ];
 		}
-		this.first = this.turn = this.randProp( this.clients );
+		this.x = this.turn = TictactoeRoom.randProp( this.clients );
 		
 		this.state = tictactoeState.PLAY;
 		this.roomEmit( tictactoeInfo.play, { first: this.turn } );
 	}
 	
-	public play( player: string, x, y ) {
+	public play( player: string, x: number, y: number ) {
 		if ( this.board[ y ][ x ] && this.turn !== player ) return false;
 		
 		this.board[ y ][ x ] = player;
@@ -85,7 +87,7 @@ class TictactoeRoom extends Room<TictactoeClient> {
 		return this.check( player, x, y );
 	}
 	
-	public check( player, x, y ) {
+	public check( player: string, x: number, y: number ) {
 		let row = 0, col = 0, diag1 = 0, diag2 = 0;
 		for ( let z = 0; z < 3; ++z ) {
 			if ( this.board[ y ][ z ] === player )
@@ -100,7 +102,7 @@ class TictactoeRoom extends Room<TictactoeClient> {
 		return row === 3 || col === 3 || diag1 === 3 || diag2 === 3;
 	}
 	
-	public randProp( obj: Object ): string {
+	public static randProp( obj: Object ): string {
 		let arr = Object.keys( obj );
 		return arr[ Math.floor( ( Math.random() * arr.length ) ) ];
 	}

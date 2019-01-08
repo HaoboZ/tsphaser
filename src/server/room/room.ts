@@ -7,13 +7,15 @@ import Client from '../connect/client';
 import Socket from '../connect/socket';
 import RoomClient from './roomClient';
 
-export function RoomEvents( client: Client ) {
-	client.socket.on( roomInfo.join, ( { roomId, password }: roomInfo.joinData, returnId ) => {
-		let room = Room.Group.get( roomId );
-		if ( !room ) return;
-		
-		room.join( client, password, returnId );
-	} );
+export function RoomEvents( client: Client ): roomInfo.events.server.global {
+	return {
+		[ roomInfo.join ]: ( { roomId, password }, returnId ) => {
+			let room = Room.Group.get( roomId );
+			if ( !room ) return;
+			
+			room.join( client, password, returnId );
+		}
+	};
 }
 
 type constructor = {
@@ -34,7 +36,7 @@ export default class Room<T extends RoomClient> {
 	public type = roomInfo.type;
 	protected baseClient = RoomClient;
 	
-	public id: string;
+	public id: roomInfo.id;
 	protected password: string;
 	public admin: string;
 	public maxClients: number;
@@ -77,11 +79,13 @@ export default class Room<T extends RoomClient> {
 		if ( config.debug ) console.log( `room ${this.id} created` );
 	}
 	
-	protected roomEvents( roomClient: RoomClient ) {
+	protected roomEvents( roomClient: RoomClient ): roomInfo.events.server.local {
 		let client = roomClient.client;
 		
 		return {
-			[ clientInfo.disconnect ]: () => this.leave( client, true ),
+			[ clientInfo.disconnect ]: () => {
+				this.leave( client, true );
+			},
 			[ roomInfo.leave ]:        ( roomId, args, returnId ) => {
 				if ( this.id !== roomId ) return;
 				
@@ -99,17 +103,15 @@ export default class Room<T extends RoomClient> {
 		let { socket } = client;
 		
 		// verify password
-		if ( !this.canJoin( client, password ) )
-			return error( socket, ERROR.UnableJoinRoom );
+		if ( !this.canJoin( client, password ) ) return error( socket, ERROR.UnableJoinRoom );
 		
 		socket.join( this.id, ( err ) => {
 			if ( err ) return error( socket, ERROR.UnableJoinRoom );
 			
 			let roomClient = this.clients.add( client.id, new this.baseClient( client ) as T );
-			client.rooms[ this.id ] = this;
+			client.rooms.add( this.id, this );
 			roomClient.events = this.roomEvents( roomClient );
-			for ( let event in roomClient.events )
-				client.socket.on( event, roomClient.events[ event ] );
+			client.multiOn( roomClient.events );
 			
 			// confirm joined room
 			this.socketEmit( client, roomInfo.join, this.data );
@@ -137,6 +139,7 @@ export default class Room<T extends RoomClient> {
 			if ( err ) return error( client.socket, ERROR.UnableLeaveRoom );
 			
 			let roomClient = this.clients.remove( client.id );
+			client.rooms.remove( this.id );
 			for ( let event in roomClient.events )
 				client.socket.removeListener( event, roomClient.events[ event ] );
 			

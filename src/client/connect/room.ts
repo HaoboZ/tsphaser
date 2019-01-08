@@ -3,9 +3,9 @@ import Group from '../../shared/group';
 import config from '../config';
 import Socket from './socket';
 
-export function RoomEvents() {
-	Socket.socket.on( roomInfo.join,
-		( roomId, { roomType, roomAdmin, roomMaxClients, roomCreationTime, clientsData }: roomInfo.roomData ) => {
+export function RoomEvents(): roomInfo.events.client.global {
+	return {
+		[ roomInfo.join ]: ( roomId, { roomType, roomAdmin, roomMaxClients, roomCreationTime, clientsData } ) => {
 			let room = Room.Group.get( roomId );
 			if ( room || roomType !== roomInfo.type ) return;
 			
@@ -14,7 +14,7 @@ export function RoomEvents() {
 			Socket.events.emit( roomInfo.join, room );
 			if ( config.debug ) console.log( `joined room ${room.id}` );
 		}
-	);
+	};
 }
 
 export default class Room {
@@ -46,9 +46,9 @@ export default class Room {
 		Room.Group.add( this.id, this );
 	}
 	
-	protected roomEvents() {
+	protected roomEvents(): roomInfo.events.client.local {
 		return {
-			[ roomInfo.leave ]:       ( roomId: string ) => {
+			[ roomInfo.leave ]:       ( roomId ) => {
 				if ( this.id !== roomId ) return;
 				
 				Room.Group.remove( this.id );
@@ -58,7 +58,7 @@ export default class Room {
 				this.events.emit( roomInfo.leave, this );
 				if ( config.debug ) console.log( `left room ${this.id}` );
 			},
-			[ roomInfo.clientJoin ]:  ( roomId: string, { clientId }: clientInfo.clientData ) => {
+			[ roomInfo.clientJoin ]:  ( roomId, { clientId } ) => {
 				if ( this.id !== roomId ) return;
 				
 				let client = { clientId };
@@ -67,7 +67,7 @@ export default class Room {
 				this.events.emit( roomInfo.clientJoin, client );
 				if ( config.debug ) console.log( `${clientId} joined room ${this.id}` );
 			},
-			[ roomInfo.clientLeave ]: ( roomId: string, { clientId }: clientInfo.clientData ) => {
+			[ roomInfo.clientLeave ]: ( roomId, { clientId } ) => {
 				if ( this.id !== roomId ) return;
 				
 				let client = this.clients[ clientId ];

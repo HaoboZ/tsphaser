@@ -44,7 +44,7 @@ let Socket = new class {
 		this.socket = io.connect();
 		
 		SocketEvents();
-		RoomEvents();
+		this.multiOn( RoomEvents() );
 	}
 	
 	/**
@@ -62,6 +62,11 @@ let Socket = new class {
 		}
 		
 		this.socket.emit( event, args, id );
+	}
+	
+	public multiOn( events: { [ name: string ]: ( ...any ) => void } ) {
+		for ( let name in events )
+			this.socket.on( name, events[ name ] );
 	}
 	
 };

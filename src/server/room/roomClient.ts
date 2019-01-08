@@ -4,7 +4,7 @@ export default class RoomClient {
 	
 	public client: Client;
 	
-	public events: Object;
+	public events: { [ name: string ]: ( ...any ) => void };
 	
 	get data() {
 		return this.client.data;
