@@ -1,6 +1,8 @@
-import { tictactoeInfo } from '../../../shared/events';
+import { roomInfo, tictactoeInfo } from '../../../shared/events';
+import config from '../../config';
 import Client from '../../connect/client';
 import Room from '../../room/room';
+import tictactoeClient from './tictactoeClient';
 import TictactoeClient from './tictactoeClient';
 
 enum tictactoeState {
@@ -26,32 +28,37 @@ class TictactoeRoom extends Room<TictactoeClient> {
 	public type = tictactoeInfo.type;
 	protected baseClient = TictactoeClient;
 	
-	public state: tictactoeState;
+	public state: tictactoeState = tictactoeState.WAIT;
 	
 	public board = [];
-	public x: string;
+	public first: string;
 	public turn: string;
 	
-	get data() {
-		return {
-			...super.data,
-			board: this.board
-		};
-	}
-	
 	protected roomEvents( tttClient: TictactoeClient ): tictactoeInfo.events.server.local {
-		let client = tttClient.client;
+		const client = tttClient.client;
+		
+		this.events.on( roomInfo.leave, () => {
+			if ( this.state !== tictactoeState.PLAY ) return;
+			
+			this.state = tictactoeState.WAIT;
+			this.clients.loop( ( client: tictactoeClient ) =>
+				client.ready = false );
+			this.roomEmit( tictactoeInfo.over, { winner: 0 } );
+		} );
+		
 		return {
 			...super.roomEvents( tttClient ),
 			[ tictactoeInfo.start ]: ( roomId, args, returnId ) => {
 				if ( this.id !== roomId ) return;
 				if ( this.state !== tictactoeState.WAIT ) return;
 				if ( tttClient.ready ) return;
+				if ( this.clients.count !== 2 ) return;
 				
 				tttClient.ready = true;
 				this.socketEmit( client, returnId );
-				for ( let client in this.clients )
-					if ( !( this.clients[ client ] as TictactoeClient ).ready ) return;
+				if ( !this.clients.loop( ( client: TictactoeClient ) => {
+					if ( !client.ready ) return true;
+				} ) ) return;
 				
 				this.reset();
 			},
@@ -61,33 +68,37 @@ class TictactoeRoom extends Room<TictactoeClient> {
 				
 				if ( this.play( client.id, x, y ) ) {
 					this.state = tictactoeState.WAIT;
-					this.roomEmit( tictactoeInfo.over, { winner: client.id } );
+					this.clients.loop( ( client: tictactoeClient ) =>
+						client.ready = false );
+					this.roomEmit( tictactoeInfo.over, { winner: this.tie ? 0 : client.id } );
 				}
 			}
 		};
 	}
 	
 	public reset() {
-		for ( let y = 0; y < 3; ++y ) {
+		for ( let y = 0; y < 3; ++y )
 			this.board[ y ] = [ 0, 0, 0 ];
-		}
-		this.x = this.turn = TictactoeRoom.randProp( this.clients );
+		
+		this.first = this.turn = this.clients.random;
 		
 		this.state = tictactoeState.PLAY;
-		this.roomEmit( tictactoeInfo.play, { first: this.turn } );
+		if ( config.debug ) console.log( `${this.first} playing` );
+		this.roomEmit( tictactoeInfo.start, { first: this.first } );
 	}
 	
 	public play( player: string, x: number, y: number ) {
 		if ( this.board[ y ][ x ] && this.turn !== player ) return false;
 		
 		this.board[ y ][ x ] = player;
-		this.turn = Object.keys( this.clients ).find( value => value !== player );
+		this.turn = this.clients.getFirst( value => value !== player ).client.id;
 		
-		this.roomEmit( tictactoeInfo.play, { clientId: player, x, y, turn: this.turn } );
+		this.roomEmit( tictactoeInfo.play, { player, x, y } );
+		if ( config.debug ) console.log( `${this.turn} playing` );
 		return this.check( player, x, y );
 	}
 	
-	public check( player: string, x: number, y: number ) {
+	private check( player: string, x: number, y: number ) {
 		let row = 0, col = 0, diag1 = 0, diag2 = 0;
 		for ( let z = 0; z < 3; ++z ) {
 			if ( this.board[ y ][ z ] === player )
@@ -99,12 +110,15 @@ class TictactoeRoom extends Room<TictactoeClient> {
 			if ( x + y === 2 && this.board[ z ][ 2 - z ] === player )
 				++diag2;
 		}
-		return row === 3 || col === 3 || diag1 === 3 || diag2 === 3;
+		
+		return this.tie || row === 3 || col === 3 || diag1 === 3 || diag2 === 3;
 	}
 	
-	public static randProp( obj: Object ): string {
-		let arr = Object.keys( obj );
-		return arr[ Math.floor( ( Math.random() * arr.length ) ) ];
+	private get tie() {
+		for ( let y = 0; y < 3; ++y )
+			for ( let x = 0; x < 3; ++x )
+				if ( !this.board[ y ][ x ] ) return false;
+		return true;
 	}
 	
 }

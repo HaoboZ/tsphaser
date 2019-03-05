@@ -36,11 +36,11 @@ export default class Room {
 		this.admin = admin;
 		this.maxClients = maxClients;
 		this.timeCreated = timeCreated;
-		for ( let id in clients )
+		for ( const id in clients )
 			this.clients.add( id, clients[ id ] );
 		
 		this._events = this.roomEvents();
-		for ( let event in this._events )
+		for ( const event in this._events )
 			Socket.socket.on( event, this._events[ event ] );
 		
 		Room.Group.add( this.id, this );
@@ -52,26 +52,25 @@ export default class Room {
 				if ( this.id !== roomId ) return;
 				
 				Room.Group.remove( this.id );
-				for ( let event in this._events )
+				for ( const event in this._events )
 					Socket.socket.off( event, this._events[ event ] );
 				
 				this.events.emit( roomInfo.leave, this );
 				if ( config.debug ) console.log( `left room ${this.id}` );
 			},
-			[ roomInfo.clientJoin ]:  ( roomId, { clientId } ) => {
+			[ roomInfo.clientJoin ]:  ( roomId, clientData ) => {
 				if ( this.id !== roomId ) return;
 				
-				let client = { clientId };
-				this.clients[ clientId ] = client;
+				this.clients.add( clientData.clientId, clientData );
 				
-				this.events.emit( roomInfo.clientJoin, client );
-				if ( config.debug ) console.log( `${clientId} joined room ${this.id}` );
+				this.events.emit( roomInfo.clientJoin, clientData );
+				if ( config.debug ) console.log( `${clientData.clientId} joined room ${this.id}` );
 			},
 			[ roomInfo.clientLeave ]: ( roomId, { clientId } ) => {
 				if ( this.id !== roomId ) return;
 				
-				let client = this.clients[ clientId ];
-				delete this.clients[ clientId ];
+				const client = this.clients.get( clientId );
+				this.clients.remove( clientId );
 				
 				this.events.emit( roomInfo.clientLeave, client );
 				if ( config.debug ) console.log( `${clientId} left room ${this.id}` );

@@ -22,8 +22,8 @@ export default class Load extends Phaser.Scene {
 	public create() {
 		Socket.init();
 		
-		ChatEvents();
-		TictactoeEvents();
+		Socket.multiOn( ChatEvents );
+		Socket.multiOn( TictactoeEvents );
 		
 		this.scene.start( 'Tictactoe' );
 	}
@@ -35,8 +35,8 @@ export default class Load extends Phaser.Scene {
 		// scales screen to fit screen dimensions
 		const w = $( window );
 		function onResize() {
-			let s = $( '#screen' );
-			let width       = w.width(),
+			const s = $( '#screen' );
+			const width       = w.width(),
 			    height      = w.height(),
 			    widthRatio  = width / config.width,
 			    heightRatio = height / config.height,
@@ -49,7 +49,7 @@ export default class Load extends Phaser.Scene {
 	}
 	
 	private loadBar( height: number ) {
-		let progressBar = this.add.graphics(),
+		const progressBar = this.add.graphics(),
 		    loadingText = this.add.text(
 			    2, config.height - height,
 			    'Loading...',

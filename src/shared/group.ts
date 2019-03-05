@@ -17,14 +17,15 @@ export default class Group<T> {
 		return this.list[ id ];
 	}
 	
-	get count(): number {
+	public get count(): number {
 		return Object.keys( this.list ).length;
 	}
 	
 	public loop( fn: ( item: T | any, id: string ) => boolean | void ) {
 		for ( let id in this.list ) {
-			if ( fn( this.list[ id ], id ) ) return;
+			if ( fn( this.list[ id ], id ) ) return false;
 		}
+		return true;
 	}
 	
 	public getFirst( fn: ( item: T | any ) => boolean ): T {
@@ -32,6 +33,10 @@ export default class Group<T> {
 			if ( fn( this.list[ id ] ) ) return this.list[ id ];
 		}
 		return null;
+	}
+	
+	public get random() {
+		return Object.keys( this.list )[ Math.floor( Math.random() * this.count ) ];
 	}
 	
 }

@@ -3,23 +3,25 @@ import config from '../config';
 import { RoomEvents } from './room';
 
 function SocketEvents() {
-	Socket.socket.on( clientInfo.connect, () => {
-		Socket.id = Socket.socket.id;
-		
-		Socket.events.emit( 'connect' );
-		if ( config.debug ) console.log( 'connected' );
-	} );
-	Socket.socket.on( clientInfo.disconnect, () => {
-		Socket.events.emit( 'disconnect' );
-		if ( config.debug ) console.log( 'disconnected' );
-	} );
-	Socket.socket.on( clientInfo.error, ( err ) => {
-		Socket.events.emit( clientInfo.error, err );
-		if ( config.debug ) console.log( err );
-	} );
+	return {
+		[ clientInfo.connect ]:    () => {
+			Socket.id = Socket.socket.id;
+			
+			Socket.events.emit( 'connect' );
+			if ( config.debug ) console.log( 'connected' );
+		},
+		[ clientInfo.disconnect ]: () => {
+			Socket.events.emit( 'disconnect' );
+			if ( config.debug ) console.log( 'disconnected' );
+		},
+		[ clientInfo.error ]:      ( err ) => {
+			Socket.events.emit( clientInfo.error, err );
+			if ( config.debug ) console.log( err );
+		}
+	};
 }
 
-let Socket = new class {
+const Socket = new class {
 	
 	/**
 	 * Reference to SocketIO socket.
@@ -36,15 +38,14 @@ let Socket = new class {
 	 */
 	public events = new Phaser.Events.EventEmitter();
 	
-	
 	/**
 	 * Called by main code to initialize sockets and create events.
 	 */
 	public init() {
 		this.socket = io.connect();
 		
-		SocketEvents();
-		this.multiOn( RoomEvents() );
+		this.multiOn( SocketEvents );
+		this.multiOn( RoomEvents );
 	}
 	
 	/**
@@ -64,9 +65,10 @@ let Socket = new class {
 		this.socket.emit( event, args, id );
 	}
 	
-	public multiOn( events: { [ name: string ]: ( ...any ) => void } ) {
-		for ( let name in events )
-			this.socket.on( name, events[ name ] );
+	public multiOn( events: () => { [ name: string ]: ( ...any ) => void } ) {
+		const _events = events();
+		for ( const name in _events )
+			this.socket.on( name, _events[ name ] );
 	}
 	
 };

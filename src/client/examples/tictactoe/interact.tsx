@@ -15,35 +15,40 @@ export default class Interact extends React.Component {
 	};
 	
 	public componentDidMount(): void {
-		Socket.events.on( tictactoeInfo.room.join, ( room: TictactoeRoom ) => {
+		Socket.events.on( tictactoeInfo.join, ( room: TictactoeRoom ) => {
 			this.setState( { room } );
-			room.events.on( tictactoeInfo.start, () => this.setState( { playing: true } ) );
-			room.events.on( tictactoeInfo.over, ( winner ) => {
-				console.log( 'Winner is ', this.state.room.clients.get( winner ).clientName );
-				this.setState( { playing: false } );
-			} );
-			room.events.on( roomInfo.leave, () => this.setState( { room: null, playing: false } ) );
+			
+			room.events.on( tictactoeInfo.start, () =>
+				this.setState( { playing: true } ) );
+			room.events.on( tictactoeInfo.over, () =>
+				this.setState( { playing: false } ) );
+			room.events.on( roomInfo.leave, () =>
+				this.setState( { room: null, playing: false } ) );
 		} );
 	}
 	
 	render() {
-		let style: React.CSSProperties = { width: 200, height: 64, fontSize: 30 };
-		let find = <button style={style} onClick={() => Socket.emit( tictactoeInfo.room.join )}>
+		const style: React.CSSProperties = { width: 200, height: 64, fontSize: 30 };
+		const find = <button className='pEvents' style={style} onClick={() =>
+			    Socket.emit( tictactoeInfo.join )}>
 			    Find Room
 		    </button>,
-		    play = <button style={style} onClick={() => this.state.room.emit( tictactoeInfo.start )}>
+		    play = <button className='pEvents' style={style} onClick={() =>
+			    this.state.room.emit( tictactoeInfo.start, undefined, () =>
+				    this.setState( { playing: true } ) )}>
 			    Play
 		    </button>,
-		    exit = <button style={style} onClick={() => this.state.room.emit( roomInfo.leave )}>
+		    exit = <button className='pEvents' style={style} onClick={() =>
+			    this.state.room.emit( roomInfo.leave )}>
 			    Exit
 		    </button>;
 		
 		if ( !this.state.room )
-			return <Centered className='pEvents'>{find}</Centered>;
+			return <Centered>{find}</Centered>;
 		else if ( !this.state.playing )
-			return <Centered className='pEvents flex-column'>{play}{exit}</Centered>;
+			return <Centered className='flex-column'>{play}{exit}</Centered>;
 		else
-			return <div className='pEvents'>{exit}</div>
+			return <div>{exit}</div>;
 	}
 	
 }

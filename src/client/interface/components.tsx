@@ -1,13 +1,11 @@
 import * as React from 'react';
 import { CSSProperties } from 'react';
 
-export class Centered extends React.PureComponent {
-	
-	props: {
-		className?: string
-		style?: CSSProperties
-		children: any
-	};
+export class Centered extends React.PureComponent<{
+	className?: string
+	style?: CSSProperties
+	children: any
+}> {
 	
 	render() {
 		return <div
@@ -20,15 +18,13 @@ export class Centered extends React.PureComponent {
 	
 }
 
-export class Pos extends React.PureComponent {
-	
-	props: {
-		x?: number
-		y?: number
-		width?: number
-		height?: number
-		children: any
-	};
+export class Pos extends React.PureComponent<{
+	x?: number
+	y?: number
+	width?: number
+	height?: number
+	children: any
+}> {
 	
 	render() {
 		return <div
@@ -46,14 +42,12 @@ export class Pos extends React.PureComponent {
 	
 }
 
-export class List extends React.PureComponent {
-	
-	props: {
-		style?: CSSProperties
-		className?: string
-		data: Array<any>
-		renderItem: ( { item, index } ) => string | React.ReactElement<any>
-	};
+export class List extends React.PureComponent<{
+	style?: CSSProperties
+	className?: string
+	data: Array<any>
+	renderItem: ( { item, index } ) => string | React.ReactElement<any>
+}> {
 	
 	render() {
 		const listItems = this.props.data.map( ( item, index ) =>
@@ -82,7 +76,7 @@ export class Button extends React.PureComponent {
 			<button className='btn btn-lg btn-primary' onClick={this.props.onClick}>
 				{this.props.children}
 			</button>
-		</div>
+		</div>;
 	}
 	
 }

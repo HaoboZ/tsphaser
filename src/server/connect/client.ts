@@ -5,13 +5,14 @@ import config from '../config';
 import Room, { RoomEvents } from '../room/room';
 
 export function ClientEvents( client: Client ) {
-	client.socket.on( clientInfo.disconnect, () => {
+	return {
+		[ clientInfo.disconnect ]: () => {
 			// remove this player from our clients list
 			Client.Group.remove( client.id );
 			
 			if ( config.debug ) console.log( `${client.id} disconnected` );
 		}
-	);
+	};
 }
 
 /**
@@ -49,15 +50,16 @@ export default class Client {
 		
 		Client.Group.add( this.id, this );
 		
-		ClientEvents( this );
-		this.multiOn( RoomEvents( this ) );
+		this.multiOn( ClientEvents );
+		this.multiOn( RoomEvents );
 		
 		if ( config.debug ) console.log( `${this.id} connected` );
 	}
 	
-	public multiOn( events: { [ name: string ]: ( ...any ) => void } ) {
-		for ( let name in events )
-			this.socket.on( name, events[ name ] );
+	public multiOn( events: ( client: Client ) => { [ name: string ]: ( ...any ) => void } ) {
+		const _events = events( this );
+		for ( const name in _events )
+			this.socket.on( name, _events[ name ] );
 	}
 	
 }

@@ -11,7 +11,7 @@ export default class ChatRoom extends Room<ChatClient> {
 	public log: Array<{ clientId, clientName, message }> = [];
 	
 	protected roomEvents( chatClient: ChatClient ): chatInfo.events.server.local {
-		let client = chatClient.client;
+		const client = chatClient.client;
 		return {
 			...super.roomEvents( chatClient ),
 			[ chatInfo.message ]: ( roomId, { message } ) => {
@@ -23,9 +23,9 @@ export default class ChatRoom extends Room<ChatClient> {
 	}
 	
 	public send( client: Client, message ) {
-		let chatClient = this.clients.get( client.id );
+		const chatClient = this.clients.get( client.id );
 		
-		let data = { ...chatClient.data, message };
+		const data = { ...chatClient.data, message };
 		
 		this.log.push( data );
 		this.roomEmit( chatInfo.message, data );

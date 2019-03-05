@@ -1,6 +1,6 @@
 import * as ReactDOM from 'react-dom';
 
-let Interface = new class {
+const Interface = new class {
 	
 	public game: Phaser.Game;
 	

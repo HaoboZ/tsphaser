@@ -4,11 +4,9 @@ import Socket from '../../connect/socket';
 import { List } from '../../interface/components';
 import ChatRoom from './chatRoom';
 
-export default class ChatComponent extends React.Component {
-	
-	props: {
-		roomId: string
-	};
+export default class ChatComponent extends React.Component<{
+	roomId: string
+}> {
 	
 	state: {
 		room: ChatRoom

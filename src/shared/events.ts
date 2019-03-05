@@ -28,20 +28,27 @@ export module roomInfo {
 	export module events {
 		export module server {
 			export type global = {
+				// Called when a client tries to join
 				[ join ]: ( args: { roomId: string, password?: string }, returnId: string ) => void
 			}
 			export type local = {
+				// Called when a client disconnects
 				[ clientInfo.disconnect ]: () => void
+				// Called when a client tries to leave
 				[ leave ]: ( roomId: string, args: undefined, returnId: string ) => void
 			}
 		}
 		export module client {
 			export type global = {
+				// Called when client joins
 				[ join ]: ( roomId: string, args: roomData ) => void
 			}
 			export type local = {
+				// Called when client leaves
 				[ leave ]: ( roomId: string ) => void
+				// Called when another client joins
 				[ clientJoin ]: ( roomId: string, args: clientInfo.clientData ) => void
+				// Called when another client leaves
 				[ clientLeave ]: ( roomId: string, args: clientInfo.clientData ) => void
 			}
 		}
@@ -59,15 +66,18 @@ export module chatInfo {
 	export module events {
 		export module server {
 			export type local = roomInfo.events.server.local & {
+				// Called when a clients sends a message
 				[ message ]: ( roomId: string, args: { message: string } ) => void
 			}
 		}
 		export module client {
 			export type global = {
+				// Called when client joins
 				[ roomInfo.join ]: ( roomId: string, args: roomInfo.roomData ) => void
 			}
 			export type local = roomInfo.events.client.local & {
-				[ chatInfo.message ]: ( roomId: string, args: clientData & { message: string } ) => void
+				// Called when a message is sent
+				[ message ]: ( roomId: string, args: clientData & { message: string } ) => void
 			}
 		}
 	}
@@ -88,21 +98,28 @@ export module tictactoeInfo {
 	export module events {
 		export module server {
 			export type global = {
-				[ tictactoeInfo.join ]: ( args, returnId ) => void
+				// Called when a client tries to join
+				[ join ]: ( args: undefined, returnId: string ) => void
 			}
 			export type local = roomInfo.events.server.local & {
-				[ tictactoeInfo.start ]: ( roomId: string, args: undefined, returnId: string ) => void
-				[ tictactoeInfo.play ]: ( roomId: string, args: { x: number, y: number } ) => void
+				// Called when a client clicks ready
+				[ start ]: ( roomId: string, args: undefined, returnId: string ) => void
+				// Called when a client plays a move
+				[ play ]: ( roomId: string, args: { x: number, y: number } ) => void
 			}
 		}
 		export module client {
 			export type global = {
+				// Called when client joins
 				[ roomInfo.join ]: ( roomId: string, args: roomInfo.roomData ) => void
 			}
 			export type local = roomInfo.events.client.local & {
-				[ tictactoeInfo.start ]: ( roomId: string, args: { x: string, o: string } ) => void
-				[ tictactoeInfo.play ]: ( roomId: string, args: { player: string, x: number, y: number } ) => void
-				[ tictactoeInfo.over ]: ( roomId: string, args: { winner: string } ) => void
+				// Called when game starts
+				[ start ]: ( roomId: string, args: { first: string } ) => void
+				// Called when a move is made
+				[ play ]: ( roomId: string, args: { player: string, x: number, y: number } ) => void
+				// Called when game over
+				[ over ]: ( roomId: string, args: { winner: string } ) => void
 			}
 		}
 	}

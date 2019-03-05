@@ -10,7 +10,7 @@ import Socket from './connect/socket';
 import ChatRoom from './examples/chat/chatRoom';
 import { TictactoeEvents } from './examples/tictactoe/tictactoeRoom';
 
-declare let __basedir;
+declare const __basedir;
 
 // set up server
 const app: express.Application = express();
@@ -21,7 +21,7 @@ const server: http.Server = app.listen( port, () => {
 );
 
 app.get( '/', ( req, res ) => {
-	let index = path.join( __basedir, 'index.html' );
+	const index = path.join( __basedir, 'index.html' );
 	res.sendFile( index );
 } );
 
@@ -36,5 +36,5 @@ new ChatRoom( {
 } );
 
 Socket.events.on( 'connect', ( client: Client ) => {
-	client.multiOn( TictactoeEvents( client ) );
+	client.multiOn( TictactoeEvents );
 } );

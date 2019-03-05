@@ -3,7 +3,7 @@ import * as SocketIO from 'socket.io';
 import { clientInfo } from '../../shared/events';
 import Client from './client';
 
-let Socket = new class {
+const Socket = new class {
 	
 	public io: SocketIO.Server;
 	

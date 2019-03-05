@@ -10,7 +10,7 @@ import RoomClient from './roomClient';
 export function RoomEvents( client: Client ): roomInfo.events.server.global {
 	return {
 		[ roomInfo.join ]: ( { roomId, password }, returnId ) => {
-			let room = Room.Group.get( roomId );
+			const room = Room.Group.get( roomId );
 			if ( !room ) return;
 			
 			room.join( client, password, returnId );
@@ -50,7 +50,7 @@ export default class Room<T extends RoomClient> {
 	public events = new EventEmitter();
 	
 	get data(): roomInfo.roomData {
-		let clients: { [ id: string ]: clientInfo.clientData } = {};
+		const clients: { [ id: string ]: clientInfo.clientData } = {};
 		this.clients.loop( ( item, id ) => {
 			clients[ id ] = item.data;
 		} );
@@ -80,7 +80,7 @@ export default class Room<T extends RoomClient> {
 	}
 	
 	protected roomEvents( roomClient: RoomClient ): roomInfo.events.server.local {
-		let client = roomClient.client;
+		const client = roomClient.client;
 		
 		return {
 			[ clientInfo.disconnect ]: () => {
@@ -100,7 +100,7 @@ export default class Room<T extends RoomClient> {
 	 * @param returnId
 	 */
 	public join( client: Client, password?: string, returnId?: string ) {
-		let { socket } = client;
+		const { socket } = client;
 		
 		// verify password
 		if ( !this.canJoin( client, password ) ) return error( socket, ERROR.UnableJoinRoom );
@@ -108,10 +108,10 @@ export default class Room<T extends RoomClient> {
 		socket.join( this.id, ( err ) => {
 			if ( err ) return error( socket, ERROR.UnableJoinRoom );
 			
-			let roomClient = this.clients.add( client.id, new this.baseClient( client ) as T );
+			const roomClient = this.clients.add( client.id, new this.baseClient( client ) as T );
 			client.rooms.add( this.id, this );
 			roomClient.events = this.roomEvents( roomClient );
-			client.multiOn( roomClient.events );
+			client.multiOn( () => roomClient.events );
 			
 			// confirm joined room
 			this.socketEmit( client, roomInfo.join, this.data );
@@ -132,15 +132,17 @@ export default class Room<T extends RoomClient> {
 	 * @param returnId
 	 */
 	public leave( client: Client, disconnect?: boolean, close?: boolean, returnId?: string ) {
-		console.log( this.hasClient( client ) );
 		if ( !this.hasClient( client ) ) return error( client.socket, ERROR.ClientNotInRoom );
 		
 		client.socket.leave( this.id, ( err ) => {
 			if ( err ) return error( client.socket, ERROR.UnableLeaveRoom );
 			
-			let roomClient = this.clients.remove( client.id );
+			const roomClient = this.clients.remove( client.id );
 			client.rooms.remove( this.id );
-			for ( let event in roomClient.events )
+			if ( config.debug ) console.log( `${client.id} left room ${this.id}` );
+			
+			// remove listeners
+			for ( const event in roomClient.events )
 				client.socket.removeListener( event, roomClient.events[ event ] );
 			
 			// remove all clients if admin leaves
@@ -150,7 +152,10 @@ export default class Room<T extends RoomClient> {
 				} );
 			
 			// removes room if all clients leave
-			if ( this.remove && !this.clients.count ) Room.Group.remove( this.id );
+			if ( this.remove && !this.clients.count ) {
+				if ( config.debug ) console.log( `removed room ${this.id}` );
+				Room.Group.remove( this.id );
+			}
 			
 			// confirm leave room
 			if ( !disconnect ) {
@@ -162,7 +167,6 @@ export default class Room<T extends RoomClient> {
 			if ( !close ) this.socketRoomEmit( client, roomInfo.clientLeave, roomClient.data );
 			
 			this.events.emit( roomInfo.leave, roomClient );
-			if ( config.debug ) console.log( `${client.id} left room ${this.id}` );
 		} );
 	}
 	
