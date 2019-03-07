@@ -4,9 +4,11 @@
 	"license": "MIT",
 	"main": "main.js",
 	"scripts": {
-		"client": "webpack",
+		"client": "webpack --watch",
 		"server": "ts-node-dev -P src/server/tsconfig.json app.ts",
 		"ionic": "ionic serve -c",
+		"start": "ts-node-dev -P src/server/tsconfig.json app.ts",
+		"build": "webpack",
 		"ionic:serve": "ts-node-dev -P src/server/tsconfig.json app.ts"
 	},
 	"dependencies": {

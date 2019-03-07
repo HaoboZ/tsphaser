@@ -9,7 +9,6 @@ module.exports = {
 	},
 	devtool:   'inline-source-map',
 	mode:      'development',
-	// watch:     true,
 	module:    {
 		rules: [
 			{
