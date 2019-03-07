@@ -1,5 +1,5 @@
 export const config = {
-	port:  80,
+	port:  8100,
 	debug: true
 };
 export default config;

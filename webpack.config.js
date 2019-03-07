@@ -1,28 +1,28 @@
-const path = require('path');
-const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
+const path = require( 'path' );
+const BrowserSyncPlugin = require( 'browser-sync-webpack-plugin' );
 
 module.exports = {
-	entry:     path.join(__dirname, 'src/client/main.ts'),
+	entry:     path.join( __dirname, 'src/client/main.ts' ),
 	output:    {
-		path:     path.join(__dirname, 'build'),
+		path:     path.join( __dirname, 'build' ),
 		filename: 'bundle.js'
 	},
 	devtool:   'inline-source-map',
 	mode:      'development',
-	watch:     true,
+	// watch:     true,
 	module:    {
 		rules: [
 			{
 				test:   /\.tsx?$/,
-				loader: ['ts-loader']
+				loader: [ 'ts-loader' ]
 			},
 			{
 				test:   /\.less$/,
-				loader: ['style-loader', 'css-loader', 'less-loader']
+				loader: [ 'style-loader', 'css-loader', 'less-loader' ]
 			},
 			{
 				test:   /\.css$/,
-				loader: ['style-loader', 'css-loader']
+				loader: [ 'style-loader', 'css-loader' ]
 			}
 		]
 	},
@@ -31,12 +31,12 @@ module.exports = {
 		'react-dom': 'ReactDOM'
 	},
 	plugins:   [
-		new BrowserSyncPlugin({
+		new BrowserSyncPlugin( {
 			host:      'localhost',
 			ghostMode: false
-		})
+		} )
 	],
 	resolve:   {
-		extensions: ['.js', '.jsx', '.ts', '.tsx', '.css', '.less']
+		extensions: [ '.js', '.jsx', '.ts', '.tsx', '.css', '.less' ]
 	}
 };

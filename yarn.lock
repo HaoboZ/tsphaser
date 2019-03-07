@@ -2,6 +2,46 @@
 # yarn lockfile v1
 
 
+"@ionic-native/core@^5.2.0":
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/core/-/core-5.2.0.tgz#68bf890b3276d481c2266d348028968646002234"
+  integrity sha512-bVvYZsNTckoRW61QioGHTfp2v0FJcaJ7WhlnMrGgOj/ejBvSMPpfj1K/pws0TCUFnerWyLbSXgfGGYGoicLEOw==
+  dependencies:
+    "@types/cordova" latest
+
+"@ionic-native/splash-screen@^5.2.0":
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/splash-screen/-/splash-screen-5.2.0.tgz#4b065f42660fe19291e1b96f425a43eef070a04b"
+  integrity sha512-Nqykf2Fzj1mxENI6LSj1IplHiUIJzsiP13HhNWqceqAlQF2S8yI8KAKPGT6JRWtjSB1hlUR8VywhiFnX298jaw==
+  dependencies:
+    "@types/cordova" latest
+
+"@ionic-native/status-bar@^5.2.0":
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/status-bar/-/status-bar-5.2.0.tgz#ae5df46511cb5b21c43b2587d2fbd433dacc6d80"
+  integrity sha512-kvCE1gh6nuXvvSv07sDmbknF5G/f09dTE27jvBPBe51OxyNcFNhHidqoRo2ZoNbMN0/Obb9KqrUiRevSQbOcUA==
+  dependencies:
+    "@types/cordova" latest
+
+"@ionic/core@^4.0.2":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@ionic/core/-/core-4.1.0.tgz#fbe2c3df570e8ce6689fdd802450dd576cfac01f"
+  integrity sha512-l0E8K/iOevtLAVJARO2AJ9qyqUaibcISJ2k3qo4V5cyV0BlXZw84cQrQizgelfcKdF4p8arRv8+SuOGtveFhmQ==
+  dependencies:
+    ionicons "4.5.5"
+
+"@ionic/pro@^2.0.4":
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/@ionic/pro/-/pro-2.0.4.tgz#d9531ddaaf11098b75dde5aad5fea47b23632322"
+  integrity sha512-8/tLniY1A2VUgphWvNzebm5hqZoaJTdQlPIReQHxFAAuwGyY+8aakLM1EhvXTC8a68J0mWSs2/wgepSWq1wNlw==
+
+"@ionic/react@^0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@ionic/react/-/react-0.0.5.tgz#7a0bc4531244acd2f1dd0be92c2accb1086136f9"
+  integrity sha512-gaj7/KI3eVlwoEoaX25+9rF1Ik4PUEs1HipnMfY8k3UvhVnbqTGAyfWeVPXsbcbpeiI6iB13vZGSkut8FOKakA==
+  dependencies:
+    "@ionic/core" "^4.0.2"
+
 "@types/body-parser@*":
   version "1.17.0"
   resolved "https://registry.yarnpkg.com/@types/body-parser/-/body-parser-1.17.0.tgz#9f5c9d9bd04bb54be32d5eb9fc0d8c974e6cf58c"
@@ -24,6 +64,11 @@
   integrity sha512-4r8qa0quOvh7lGD0pre62CAb1oni1OO6ecJLGCezTmhQ8Fz50Arx9RUszryR8KlgK6avuSXvviL6yWyViQABOg==
   dependencies:
     "@types/node" "*"
+
+"@types/cordova@latest":
+  version "0.0.34"
+  resolved "https://registry.yarnpkg.com/@types/cordova/-/cordova-0.0.34.tgz#ea7addf74ecec3d7629827a0c39e2c9addc73d04"
+  integrity sha1-6nrd907Ow9dimCegw54smt3HPQQ=
 
 "@types/events@*":
   version "1.2.0"
@@ -3044,6 +3089,11 @@ invert-kv@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/invert-kv/-/invert-kv-2.0.0.tgz#7393f5afa59ec9ff5f67a27620d11c226e3eec02"
   integrity sha512-wPVv/y/QQ/Uiirj/vh3oP+1Ww+AWehmi1g5fFWGPF6IpCBCDVrhgHRMvrLfdYcwDh3QJbGXDW4JAuzxElLSqKA==
+
+ionicons@4.5.5:
+  version "4.5.5"
+  resolved "https://registry.yarnpkg.com/ionicons/-/ionicons-4.5.5.tgz#b059958a54dd45cfa127acc0baf11503b8671e51"
+  integrity sha512-dIGI73XG6Fg2Ps77ry5Ywe36Pq7wUGkDkl0pBhC4uhsiyoW+oXe+pplmarXEnKEcB5fmlkRrBOxYYzZaoRiUGw==
 
 ipaddr.js@1.8.0:
   version "1.8.0"
