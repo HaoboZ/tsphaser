@@ -1,4 +1,4 @@
-import names from '../../../shared/names';
+import { names } from '../../../shared/constants';
 import RoomClient from '../../room/roomClient';
 
 export default class ChatClient extends RoomClient {
@@ -8,7 +8,7 @@ export default class ChatClient extends RoomClient {
 	get data() {
 		return {
 			...super.data,
-			clientName: this.name
+			name: this.name
 		};
 	}
 	

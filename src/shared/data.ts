@@ -58,7 +58,7 @@ export module roomInfo {
 export module chatInfo {
 	export type clientData = {
 		clientId: clientInfo.id
-		clientName: string
+		name: string
 	}
 	export const type = 'chat';
 	
@@ -87,7 +87,7 @@ export module tictactoeInfo {
 	export const type = 'ttt';
 	export type clientData = {
 		clientId: clientInfo.id
-		clientName: string
+		name: string
 	}
 	
 	export const join = 'tttJoin';
@@ -125,13 +125,48 @@ export module tictactoeInfo {
 	}
 }
 
+export module moveInfo {
+	export const type = 'move';
+	export type clientData = {
+		clientId: clientInfo.id
+		name: string
+		color: string
+		x: number
+		y: number
+	}
+	
+	export const fps = 15;
+	export const world = { width: 2000, height: 2000 };
+	export const player = { width: 100, height: 100 };
+	
+	export const move = 'movement';
+	
+	export module events {
+		export module server {
+			export type local = roomInfo.events.server.local & {
+				// called
+				[ move ]: ( roomId: string, args: { x: number, y: number } ) => void
+			}
+		}
+		export module client {
+			export type global = {
+				// Called when client joins
+				[ roomInfo.join ]: ( roomId: string, args: roomInfo.roomData ) => void
+			}
+			export type local = roomInfo.events.client.local & {
+				[ move ]: ( roomId: string, args: { clientData: { [ id: string ]: { x: number, y: number } } } ) => void
+			}
+		}
+	}
+}
+
 // export module events {
 // 	export module server {
 // 		export type global = {}
-// 		export type local = {}
+// 		export type local = roomInfo.events.server.local & {}
 // 	}
 // 	export module client {
 // 		export type global = {}
-// 		export type local = {}
+// 		export type local = roomInfo.events.client.local & {}
 // 	}
 // }

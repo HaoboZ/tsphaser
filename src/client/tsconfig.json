@@ -5,7 +5,7 @@
 		"../common/**/*"
 	],
 	"files": [
-		"../typings/phaser.d.ts"
+		"./typings/*"
 	],
 	"exclude": [
 		"../../node_modules"

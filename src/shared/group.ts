@@ -21,14 +21,14 @@ export default class Group<T> {
 		return Object.keys( this.list ).length;
 	}
 	
-	public loop( fn: ( item: T | any, id: string ) => boolean | void ) {
+	public iterate( fn: ( item: T, id: string ) => boolean | void ) {
 		for ( let id in this.list ) {
 			if ( fn( this.list[ id ], id ) ) return false;
 		}
 		return true;
 	}
 	
-	public getFirst( fn: ( item: T | any ) => boolean ): T {
+	public getFirst( fn: ( item: T ) => boolean ): T {
 		for ( let id in this.list ) {
 			if ( fn( this.list[ id ] ) ) return this.list[ id ];
 		}

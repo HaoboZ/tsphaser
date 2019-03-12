@@ -1,4 +1,4 @@
-import { clientInfo, roomInfo } from '../../shared/events';
+import { clientInfo, roomInfo } from '../../shared/data';
 import Group from '../../shared/group';
 import config from '../config';
 import Socket from './socket';
@@ -17,15 +17,15 @@ export function RoomEvents(): roomInfo.events.client.global {
 	};
 }
 
-export default class Room {
+export default class Room<T extends clientInfo.clientData> {
 	
-	public static Group = new Group<Room>();
+	public static Group = new Group<Room<any>>();
 	
 	public id: string;
 	public admin: string;
 	public maxClients: number;
 	public timeCreated: number;
-	public clients = new Group<clientInfo.clientData>();
+	public clients = new Group<T>();
 	
 	public events = new Phaser.Events.EventEmitter();
 	
@@ -37,7 +37,7 @@ export default class Room {
 		this.maxClients = maxClients;
 		this.timeCreated = timeCreated;
 		for ( const id in clients )
-			this.clients.add( id, clients[ id ] );
+			this.clients.add( id, clients[ id ] as T );
 		
 		this._events = this.roomEvents();
 		for ( const event in this._events )
@@ -61,7 +61,7 @@ export default class Room {
 			[ roomInfo.clientJoin ]:  ( roomId, clientData ) => {
 				if ( this.id !== roomId ) return;
 				
-				this.clients.add( clientData.clientId, clientData );
+				this.clients.add( clientData.clientId, clientData as T );
 				
 				this.events.emit( roomInfo.clientJoin, clientData );
 				if ( config.debug ) console.log( `${clientData.clientId} joined room ${this.id}` );

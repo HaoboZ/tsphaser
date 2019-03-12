@@ -1,4 +1,4 @@
-import { chatInfo } from '../../../shared/events';
+import { chatInfo } from '../../../shared/data';
 import Client from '../../connect/client';
 import Room from '../../room/room';
 import ChatClient from './chatClient';
@@ -8,7 +8,7 @@ export default class ChatRoom extends Room<ChatClient> {
 	public type = chatInfo.type;
 	protected baseClient = ChatClient;
 	
-	public log: Array<{ clientId, clientName, message }> = [];
+	public log: Array<{ clientId, name, message }> = [];
 	
 	protected roomEvents( chatClient: ChatClient ): chatInfo.events.server.local {
 		const client = chatClient.client;

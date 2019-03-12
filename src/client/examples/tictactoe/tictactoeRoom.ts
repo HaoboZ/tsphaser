@@ -1,5 +1,4 @@
-import { roomInfo, tictactoeInfo } from '../../../shared/events';
-import Group from '../../../shared/group';
+import { roomInfo, tictactoeInfo } from '../../../shared/data';
 import config from '../../config';
 import Room from '../../connect/room';
 import Socket from '../../connect/socket';
@@ -12,15 +11,13 @@ export function TictactoeEvents(): tictactoeInfo.events.client.global {
 			
 			room = new TictactoeRoom( roomId, roomAdmin, roomMaxClients, roomCreationTime, clientsData );
 			
-			Socket.events.emit( tictactoeInfo.join, room );
+			Socket.events.emit( roomInfo.join, room );
 			if ( config.debug ) console.log( `joined tictactoe room ${room.id}` );
 		}
 	};
 }
 
-export default class TictactoeRoom extends Room {
-	
-	public clients: Group<tictactoeInfo.clientData>;
+export default class TictactoeRoom extends Room<tictactoeInfo.clientData> {
 	
 	public board = [];
 	public first: string;
@@ -57,7 +54,7 @@ export default class TictactoeRoom extends Room {
 			},
 			[ tictactoeInfo.over ]:  ( roomId, { winner } ) => {
 				if ( winner )
-					alert( 'The winner is ' + this.clients.get( winner ).clientName );
+					alert( 'The winner is ' + this.clients.get( winner ).name );
 				else
 					alert( 'No one wins' );
 				this.playing = false;

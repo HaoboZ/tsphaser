@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 import * as SocketIO from 'socket.io';
-import { clientInfo } from '../../shared/events';
+import { clientInfo } from '../../shared/data';
 import Client from './client';
 
 const Socket = new class {

@@ -1,4 +1,4 @@
-import { clientInfo } from '../../shared/events';
+import { clientInfo } from '../../shared/data';
 import config from '../config';
 import { RoomEvents } from './room';
 

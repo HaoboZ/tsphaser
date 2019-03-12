@@ -1,5 +1,5 @@
 import * as SocketIO from 'socket.io';
-import { clientInfo } from '../../shared/events';
+import { clientInfo } from '../../shared/data';
 import Group from '../../shared/group';
 import config from '../config';
 import Room, { RoomEvents } from '../room/room';

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { roomInfo, tictactoeInfo } from '../../../shared/events';
+import { roomInfo, tictactoeInfo } from '../../../shared/data';
 import Socket from '../../connect/socket';
 import Interface from '../../interface/interface';
 import Interact from './interact';
@@ -27,7 +27,7 @@ export default class Tictactoe extends Phaser.Scene {
 		this.input.on( 'pointerdown', ( pointer: Phaser.Input.Pointer ) => {
 				if ( !this.room || !this.room.playing || !this.room.turn ) return;
 				const x = Math.floor( ( pointer.x - boardX ) / 180 ),
-				    y = Math.floor( ( pointer.y - boardY ) / 180 );
+				      y = Math.floor( ( pointer.y - boardY ) / 180 );
 				
 				if ( 0 <= x && x < 3 && 0 <= y && y < 3 ) {
 					if ( !this.room.board[ y ][ x ] )
@@ -48,7 +48,8 @@ export default class Tictactoe extends Phaser.Scene {
 		}
 		this.pieces = this.add.graphics();
 		
-		Socket.events.on( tictactoeInfo.join, ( room: TictactoeRoom ) => {
+		Socket.events.on( roomInfo.join, ( room: TictactoeRoom ) => {
+			if ( !( room instanceof TictactoeRoom ) ) return;
 			this.room = room;
 			
 			this.draw();
@@ -71,12 +72,12 @@ export default class Tictactoe extends Phaser.Scene {
 		this.pieces.clear();
 		if ( !this.room ) return;
 		
-		this.room.clients.loop( ( client ) => {
+		this.room.clients.iterate( ( client ) => {
 			let piece = '';
 			const text = client.clientId === Socket.id ? this.self : this.enemy;
 			if ( this.room.first )
 				piece = this.room.first === client.clientId ? 'X ' : 'O ';
-			text.setText( piece + client.clientName );
+			text.setText( piece + client.name );
 		} );
 		
 		if ( this.room.playing )

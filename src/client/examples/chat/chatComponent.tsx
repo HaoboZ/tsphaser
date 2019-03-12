@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { chatInfo, roomInfo } from '../../../shared/events';
+import { chatInfo, roomInfo } from '../../../shared/data';
 import Socket from '../../connect/socket';
 import { List } from '../../interface/components';
 import ChatRoom from './chatRoom';
@@ -20,7 +20,6 @@ export default class ChatComponent extends React.Component<{
 		Socket.emit( roomInfo.join, { roomId: this.props.roomId } );
 		Socket.events.on( roomInfo.join, ( room: ChatRoom ) => {
 			if ( !( room instanceof ChatRoom ) ) return;
-			
 			this.setState( { room } );
 			
 			room.events.on( chatInfo.message,
@@ -40,12 +39,12 @@ export default class ChatComponent extends React.Component<{
 				style={{ overflowY: 'scroll', height: '90%', paddingLeft: 15, paddingRight: 15 }}
 				data={this.state.room.log}
 				renderItem={( { item, index } ) => <div style={{ height: 60 }} key={index}>
-					{item ? `${item.clientName ? `${item.clientName}: ` : ''}${item.message}` : ''}
+					{item ? `${item.name ? `${item.name}: ` : ''}${item.message}` : ''}
 				</div>}
 			/>
 			<div className='input-group row' style={{ height: '10%', margin: 0 }}>
 				<div className='col-3 border text-center align-items-center' style={{ lineHeight: 2 }}>
-					{this.state.room.clients.get( Socket.id ).clientName}
+					{this.state.room.clients.get( Socket.id ).name}
 				</div>
 				<input
 					className='col-6 text-dark'

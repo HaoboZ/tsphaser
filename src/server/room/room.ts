@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
+import { clientInfo, roomInfo } from '../../shared/data';
 import { ERROR, error } from '../../shared/error';
-import { clientInfo, roomInfo } from '../../shared/events';
 import Group from '../../shared/group';
 import config from '../config';
 import Client from '../connect/client';
@@ -31,7 +31,7 @@ type constructor = {
 
 export default class Room<T extends RoomClient> {
 	
-	public static Group = new Group<Room<any>>();
+	public static Group = new Group<Room<any> | any>();
 	
 	public type = roomInfo.type;
 	protected baseClient = RoomClient;
@@ -51,7 +51,7 @@ export default class Room<T extends RoomClient> {
 	
 	get data(): roomInfo.roomData {
 		const clients: { [ id: string ]: clientInfo.clientData } = {};
-		this.clients.loop( ( item, id ) => {
+		this.clients.iterate( ( item, id ) => {
 			clients[ id ] = item.data;
 		} );
 		return {
@@ -75,6 +75,7 @@ export default class Room<T extends RoomClient> {
 		this.timeCreated = Date.now();
 		
 		Room.Group.add( this.id, this );
+		this.onCreate();
 		
 		if ( config.debug ) console.log( `room ${this.id} created` );
 	}
@@ -93,6 +94,12 @@ export default class Room<T extends RoomClient> {
 			}
 		};
 	}
+	
+	protected onCreate() {
+	};
+	
+	protected onRemove() {
+	};
 	
 	/**
 	 * @param client
@@ -147,14 +154,15 @@ export default class Room<T extends RoomClient> {
 			
 			// remove all clients if admin leaves
 			if ( this.admin === client.id )
-				this.clients.loop( ( item ) => {
+				this.clients.iterate( ( item ) => {
 					this.leave( item.client, false, true );
 				} );
 			
 			// removes room if all clients leave
 			if ( this.remove && !this.clients.count ) {
-				if ( config.debug ) console.log( `removed room ${this.id}` );
 				Room.Group.remove( this.id );
+				this.onRemove();
+				if ( config.debug ) console.log( `removed room ${this.id}` );
 			}
 			
 			// confirm leave room
@@ -178,7 +186,7 @@ export default class Room<T extends RoomClient> {
 	
 	public hasClient( client: Client ) {
 		let hasClient = false;
-		this.clients.loop( ( item ) => {
+		this.clients.iterate( ( item ) => {
 			if ( item.client === client ) return hasClient = true;
 		} );
 		return hasClient;

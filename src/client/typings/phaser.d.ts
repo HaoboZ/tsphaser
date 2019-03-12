@@ -15864,7 +15864,7 @@ declare namespace Phaser {
             /**
              * If this Game Object is enabled for physics then this property will contain a reference to a Physics Body.
              */
-            body: object | Phaser.Physics.Arcade.Body | Phaser.Physics.Impact.Body;
+            body: any | Phaser.Physics.Arcade.Body | Phaser.Physics.Impact.Body;
 
             /**
              * This Game Object will ignore all calls made to its destroy method if this flag is set to `true`.
@@ -16928,7 +16928,7 @@ declare namespace Phaser {
              * Note: This method will only be available Tweens have been built into Phaser.
              * @param config The Tween configuration.
              */
-            tween(config: object): Phaser.Tweens.Tween;
+            tween(config: Phaser.Tweens.TweenDataConfig): Phaser.Tweens.Tween;
 
         }
 
@@ -67436,7 +67436,7 @@ declare namespace Phaser {
              * @param property The property name to check on the elements of this Set.
              * @param value The value to check for.
              */
-            get(property: string, value: T): T;
+            get(property: string, value: any): T;
 
             /**
              * Returns an array containing all the values in this Set.

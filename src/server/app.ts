@@ -8,6 +8,7 @@ import Client from './connect/client';
 
 import Socket from './connect/socket';
 import ChatRoom from './examples/chat/chatRoom';
+import MoveRoom from './examples/movement/moveRoom';
 import { TictactoeEvents } from './examples/tictactoe/tictactoeRoom';
 
 declare const __basedir;
@@ -21,7 +22,7 @@ const server: http.Server = app.listen( port, () => {
 );
 
 app.get( '/', ( req, res ) => {
-	const index = path.join( __basedir, 'index.html' );
+	const index = path.join( __basedir, config.index );
 	res.sendFile( index );
 } );
 
@@ -32,6 +33,11 @@ Socket.init( SocketIO( server ) );
 
 new ChatRoom( {
 	id:     'chatTest',
+	remove: false
+} );
+
+new MoveRoom( {
+	id:     'moveTest',
 	remove: false
 } );
 

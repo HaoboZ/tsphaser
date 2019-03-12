@@ -1,4 +1,4 @@
-import { roomInfo, tictactoeInfo } from '../../../shared/events';
+import { roomInfo, tictactoeInfo } from '../../../shared/data';
 import config from '../../config';
 import Client from '../../connect/client';
 import Room from '../../room/room';
@@ -41,7 +41,7 @@ class TictactoeRoom extends Room<TictactoeClient> {
 			if ( this.state !== tictactoeState.PLAY ) return;
 			
 			this.state = tictactoeState.WAIT;
-			this.clients.loop( ( client: tictactoeClient ) =>
+			this.clients.iterate( ( client: tictactoeClient ) =>
 				client.ready = false );
 			this.roomEmit( tictactoeInfo.over, { winner: 0 } );
 		} );
@@ -56,7 +56,7 @@ class TictactoeRoom extends Room<TictactoeClient> {
 				
 				tttClient.ready = true;
 				this.socketEmit( client, returnId );
-				if ( !this.clients.loop( ( client: TictactoeClient ) => {
+				if ( !this.clients.iterate( ( client: TictactoeClient ) => {
 					if ( !client.ready ) return true;
 				} ) ) return;
 				
@@ -68,7 +68,7 @@ class TictactoeRoom extends Room<TictactoeClient> {
 				
 				if ( this.play( client.id, x, y ) ) {
 					this.state = tictactoeState.WAIT;
-					this.clients.loop( ( client: tictactoeClient ) =>
+					this.clients.iterate( ( client: tictactoeClient ) =>
 						client.ready = false );
 					this.roomEmit( tictactoeInfo.over, { winner: this.tie ? 0 : client.id } );
 				}
@@ -91,7 +91,7 @@ class TictactoeRoom extends Room<TictactoeClient> {
 		if ( this.board[ y ][ x ] && this.turn !== player ) return false;
 		
 		this.board[ y ][ x ] = player;
-		this.turn = this.clients.getFirst( value => value !== player ).client.id;
+		this.turn = this.clients.getFirst( value => value.client.id !== player ).client.id;
 		
 		this.roomEmit( tictactoeInfo.play, { player, x, y } );
 		if ( config.debug ) console.log( `${this.turn} playing` );
