@@ -1,6 +1,6 @@
 import { moveInfo, roomInfo } from '../../../shared/data';
 import Socket from '../../connect/socket';
-import MoveRoom from './moveRoom';
+import MoveRoom, { MoveEvents } from './moveRoom';
 
 const speed = Phaser.Math.GetSpeed( 1000, 5 ) * 1000;
 
@@ -18,6 +18,8 @@ export default class Movement extends Phaser.Scene {
 	}
 	
 	public create() {
+		Socket.multiOn( MoveEvents );
+		
 		Socket.emit( roomInfo.join, { roomId: 'moveTest' } );
 		Socket.events.on( roomInfo.join, ( room: MoveRoom ) => {
 			if ( !( room instanceof MoveRoom ) ) return;

@@ -1,8 +1,5 @@
 import config from './config';
 import Socket from './connect/socket';
-import { ChatEvents } from './examples/chat/chatRoom';
-import { MoveEvents } from './examples/movement/moveRoom';
-import { TictactoeEvents } from './examples/tictactoe/tictactoeRoom';
 import Interface from './interface/interface';
 import Sizing from './interface/sizing';
 
@@ -23,10 +20,6 @@ export default class Load extends Phaser.Scene {
 	
 	public create() {
 		Socket.init();
-		
-		Socket.multiOn( ChatEvents );
-		Socket.multiOn( TictactoeEvents );
-		Socket.multiOn( MoveEvents );
 		
 		this.scene.start( 'Movement' );
 	}

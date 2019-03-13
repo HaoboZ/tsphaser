@@ -3,7 +3,7 @@ import { roomInfo, tictactoeInfo } from '../../../shared/data';
 import Socket from '../../connect/socket';
 import Interface from '../../interface/interface';
 import Interact from './interact';
-import TictactoeRoom from './tictactoeRoom';
+import TictactoeRoom, { TictactoeEvents } from './tictactoeRoom';
 
 const boardX = 370, boardY = 90;
 
@@ -22,6 +22,8 @@ export default class Tictactoe extends Phaser.Scene {
 	}
 	
 	public create() {
+		Socket.multiOn( TictactoeEvents );
+		
 		Interface.render( <Interact/> );
 		
 		this.input.on( 'pointerdown', ( pointer: Phaser.Input.Pointer ) => {

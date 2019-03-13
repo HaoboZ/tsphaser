@@ -1,6 +1,5 @@
-export const config = {
+export default {
 	port:  80,
-	index: 'www/index.html',
+	index: 'public/index.html',
 	debug: true
 };
-export default config;
