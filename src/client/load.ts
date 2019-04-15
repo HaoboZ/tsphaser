@@ -15,13 +15,12 @@ export default class Load extends Phaser.Scene {
 		
 		// load assets
 		this.loadBar( 24 );
-		// this.load.pack( 'pack', 'assets/pack.json' );
 	}
 	
 	public create() {
 		Socket.init();
 		
-		this.scene.start( 'Movement' );
+		this.scene.start( 'Sample' );
 	}
 	
 	private loadBar( height: number ) {
@@ -42,11 +41,6 @@ export default class Load extends Phaser.Scene {
 			progressBar.fillStyle( Phaser.Display.Color.HexStringToColor( '#bbbbbb' ).color, 1 );
 			
 			progressBar.fillRect( 0, config.size.height - height - 2, config.size.width * value, height + 4 );
-		} );
-		
-		this.load.on( 'complete', () => {
-			progressBar.destroy();
-			loadingText.destroy();
 		} );
 	}
 	

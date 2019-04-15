@@ -27,6 +27,7 @@ app.get( '/', ( req, res ) => {
 } );
 
 app.use( '/', express.static( path.join( __basedir, 'public' ) ) );
+app.use( '/assets', express.static( path.join( __basedir, 'assets' ) ) );
 app.use( '/node_modules', express.static( path.join( __basedir, 'node_modules' ) ) );
 
 // socket.io

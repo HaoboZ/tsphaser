@@ -1,7 +1,5 @@
+import Sample from './cards/sample';
 import config from './config';
-import Chat from './examples/chat/chat';
-import Movement from './examples/movement/movement';
-import Tictactoe from './examples/tictactoe/tictactoe';
 import Load from './load';
 
 new Phaser.Game( {
@@ -20,5 +18,5 @@ new Phaser.Game( {
 			debug: config.debug
 		}
 	},
-	scene:    [ Load, Chat, Tictactoe, Movement ]
+	scene:    [ Load, Sample ]
 } );
