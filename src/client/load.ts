@@ -1,7 +1,5 @@
 import config from './config';
-import Socket from './connect/socket';
-import Interface from './interface/interface';
-import Sizing from './interface/sizing';
+import Server from './connect/server';
 
 export default class Load extends Phaser.Scene {
 	
@@ -10,17 +8,14 @@ export default class Load extends Phaser.Scene {
 	}
 	
 	public preload() {
-		Sizing.init( this.sys.game );
-		Interface.init( this.sys.game );
+		Server.init();
 		
 		// load assets
 		this.loadBar( 24 );
 	}
 	
 	public create() {
-		Socket.init();
-		
-		this.scene.start( 'Sample' );
+		this.scene.start( this.scene.settings.data[ 'start' ] );
 	}
 	
 	private loadBar( height: number ) {

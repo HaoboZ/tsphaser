@@ -1,34 +1,27 @@
-import { chatInfo } from '../../../shared/data';
-import Client from '../../connect/client';
-import Room from '../../room/room';
-import ChatClient from './chatClient';
+import { Room } from 'colyseus';
 
-export default class ChatRoom extends Room<ChatClient> {
+export default class ChatRoom extends Room {
 	
-	public type = chatInfo.type;
-	protected baseClient = ChatClient;
-	
-	public log: Array<{ clientId, name, message }> = [];
-	
-	protected roomEvents( chatClient: ChatClient ): chatInfo.events.server.local {
-		const client = chatClient.client;
-		return {
-			...super.roomEvents( chatClient ),
-			[ chatInfo.message ]: ( roomId, { message } ) => {
-				if ( this.id !== roomId ) return;
-				
-				this.send( client, message );
-			}
-		};
+	onInit( options ) {
+		console.log( 'BasicRoom created!', options );
 	}
 	
-	public send( client: Client, message ) {
-		const chatClient = this.clients.get( client.id );
-		
-		const data = { ...chatClient.data, message };
-		
-		this.log.push( data );
-		this.roomEmit( chatInfo.message, data );
+	onJoin( client ) {
+		this.broadcast( `${client.sessionId} joined.` );
 	}
+	
+	onLeave( client ) {
+		this.broadcast( `${client.sessionId} left.` );
+	}
+	
+	onMessage( client, data ) {
+		console.log( 'ChatRoom received message from', client.sessionId, ':', data );
+		this.broadcast( `(${client.sessionId}) ${data.message}` );
+	}
+	
+	onDispose() {
+		console.log( 'Dispose BasicRoom' );
+	}
+	
 	
 }

@@ -2,8 +2,8 @@ const mobile = ( typeof window.orientation !== 'undefined' ) || ( navigator.user
 
 export default {
 	size:  {
-		width:  mobile ? 720 : 1280,
-		height: mobile ? 1280 : 720
+		width:  1280,
+		height: 720
 	},
 	mobile,
 	debug: true
