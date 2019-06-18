@@ -1,12 +1,13 @@
 import { Client } from 'colyseus.js';
 import config from '../../server/config';
 
+
 const Server = new class {
 	
 	private _client: Client;
 	
 	public init() {
-		this._client = new Client( 'ws://localhost:' + config.port );
+		this._client = new Client( `ws://${window.location.host}:${config.port}` );
 	}
 	
 	public get client() {

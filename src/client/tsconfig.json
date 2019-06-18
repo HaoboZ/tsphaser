@@ -31,9 +31,9 @@
 		/* Skip type checking of declaration files. */
 		"skipLibCheck": true,
 		/* Concatenate and emit output to single file. */
-		//		"outFile": "../../public/bundle.js",
+		//		"outFile": "../../public/build/bundle.js",
 		/* Redirect output structure to the directory. */
-		//		"outDir": "public",
+		"outDir": "../../build/client",
 		/* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
 		//		"rootDir": "./",
 		/* Do not emit comments to output. */

@@ -1,56 +1,78 @@
-import { Room } from 'colyseus.js';
+import { Button, List, ListItem, ListItemText, TextField, Theme, Typography } from '@material-ui/core';
+import { withTheme } from '@material-ui/core/styles';
 import * as React from 'react';
 import { connect } from 'react-redux';
-import Server from '../../connect/server';
+import { StoreState } from '../../redux/store';
+import { ChatState } from './chatReducer';
 
-export default connect( ( store ) => ( store ) )
-( class ChatUI extends React.PureComponent {
+
+interface Props extends ChatState {
+	theme: Theme
+}
+
+// @ts-ignore
+@withTheme()
+// @ts-ignore
+@connect( ( state: StoreState ) => state.chat )
+export default class ChatUI extends React.PureComponent<Props> {
 	
-	private room: Room;
-	
-	// @ts-ignore
 	state: {
-		log: any
 		input: string
 	} = {
 		input: ''
 	};
 	
 	render() {
-		console.log( this.state );
+		const { theme, room, log } = this.props;
+		if ( !room ) return null;
+		
+		let newLog = [];
+		for ( let i = 0; i < 10; ++i )
+			newLog[ i ] = log.length >= 10 - i
+				? log[ log.length - 10 + i ] : '\xa0';
 		
 		return <div
-			className='border pEvents text-white'
-			style={{ height: '100%', fontSize: 26 }}
-		>
-			<div style={{ overflowY: 'scroll', height: '90%', paddingLeft: 15, paddingRight: 15 }}>
-				{this.state.log.map( ( item, index ) => (
-					<div key={index} style={{ height: 60 }}>{item}</div>
-				) )}
-			</div>
-			<div className='input-group row' style={{ height: '10%', margin: 0 }}>
-				<div className='col-3 border text-center align-items-center' style={{ lineHeight: 2 }}>
-					{Server.client.id}
-				</div>
-				<input
-					className='col-6 text-dark'
+			className='pEvents'
+			style={{
+				width:           'fit-content',
+				margin:          'auto',
+				marginTop:       50,
+				backgroundColor: theme.palette.background.paper
+			}}>
+			<List>
+				{newLog.map( ( item, index ) => {
+					return <ListItem key={index}>
+						<ListItemText primary={item}/>
+					</ListItem>;
+				} )}
+			</List>
+			<div>
+				<Typography
+					inline
+					style={{ margin: 16 }}>
+					{room.sessionId}
+				</Typography>
+				<TextField
 					value={this.state.input}
+					style={{ margin: 16 }}
+					onKeyPress={( ev ) => {
+						if ( ev.key === 'Enter' )
+							this.sendMessage();
+					}}
 					onChange={( event ) => {
 						this.setState( { input: event.target.value } );
-					}}
-				/>
-				<button
-					className='col-3 text-dark'
-					onClick={() => {
-						if ( !this.state.input.length ) return;
-						this.room.send( { message: this.state.input } );
-						this.setState( { input: '' } );
-					}}
-				>
-					Send
-				</button>
+					}}/>
+				<Button
+					style={{ margin: 16 }}
+					onClick={this.sendMessage}>Send</Button>
 			</div>
 		</div>;
 	}
 	
-} );
+	sendMessage = () => {
+		if ( !this.state.input.length ) return;
+		this.props.room.send( { message: this.state.input } );
+		this.setState( { input: '' } );
+	};
+	
+}

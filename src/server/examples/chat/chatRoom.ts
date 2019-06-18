@@ -1,9 +1,10 @@
 import { Room } from 'colyseus';
 
+
 export default class ChatRoom extends Room {
 	
 	onInit( options ) {
-		console.log( 'BasicRoom created!', options );
+		console.log( 'ChatRoom created!', options );
 	}
 	
 	onJoin( client ) {
@@ -20,8 +21,7 @@ export default class ChatRoom extends Room {
 	}
 	
 	onDispose() {
-		console.log( 'Dispose BasicRoom' );
+		console.log( 'Dispose ChatRoom' );
 	}
-	
 	
 }

@@ -1,5 +1,5 @@
 import config from './config';
-import Server from './connect/server';
+
 
 export default class Load extends Phaser.Scene {
 	
@@ -8,7 +8,8 @@ export default class Load extends Phaser.Scene {
 	}
 	
 	public preload() {
-		Server.init();
+		this.onResize();
+		this.game.scale.on( 'resize', this.onResize );
 		
 		// load assets
 		this.loadBar( 24 );
@@ -17,6 +18,14 @@ export default class Load extends Phaser.Scene {
 	public create() {
 		this.scene.start( this.scene.settings.data[ 'start' ] );
 	}
+	
+	private onResize = () => {
+		$( '#ui' )
+			.innerWidth( this.game.scale.width )
+			.innerHeight( this.game.scale.height )
+			.css( 'transform',
+				`translate(-50%, -50%) scale(${1 / this.game.scale.displayScale.x}, ${1 / this.game.scale.displayScale.y})` );
+	};
 	
 	private loadBar( height: number ) {
 		const progressBar = this.add.graphics(),

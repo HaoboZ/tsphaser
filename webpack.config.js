@@ -13,7 +13,7 @@ module.exports = {
 		rules: [
 			{
 				test:   /\.tsx?$/,
-				loader: [ 'ts-loader' ]
+				loader: [ 'babel-loader' ]
 			},
 			{
 				test:   /\.less$/,
@@ -26,8 +26,10 @@ module.exports = {
 		]
 	},
 	externals: {
-		'react':     'React',
-		'react-dom': 'ReactDOM'
+		'react':       'React',
+		'react-dom':   'ReactDOM',
+		'redux':       'Redux',
+		'react-redux': 'ReactRedux'
 	},
 	plugins:   [
 		new BrowserSyncPlugin( {

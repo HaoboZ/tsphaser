@@ -1,41 +1,31 @@
-import { moveInfo } from '../../../shared/data';
-import Room from '../../room/room';
-import MoveClient from './moveClient';
+import { Room } from 'colyseus';
+import MoveState from './moveState';
 
-export default class MoveRoom extends Room<MoveClient> {
+
+export default class MoveRoom extends Room<MoveState> {
 	
-	public type = moveInfo.type;
-	protected baseClient = MoveClient;
-	
-	private interval: NodeJS.Timeout;
-	
-	protected roomEvents( moveClient: MoveClient ): moveInfo.events.server.local {
-		return {
-			...super.roomEvents( moveClient ),
-			[ moveInfo.move ]: ( roomId, { x, y } ) => {
-				if ( this.id !== roomId ) return;
-				
-				moveClient.moveTo( x, y );
-			}
-		};
+	onInit( options ) {
+		console.log( 'MoveRoom created!', options );
+		this.setState( new MoveState() );
+		this.setPatchRate( 1000 / 60 );
 	}
 	
-	protected onCreate() {
-		this.interval = setInterval( () => {
-			const clientData: { [ id: string ]: { x, y } } = {};
-			this.clients.iterate( ( item, id ) => {
-				if ( item.dirty ) {
-					clientData[ id ] = { x: item.x, y: item.y };
-					item.dirty = false;
-				}
-			} );
-			
-			this.roomEmit( moveInfo.move, { clientData } );
-		}, 1000 / moveInfo.fps );
+	onJoin( client ) {
+		console.log( client.sessionId, 'Joined' );
+		this.state.createPlayer( client.sessionId );
 	}
 	
-	protected onRemove() {
-		clearInterval( this.interval );
+	onLeave( client ) {
+		console.log( client.sessionId, 'Left' );
+		this.state.removePlayer( client.sessionId );
+	}
+	
+	onMessage( client, data ) {
+		this.state.movePlayer( client.sessionId, data );
+	}
+	
+	onDispose() {
+		console.log( 'Dispose MoveRoom' );
 	}
 	
 }

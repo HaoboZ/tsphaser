@@ -1,7 +1,19 @@
 import { combineReducers, createStore } from 'redux';
-import { chatReducer } from './chatReducer';
+import { chatReducer, ChatState } from '../examples/chat/chatReducer';
+import { tictactoeReducer, TictactoeState } from '../examples/tictactoe/tictactoeReducer';
+import { UIReducer, UIState } from './UIReducer';
 
 
 export default createStore( combineReducers(
-	{ chat: chatReducer }
+	{
+		chat:      chatReducer,
+		ui:        UIReducer,
+		tictactoe: tictactoeReducer
+	}
 ) );
+
+export interface StoreState {
+	ui: UIState
+	chat: ChatState
+	tictactoe: TictactoeState
+}

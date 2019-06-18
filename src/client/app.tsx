@@ -1,27 +1,24 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import Server from './connect/server';
+import Game from './game';
 import store from './redux/store';
+import UI from './UI';
+
 
 class App extends React.PureComponent {
 	
 	render() {
 		return <Provider store={store}>
-			<div
-				style={{
-					display:        'flex',
-					alignContent:   'center',
-					justifyContent: 'center',
-					flexDirection:  'row',
-					height:         '100vh'
-				}}
-			>
-				{/*<UI/>*/}
-				{/*<Game/>*/}
-			</div>
+			<UI/>
+			<Game/>
 		</Provider>;
 	}
 	
 }
 
-ReactDOM.render( <App/>, $( '#root' )[ 0 ] );
+$( () => {
+	Server.init();
+	ReactDOM.render( <App/>, $( '#root' )[ 0 ] );
+} );
