@@ -1,4 +1,5 @@
 import { Client } from 'colyseus.js';
+
 import config from '../../server/config';
 
 

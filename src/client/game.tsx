@@ -1,7 +1,9 @@
 import * as React from 'react';
+
 import config from './config';
 import Chat from './examples/chat/chat';
 import Movement from './examples/movement/movement';
+import Tictactoe from './examples/tictactoe/tictactoe';
 import Load from './load';
 
 
@@ -25,10 +27,10 @@ export default class Game extends React.PureComponent {
 					debug: config.debug
 				}
 			},
-			scene:    [ Load, Chat, Movement ]
+			scene:    [ Load, Chat, Movement, Tictactoe ]
 		} );
 		
-		game.scene.start( 'Load', { start: 'Movement' } );
+		game.scene.start( 'Load', { start: 'Tictactoe' } );
 	}
 	
 	public render() {

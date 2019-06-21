@@ -1,26 +1,28 @@
-import { Room } from 'colyseus';
-import MoveState from './moveState';
+import { Client, Room } from 'colyseus';
+
+import { movementConfig } from '../../../shared/config';
+import MoveRoomState from '../../../shared/examples/moveRoomState';
 
 
-export default class MoveRoom extends Room<MoveState> {
+export default class MoveRoom extends Room<MoveRoomState> {
 	
 	onInit( options ) {
 		console.log( 'MoveRoom created!', options );
-		this.setState( new MoveState() );
-		this.setPatchRate( 1000 / 60 );
+		this.setState( new MoveRoomState() );
+		this.setPatchRate( 1000 / movementConfig.FPS );
 	}
 	
-	onJoin( client ) {
+	onJoin( client: Client ) {
 		console.log( client.sessionId, 'Joined' );
-		this.state.createPlayer( client.sessionId );
+		this.state.addPlayer( client.sessionId );
 	}
 	
-	onLeave( client ) {
+	onLeave( client: Client ) {
 		console.log( client.sessionId, 'Left' );
 		this.state.removePlayer( client.sessionId );
 	}
 	
-	onMessage( client, data ) {
+	onMessage( client: Client, data ) {
 		this.state.movePlayer( client.sessionId, data );
 	}
 	

@@ -1,33 +1,24 @@
-import { Room } from 'colyseus.js';
-import { END, PLAY, ROOM } from './tictactoeActions';
+import { SCENE } from './tictactoeActions';
 
 
 export interface TictactoeState {
-	room: Room
-	playing: boolean
+	scene: Phaser.Scene
 }
 
 const initState: TictactoeState = {
-	room:    null,
-	playing: false
+	scene: null
 };
 
 export const tictactoeReducer = (
 	state = initState,
 	action: {
 		type: string
-		room?: Room
+		scene?: Phaser.Scene
 	}
 ) => {
-	switch ( action.type ) {
-	case ROOM:
-		return { ...state, room: action.room };
-	case PLAY:
-		return { ...state, playing: true };
-	case END:
-		return { ...state, playing: false };
-	default:
+	if ( action.type === SCENE ) {
+		return { ...state, room: action.scene };
+	} else
 		return state;
-	}
 };
 

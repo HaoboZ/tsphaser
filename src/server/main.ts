@@ -2,9 +2,11 @@ import { Server } from 'colyseus';
 import * as express from 'express';
 import { createServer } from 'http';
 import * as path from 'path';
+
 import config from './config';
 import ChatRoom from './examples/chat/chatRoom';
 import MoveRoom from './examples/movement/moveRoom';
+import TictactoeRoom from './examples/tictactoe/tictactoeRoom';
 
 
 declare const __basedir;
@@ -32,3 +34,4 @@ app.use( '/node_modules', express.static( path.join( __basedir, 'node_modules' )
 
 gameServer.register( 'chat', ChatRoom ).then();
 gameServer.register( 'movement', MoveRoom ).then();
+gameServer.register( 'tictactoe', TictactoeRoom ).then();

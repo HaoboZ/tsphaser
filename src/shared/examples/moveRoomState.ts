@@ -1,5 +1,6 @@
 import { MapSchema, Schema, type } from '@colyseus/schema';
-import { colors } from '../../../shared/constants';
+
+import { colors } from '../constants';
 
 
 class Player extends Schema {
@@ -15,12 +16,12 @@ class Player extends Schema {
 	
 }
 
-export default class MoveState extends Schema {
+export default class MoveRoomState extends Schema {
 	
 	@type( { map: Player } )
 	players = new MapSchema<Player>();
 	
-	createPlayer( id: string ) {
+	addPlayer( id: string ) {
 		this.players[ id ] = new Player();
 	}
 	

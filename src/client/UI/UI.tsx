@@ -2,15 +2,13 @@ import { CssBaseline } from '@material-ui/core';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { StoreState } from './redux/store';
+
+import { StoreState } from '../redux/store';
 
 
-const theme = createMuiTheme( {
-	palette:    {
+export const theme = createMuiTheme( {
+	palette: {
 		type: 'dark'
-	},
-	typography: {
-		useNextVariants: true
 	}
 } );
 
@@ -32,4 +30,3 @@ export default class UI extends React.PureComponent<Props> {
 	}
 	
 }
-

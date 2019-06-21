@@ -73,6 +73,8 @@
 		/* Module Resolution Options */
 		/* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */
 		"moduleResolution": "node",
+		/* Handles JSON files */
+		"resolveJsonModule": true,
 		/* Base directory to resolve non-absolute module names. */
 		//		"baseUrl": "./",
 		/* A series of entries which re-map imports to lookup locations relative to the 'baseUrl'. */
@@ -86,8 +88,7 @@
 		/* Type declaration files to be included in compilation. */
 		"types": [
 			"node",
-			"express",
-			"socket.io"
+			"express"
 		],
 		/* Allow default imports from modules with no default export. This does not affect code emit, just typechecking. */
 		//		"allowSyntheticDefaultImports": true,
