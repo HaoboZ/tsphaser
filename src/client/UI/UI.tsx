@@ -13,7 +13,7 @@ export const theme = createMuiTheme( {
 } );
 
 interface Props {
-	ui?: StoreState['ui']
+	ui?
 }
 
 // @ts-ignore
@@ -24,7 +24,9 @@ export default class UI extends React.PureComponent<Props> {
 		return <MuiThemeProvider theme={theme}>
 			<CssBaseline/>
 			<div id='ui'>
-				{this.props.ui.element ? React.createElement( this.props.ui.element ) : null}
+				{this.props.ui.element ?
+					typeof this.props.ui.element === 'function' ?
+						React.createElement( this.props.ui.element ) : this.props.ui.element : null}
 			</div>
 		</MuiThemeProvider>;
 	}

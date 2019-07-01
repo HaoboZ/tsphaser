@@ -23,14 +23,15 @@ gameServer.listen( port, undefined, undefined,
 	}
 );
 
-app.get( '/', ( req, res ) => {
+app.use( '/', express.static( path.join( __basedir, 'public' ) ) );
+app.use( '/assets', express.static( path.join( __basedir, 'assets' ) ) );
+app.use( '/node_modules', express.static( path.join( __basedir, 'node_modules' ) ) );
+
+app.get( '*', ( req, res ) => {
 	const index = path.join( __basedir, config.index );
 	res.sendFile( index );
 } );
 
-app.use( '/', express.static( path.join( __basedir, 'public' ) ) );
-app.use( '/assets', express.static( path.join( __basedir, 'assets' ) ) );
-app.use( '/node_modules', express.static( path.join( __basedir, 'node_modules' ) ) );
 
 gameServer.register( 'chat', ChatRoom ).then();
 gameServer.register( 'movement', MoveRoom ).then();

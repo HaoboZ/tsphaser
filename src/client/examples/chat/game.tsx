@@ -1,3 +1,5 @@
+import * as React from 'react';
+
 import Server from '../../connect/server';
 import store from '../../redux/store';
 import { setUI } from '../../UI/reducer';

@@ -1,19 +1,22 @@
-const UI = 'TictactoeUI';
+import * as React from 'react';
 
-export const setUI = ( element: React.ComponentClass ) => ( {
+
+const UI = 'setUI';
+
+export const setUI = ( element: React.ComponentClass | React.ReactElement ) => ( {
 	type: UI,
 	element
 } );
 
 export interface UIState {
-	element: React.ComponentClass
+	element: React.ComponentClass | React.ReactElement
 }
 
 const initState: UIState = { element: null };
 
 export const UIReducer = (
 	state = initState,
-	action: { type: string, element?: React.ComponentClass }
+	action: { type: string, element?: React.ComponentClass | React.ReactElement }
 ) => {
 	if ( action.type === UI ) {
 		state.element = action.element;
@@ -22,4 +25,3 @@ export const UIReducer = (
 		return state;
 	}
 };
-
