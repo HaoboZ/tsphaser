@@ -1,11 +1,11 @@
 import { Room } from 'colyseus.js';
 
-import { movementConfig } from '../../../shared/config';
+import { moveConfig } from '../../../shared/examples/moveConfig';
 import MoveRoomState from '../../../shared/examples/moveRoomState';
 import Server from '../../connect/server';
 
 
-const { FPS, WORLD, PLAYER, SPEED } = movementConfig;
+const { FPS, WORLD, PLAYER, SPEED } = moveConfig;
 
 export default class MovementScene extends Phaser.Scene {
 	
@@ -93,12 +93,12 @@ export default class MovementScene extends Phaser.Scene {
 		};
 		
 		this.room.state.players.onRemove = ( player, sessionId ) => {
-			const child = this.players.children.get( 'name', sessionId );
+			const child = this.players.children.get( 'name', sessionId as any );
 			this.players.remove( child, true, true );
 		};
 		
 		this.room.state.players.onChange = ( player, sessionId ) => {
-			const child = this.players.children.get( 'name', sessionId );
+			const child = this.players.children.get( 'name', sessionId as any );
 			this.add.tween( {
 				targets: child,
 				x:       { value: player.x, duration: 1000 / FPS },

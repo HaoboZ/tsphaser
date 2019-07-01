@@ -7,8 +7,8 @@ import { UIReducer, UIState } from '../UI/reducer';
 
 export default createStore( combineReducers(
 	{
-		chat:      chatReducer,
 		ui:        UIReducer,
+		chat:      chatReducer,
 		tictactoe: tictactoeReducer
 	}
 ) );
