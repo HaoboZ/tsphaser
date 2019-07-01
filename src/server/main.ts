@@ -4,9 +4,9 @@ import { createServer } from 'http';
 import * as path from 'path';
 
 import config from './config';
-import ChatRoom from './examples/chat/chatRoom';
-import MoveRoom from './examples/movement/moveRoom';
-import TictactoeRoom from './examples/tictactoe/tictactoeRoom';
+import ChatRoom from './examples/chat/room';
+import MoveRoom from './examples/movement/room';
+import TictactoeRoom from './examples/tictactoe/room';
 
 
 declare const __basedir;

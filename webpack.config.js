@@ -1,5 +1,6 @@
 const path = require( 'path' );
 const BrowserSyncPlugin = require( 'browser-sync-webpack-plugin' );
+const BundleAnalyzerPlugin = require( 'webpack-bundle-analyzer' ).BundleAnalyzerPlugin;
 
 module.exports = {
 	entry:     path.join( __dirname, 'src/client/app.tsx' ),
@@ -29,14 +30,14 @@ module.exports = {
 		'react':       'React',
 		'react-dom':   'ReactDOM',
 		'redux':       'Redux',
-		'react-redux': 'ReactRedux',
-		'colyseus':    '_blank'
+		'react-redux': 'ReactRedux'
 	},
 	plugins:   [
 		new BrowserSyncPlugin( {
 			host:      'localhost',
 			ghostMode: false
-		} )
+		} ),
+		new BundleAnalyzerPlugin()
 	],
 	resolve:   {
 		extensions: [ '.js', '.jsx', '.ts', '.tsx', '.css', '.less' ]

@@ -1,11 +1,11 @@
 import Server from '../../connect/server';
 import store from '../../redux/store';
-import { setUI } from '../../UI/UIReducer';
-import { sendMessage, setRoom } from './chatActions';
-import ChatUI from './chatUI';
+import { setUI } from '../../UI/reducer';
+import { sendMessage, setRoom } from './actions';
+import ChatUI from './UI';
 
 
-export default class Chat extends Phaser.Scene {
+export default class ChatScene extends Phaser.Scene {
 	
 	constructor() {
 		super( 'Chat' );
@@ -13,11 +13,8 @@ export default class Chat extends Phaser.Scene {
 	
 	public create() {
 		const room = Server.client.join( 'chat' );
-		room.onMessage.add( message => {
+		room.onMessage.add( ( message ) => {
 			store.dispatch( sendMessage( message ) );
-		} );
-		room.onError.add( err => {
-			console.log( 'Error:', err );
 		} );
 		
 		store.dispatch( setRoom( room ) );

@@ -2,11 +2,16 @@ import * as React from 'react';
 
 
 interface Props extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
-	row: string | number
-	column: string | number
+	row?: string | number
+	column?: string | number
 }
 
 export default class Grid extends React.PureComponent<Props> {
+	
+	static defaultProps = {
+		row:    1,
+		column: 1
+	};
 	
 	render() {
 		let { row, column, children, style, ...props } = this.props;

@@ -7,7 +7,7 @@ import Server from '../../connect/server';
 
 const { FPS, WORLD, PLAYER, SPEED } = movementConfig;
 
-export default class Movement extends Phaser.Scene {
+export default class MovementScene extends Phaser.Scene {
 	
 	private room: Room<MoveRoomState>;
 	

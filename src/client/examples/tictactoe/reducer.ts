@@ -1,4 +1,4 @@
-import { SCENE } from './tictactoeActions';
+import { SCENE } from './actions';
 
 
 export interface TictactoeState {
@@ -17,8 +17,7 @@ export const tictactoeReducer = (
 	}
 ) => {
 	if ( action.type === SCENE ) {
-		return { ...state, room: action.scene };
+		return { ...state, scene: action.scene };
 	} else
 		return state;
 };
-

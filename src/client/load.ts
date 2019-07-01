@@ -1,6 +1,3 @@
-import config from './config';
-
-
 export default class Load extends Phaser.Scene {
 	
 	constructor() {
@@ -30,7 +27,7 @@ export default class Load extends Phaser.Scene {
 	private loadBar( height: number ) {
 		const progressBar = this.add.graphics(),
 		      loadingText = this.add.text(
-			      2, config.size.height - height,
+			      2, this.scale.gameSize.height - height,
 			      'Loading...',
 			      {
 				      font: `${height * 0.9}px monospace`,
@@ -44,7 +41,7 @@ export default class Load extends Phaser.Scene {
 			progressBar.clear();
 			progressBar.fillStyle( Phaser.Display.Color.HexStringToColor( '#bbbbbb' ).color, 1 );
 			
-			progressBar.fillRect( 0, config.size.height - height - 2, config.size.width * value, height + 4 );
+			progressBar.fillRect( 0, this.scale.gameSize.height - height - 2, this.scale.gameSize.width * value, height + 4 );
 		} );
 	}
 	

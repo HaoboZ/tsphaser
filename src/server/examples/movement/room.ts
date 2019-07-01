@@ -7,18 +7,18 @@ import MoveRoomState from '../../../shared/examples/moveRoomState';
 export default class MoveRoom extends Room<MoveRoomState> {
 	
 	onInit( options ) {
-		console.log( 'MoveRoom created!', options );
+		console.log( `MoveRoom ${this.roomId} created!`, options );
 		this.setState( new MoveRoomState() );
 		this.setPatchRate( 1000 / movementConfig.FPS );
 	}
 	
 	onJoin( client: Client ) {
-		console.log( client.sessionId, 'Joined' );
+		console.log( client.sessionId, 'joined', this.roomId );
 		this.state.addPlayer( client.sessionId );
 	}
 	
 	onLeave( client: Client ) {
-		console.log( client.sessionId, 'Left' );
+		console.log( client.sessionId, 'left', this.roomId );
 		this.state.removePlayer( client.sessionId );
 	}
 	
@@ -27,7 +27,7 @@ export default class MoveRoom extends Room<MoveRoomState> {
 	}
 	
 	onDispose() {
-		console.log( 'Dispose MoveRoom' );
+		console.log( 'Dispose MoveRoom', this.roomId );
 	}
 	
 }

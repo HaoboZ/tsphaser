@@ -1,6 +1,6 @@
 import { Room } from 'colyseus.js';
 
-import { MESSAGE, ROOM } from './chatActions';
+import { MESSAGE, ROOM } from './actions';
 
 
 export interface ChatState {

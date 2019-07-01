@@ -1,9 +1,9 @@
 import * as React from 'react';
 
 import config from './config';
-import Chat from './examples/chat/chat';
-import Movement from './examples/movement/movement';
-import Tictactoe from './examples/tictactoe/tictactoe';
+import ChatScene from './examples/chat/game';
+import MovementScene from './examples/movement/game';
+import TictactoeScene from './examples/tictactoe/game';
 import Load from './load';
 
 
@@ -27,7 +27,7 @@ export default class Game extends React.PureComponent {
 					debug: config.debug
 				}
 			},
-			scene:    [ Load, Chat, Movement, Tictactoe ]
+			scene:    [ Load, ChatScene, MovementScene, TictactoeScene ]
 		} );
 		
 		game.scene.start( 'Load', { start: 'Tictactoe' } );

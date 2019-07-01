@@ -1,8 +1,8 @@
 import { combineReducers, createStore } from 'redux';
 
-import { chatReducer, ChatState } from '../examples/chat/chatReducer';
-import { tictactoeReducer, TictactoeState } from '../examples/tictactoe/tictactoeReducer';
-import { UIReducer, UIState } from '../UI/UIReducer';
+import { chatReducer, ChatState } from '../examples/chat/reducer';
+import { tictactoeReducer, TictactoeState } from '../examples/tictactoe/reducer';
+import { UIReducer, UIState } from '../UI/reducer';
 
 
 export default createStore( combineReducers(

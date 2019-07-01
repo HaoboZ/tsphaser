@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import { StoreState } from '../../redux/store';
 import Grid from '../../UI/grid';
-import { ChatState } from './chatReducer';
+import { ChatState } from './reducer';
 
 
 interface InjectedProps extends ChatState {
@@ -27,13 +27,9 @@ export default class ChatUI extends React.PureComponent {
 	};
 	
 	render() {
-		const { room, log, theme } = this.props;
+		const { room, theme } = this.props;
 		if ( !room.hasJoined ) return null;
 		
-		let newLog = [];
-		for ( let i = 0; i < 10; ++i )
-			newLog[ i ] = log.length >= 10 - i
-				? log[ log.length - 10 + i ] : '\xa0';
 		return <Grid row='1fr 80% 1fr' column='1fr 50% 1fr'>
 			<Grid style={{
 				backgroundColor: theme.palette.background.default,
@@ -42,15 +38,32 @@ export default class ChatUI extends React.PureComponent {
 			      row='1fr 50px' column='1fr 2fr 1fr'
 			      className='pEvents'
 			>
-				<List style={{ gridArea: '1 / 1 / auto / span 3', justifySelf: 'start' }}>
-					{newLog.map( ( item, index ) => {
-						return <ListItem key={index}>
-							<ListItemText primary={item}/>
-						</ListItem>;
-					} )}
-				</List>
+				{this.components.log()}
+				{this.components.control()}
+			</Grid>
+		</Grid>;
+	}
+	
+	private components = {
+		log:     () => {
+			const { log } = this.props;
+			let newLog = [];
+			for ( let i = 0; i < 10; ++i )
+				newLog[ i ] = log.length >= 10 - i
+					? log[ log.length - 10 + i ] : '\xa0';
+			
+			return <List style={{ gridArea: '1 / 1 / auto / span 3', justifySelf: 'start' }}>
+				{newLog.map( ( item, index ) => {
+					return <ListItem key={index}>
+						<ListItemText primary={item}/>
+					</ListItem>;
+				} )}
+			</List>;
+		},
+		control: () => {
+			return <>
 				<Typography style={{ gridArea: '2 / 1' }} align='center'>
-					{room.sessionId}
+					{this.props.room.sessionId}
 				</Typography>
 				<TextField
 					value={this.state.input}
@@ -63,15 +76,14 @@ export default class ChatUI extends React.PureComponent {
 						this.setState( { input: event.target.value } );
 					}}/>
 				<Button
-					href=''
 					variant='contained'
-					style={{ gridArea: '2 / 3' }}
+					style={{ gridArea: '2 / 3', justifySelf: 'stretch', alignSelf: 'stretch' }}
 					onClick={this.sendMessage}>
 					Send
 				</Button>
-			</Grid>
-		</Grid>;
-	}
+			</>;
+		}
+	};
 	
 	private sendMessage = () => {
 		if ( !this.state.input.length ) return;
