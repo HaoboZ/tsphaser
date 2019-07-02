@@ -22,11 +22,12 @@ interface Props {
 export default class UI extends React.PureComponent<Props> {
 	
 	render() {
+		console.log( this.props.ui.element );
 		return <MuiThemeProvider theme={theme}>
 			<CssBaseline/>
 			<div id='ui'>
 				{this.props.ui.element ?
-					typeof this.props.ui.element === 'function' || 'render' in this.props.ui.element ?
+					typeof this.props.ui.element === 'function' || 'displayName' in this.props.ui.element ?
 						React.createElement( this.props.ui.element ) : this.props.ui.element : null}
 			</div>
 		</MuiThemeProvider>;

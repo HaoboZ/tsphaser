@@ -3,6 +3,8 @@ import { Room } from 'colyseus.js';
 import { moveConfig } from '../../../shared/examples/moveConfig';
 import MoveRoomState from '../../../shared/examples/moveRoomState';
 import Server from '../../connect/server';
+import store from '../../redux/store';
+import { setUI } from '../../UI/reducer';
 
 
 const { FPS, WORLD, PLAYER, SPEED } = moveConfig;
@@ -22,6 +24,8 @@ export default class MovementScene extends Phaser.Scene {
 	}
 	
 	public create() {
+		store.dispatch( setUI( null ) );
+		
 		this.room = Server.client.join( 'movement' );
 		this.room.onJoin.add( () => {
 			this.loadField();

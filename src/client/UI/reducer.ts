@@ -3,24 +3,25 @@ import * as React from 'react';
 
 const UI = 'setUI';
 
-export const setUI = ( element: React.ComponentClass | React.ReactElement ) => ( {
+export const setUI = ( element: React.ComponentClass | React.ReactElement, scene: Phaser.Scene = null ) => ( {
 	type: UI,
-	element
+	element,
+	scene
 } );
 
 export interface UIState {
 	element: React.ComponentClass | React.ReactElement
+	scene: Phaser.Scene
 }
 
-const initState: UIState = { element: null };
+const initState: UIState = { element: null, scene: null };
 
 export const UIReducer = (
 	state = initState,
-	action: { type: string, element?: React.ComponentClass | React.ReactElement }
+	action: { type: string, element?: React.ComponentClass | React.ReactElement, scene?: Phaser.Scene }
 ) => {
 	if ( action.type === UI ) {
-		state.element = action.element;
-		return { ...state };
+		return { ...state, element: action.element, scene: action.scene };
 	} else {
 		return state;
 	}

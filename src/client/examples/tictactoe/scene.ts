@@ -4,7 +4,6 @@ import { tictactoeEvents } from '../../../shared/examples/tictactoeEvents';
 import tictactoeRoomState from '../../../shared/examples/tictactoeRoomState';
 import store from '../../redux/store';
 import { setUI } from '../../UI/reducer';
-import { setScene } from './actions';
 import UI from './UI';
 
 
@@ -25,8 +24,7 @@ export default class TictactoeScene extends Phaser.Scene {
 	}
 	
 	public create() {
-		store.dispatch( setScene( this ) );
-		store.dispatch( setUI( UI ) );
+		store.dispatch( setUI( UI, this ) );
 		
 		this.input.on( 'gameobjectup', ( _, rect ) => {
 				if ( !this.room ) return;

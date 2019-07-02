@@ -10,11 +10,11 @@ import { tictactoeEvents } from '../../../shared/examples/tictactoeEvents';
 import TictactoeRoomState, { Player, playResult } from '../../../shared/examples/tictactoeRoomState';
 import Server from '../../connect/server';
 import { StoreState } from '../../redux/store';
-import TictactoeScene from './game';
-import { TictactoeState } from './reducer';
+import { UIState } from '../../UI/reducer';
+import Scene from './scene';
 
 
-interface InjectedProps extends RouteComponentProps, WithTheme, TictactoeState {
+interface InjectedProps extends RouteComponentProps, WithTheme, UIState {
 }
 
 // @ts-ignore
@@ -22,7 +22,7 @@ interface InjectedProps extends RouteComponentProps, WithTheme, TictactoeState {
 //@ts-ignore
 @withTheme
 // @ts-ignore
-@connect( ( state: StoreState ) => state.tictactoe )
+@connect( ( state: StoreState ) => state.ui )
 export default class TictactoeUI extends React.PureComponent {
 	
 	props: InjectedProps;
@@ -191,7 +191,7 @@ export default class TictactoeUI extends React.PureComponent {
 	
 	private roomEvents( room: Room<TictactoeRoomState> ) {
 		room.onJoin.add( () => {
-			( this.props.scene as TictactoeScene ).setRoom( room );
+			( this.props.scene as Scene ).setRoom( room );
 			
 			room.state.players.onAdd = ( player, key ) => {
 				this.setState( { [ room.sessionId === key ? 'self' : 'enemy' ]: player } );
@@ -221,7 +221,7 @@ export default class TictactoeUI extends React.PureComponent {
 			}
 		} );
 		room.onLeave.add( () => {
-			( this.props.scene as TictactoeScene ).setRoom();
+			( this.props.scene as Scene ).setRoom();
 			this.setState( {
 				showID: false,
 				self:   { name: '', ready: false },
