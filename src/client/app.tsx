@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import { MemoryRouter } from 'react-router-dom';
 
 import Server from './connect/server';
 import Game from './game';
@@ -12,8 +13,10 @@ class App extends React.PureComponent {
 	
 	render() {
 		return <Provider store={store}>
-			<UI/>
-			<Game/>
+			<MemoryRouter>
+				<UI/>
+				<Game/>
+			</MemoryRouter>
 		</Provider>;
 	}
 	

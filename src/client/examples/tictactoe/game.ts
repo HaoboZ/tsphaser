@@ -30,7 +30,6 @@ export default class TictactoeScene extends Phaser.Scene {
 		
 		this.input.on( 'gameobjectup', ( _, rect ) => {
 				if ( !this.room ) return;
-				console.log( this.playing, this.room.state.turn ? this.room.state.cross : this.room.state.circle, this.room.sessionId );
 				if ( !this.playing || ( this.room.state.turn ? this.room.state.cross : this.room.state.circle ) !== this.room.sessionId ) return;
 				if ( rect.getData( 'value' ) !== 0 ) return;
 				

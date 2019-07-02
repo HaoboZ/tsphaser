@@ -1,10 +1,12 @@
-import { Button, Dialog, TextField, Typography } from '@material-ui/core';
+import { Button, TextField, Typography } from '@material-ui/core';
 import { Room } from 'colyseus.js';
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { RouteComponentProps, withRouter } from 'react-router';
+import { Route } from 'react-router-dom';
 
 import { events } from '../../../shared/examples/tictactoeEvents';
-import TictactoeRoomState, { Player, playResult, roomStatus } from '../../../shared/examples/tictactoeRoomState';
+import TictactoeRoomState, { Player, playResult } from '../../../shared/examples/tictactoeRoomState';
 import Server from '../../connect/server';
 import { StoreState } from '../../redux/store';
 import Grid from '../../UI/grid';
@@ -12,9 +14,11 @@ import TictactoeScene from './game';
 import { TictactoeState } from './reducer';
 
 
-interface InjectedProps extends TictactoeState {
+interface InjectedProps extends RouteComponentProps, TictactoeState {
 }
 
+// @ts-ignore
+@withRouter
 // @ts-ignore
 @connect( ( state: StoreState ) => state.tictactoe )
 export default class TictactoeUI extends React.PureComponent {
@@ -23,32 +27,31 @@ export default class TictactoeUI extends React.PureComponent {
 	
 	state: {
 		room: Room<TictactoeRoomState>
-		status: roomStatus
 		input: string
 		result: string
-		resultOpen: boolean
 		showID: boolean
 		self: Player
 		enemy: Player
 	} = {
-		room:       null,
-		status:     roomStatus.LOBBY,
-		input:      '',
-		result:     '',
-		resultOpen: false,
-		showID:     false,
-		self:       { name: '', ready: false } as any,
-		enemy:      { name: '', ready: false } as any
+		room:   null,
+		input:  '',
+		result: '',
+		showID: false,
+		self:   { name: '', ready: false } as any,
+		enemy:  { name: '', ready: false } as any
 	};
 	
 	render() {
-		const { room } = this.state;
-		
-		return !room ? this.components.joinOptions() : this.components.inRoom();
+		return <>
+			<Route exact path='/' component={this.components.home}/>
+			<Route path='/lobby' component={this.components.lobby}/>
+			<Route path='/game' component={this.components.game}/>
+			<Route path='/over' component={this.components.over}/>
+		</>;
 	}
 	
 	private components = {
-		joinOptions: () => {
+		home:  () => {
 			const { input } = this.state;
 			
 			return <Grid>
@@ -88,17 +91,12 @@ export default class TictactoeUI extends React.PureComponent {
 				</div>
 			</Grid>;
 		},
-		inRoom:      () => {
-			const { room, status, showID, enemy, self } = this.state;
+		lobby: () => {
+			const { room, showID, enemy, self } = this.state;
 			
 			return <>
-				<Dialog open={this.state.resultOpen} onClose={() => {
-					this.setState( { resultOpen: false } );
-				}}>
-					{this.state.result}
-				</Dialog>
 				<Grid row='1fr 80% 1fr'>
-					{status === roomStatus.LOBBY ? <div style={{ display: 'grid', gridRow: '2' }}>
+					<div style={{ display: 'grid', gridRow: '2' }}>
 						<Typography>
 							{showID ? `Room ID: ${room.id}` : ''}
 						</Typography>
@@ -118,7 +116,7 @@ export default class TictactoeUI extends React.PureComponent {
 						>
 							Exit
 						</Button>
-					</div> : null}
+					</div>
 					<Typography style={{
 						justifySelf: 'start',
 						paddingLeft: 40,
@@ -134,7 +132,29 @@ export default class TictactoeUI extends React.PureComponent {
 						{enemy.name}
 					</Typography>
 				</Grid>
-				{status === roomStatus.GAME ? <Button
+			</>;
+		},
+		game:  () => {
+			const { room, enemy, self } = this.state;
+			
+			return <>
+				<Grid row='1fr 80% 1fr'>
+					<Typography style={{
+						justifySelf: 'start',
+						paddingLeft: 40,
+						gridRow:     '3'
+					}} color={self.ready ? self.turn ? 'primary' : 'textPrimary' : 'error'}>
+						{self.name}
+					</Typography>
+					<Typography style={{
+						justifySelf:  'end',
+						paddingRight: 40,
+						gridRow:      '1'
+					}} color={enemy.ready ? enemy.turn ? 'primary' : 'textPrimary' : 'error'}>
+						{enemy.name}
+					</Typography>
+				</Grid>
+				<Button
 					variant='contained'
 					style={{ position: 'absolute', top: 0 }}
 					onClick={() => {
@@ -142,8 +162,17 @@ export default class TictactoeUI extends React.PureComponent {
 					}}
 				>
 					Quit
-				</Button> : null}
+				</Button>
 			</>;
+		},
+		over:  () => {
+			return <Grid className='pEvents' onClick={() => {
+				this.props.history.push( '/lobby' );
+			}}>
+				<Typography variant='h1'>
+					{this.state.result}
+				</Typography>
+			</Grid>;
 		}
 	};
 	
@@ -163,30 +192,29 @@ export default class TictactoeUI extends React.PureComponent {
 		} );
 		room.onStateChange.addOnce( () => {
 			this.setState( { room } );
+			this.props.history.push( '/lobby' );
 		} );
 		room.onMessage.add( ( message ) => {
-			console.log();
 			switch ( message.event ) {
 			case events.START:
-				this.setState( { status: roomStatus.GAME } );
+				this.props.history.push( '/game' );
 				break;
 			case events.OVER:
-				this.setState( { status: roomStatus.LOBBY } );
-				if ( message.state === playResult.TIE ) this.setState( { result: 'It\'s a TIE!', resultOpen: true } );
-				else if ( room.sessionId === message.winner ) this.setState( { result: 'You WIN!', resultOpen: true } );
-				else this.setState( { result: 'You LOSE!', resultOpen: true } );
+				if ( message.state === playResult.TIE ) this.setState( { result: 'It\'s a TIE!' } );
+				else if ( room.sessionId === message.winner ) this.setState( { result: 'You WIN!' } );
+				else this.setState( { result: 'You LOSE!' } );
+				this.props.history.push( '/over' );
 				break;
 			}
 		} );
 		room.onLeave.add( () => {
 			( this.props.scene as TictactoeScene ).setRoom();
 			this.setState( {
-				room:   null,
-				status: roomStatus.LOBBY,
 				showID: false,
 				self:   { name: '', ready: false },
 				enemy:  { name: '', ready: false }
 			} );
+			this.props.history.push( '/' );
 		} );
 	}
 	

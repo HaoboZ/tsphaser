@@ -1,4 +1,4 @@
-import { Button, List, ListItem, ListItemText, TextField, Theme, Typography } from '@material-ui/core';
+import { Button, List, ListItem, ListItemText, TextField, Typography, WithTheme } from '@material-ui/core';
 import { withTheme } from '@material-ui/core/styles';
 import * as React from 'react';
 import { connect } from 'react-redux';
@@ -8,8 +8,7 @@ import Grid from '../../UI/grid';
 import { ChatState } from './reducer';
 
 
-interface InjectedProps extends ChatState {
-	theme: Theme
+interface InjectedProps extends ChatState, WithTheme {
 }
 
 // @ts-ignore
