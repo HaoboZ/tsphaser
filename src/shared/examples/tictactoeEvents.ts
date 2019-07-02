@@ -1,4 +1,4 @@
-export enum events {
+export enum tictactoeEvents {
 	/*
 		client -> server
 			toggle ready

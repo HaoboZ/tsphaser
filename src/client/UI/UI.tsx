@@ -4,6 +4,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 import { StoreState } from '../redux/store';
+import './style.less';
 
 
 export const theme = createMuiTheme( {
@@ -25,7 +26,7 @@ export default class UI extends React.PureComponent<Props> {
 			<CssBaseline/>
 			<div id='ui'>
 				{this.props.ui.element ?
-					typeof this.props.ui.element === 'function' ?
+					typeof this.props.ui.element === 'function' || 'render' in this.props.ui.element ?
 						React.createElement( this.props.ui.element ) : this.props.ui.element : null}
 			</div>
 		</MuiThemeProvider>;

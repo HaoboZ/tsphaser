@@ -1,6 +1,6 @@
 import { Client, Room } from 'colyseus';
 
-import { events } from '../../../shared/examples/tictactoeEvents';
+import { tictactoeEvents } from '../../../shared/examples/tictactoeEvents';
 import TictactoeRoomState, { playResult, roomStatus } from '../../../shared/examples/tictactoeRoomState';
 
 
@@ -31,7 +31,7 @@ export default class TictactoeRoom extends Room<TictactoeRoomState> {
 		
 		if ( this.state.status === roomStatus.GAME )
 			this.broadcast( {
-				event:  events.OVER,
+				event:  tictactoeEvents.OVER,
 				state:  playResult.WIN,
 				winner: this.state.cross === client.sessionId ? this.state.circle : this.state.cross
 			} );
@@ -41,23 +41,23 @@ export default class TictactoeRoom extends Room<TictactoeRoomState> {
 	
 	public onMessage( client: Client, data: any ): void {
 		switch ( data.event ) {
-		case events.START:
+		case tictactoeEvents.START:
 			if ( this.state.toggleReady( client.sessionId ) )
-				this.broadcast( { event: events.START }, { afterNextPatch: true } );
+				this.broadcast( { event: tictactoeEvents.START }, { afterNextPatch: true } );
 			break;
 		
-		case events.PLAY:
+		case tictactoeEvents.PLAY:
 			const result = this.state.playLocation( client.sessionId, data.index );
 			switch ( result ) {
 			case playResult.TIE:
 				this.broadcast( {
-					event: events.OVER,
+					event: tictactoeEvents.OVER,
 					state: playResult.TIE
 				} );
 				break;
 			case playResult.WIN:
 				this.broadcast( {
-					event:  events.OVER,
+					event:  tictactoeEvents.OVER,
 					state:  playResult.WIN,
 					winner: client.sessionId
 				} );
@@ -65,14 +65,14 @@ export default class TictactoeRoom extends Room<TictactoeRoomState> {
 			}
 			break;
 		
-		case events.OVER:
+		case tictactoeEvents.OVER:
 			this.state.players[ this.state.cross ].ready = false;
 			this.state.players[ this.state.circle ].ready = false;
 			this.state.players[ this.state.cross ].turn = false;
 			this.state.players[ this.state.circle ].turn = false;
 			this.state.status = roomStatus.LOBBY;
 			this.broadcast( {
-				event:  events.OVER,
+				event:  tictactoeEvents.OVER,
 				state:  playResult.WIN,
 				winner: this.state.cross === client.sessionId ? this.state.circle : this.state.cross
 			} );

@@ -20,7 +20,3 @@ body {
 	top: 50%;
 	left: 50%;
 }
-
-input, button, .pEvents, [role$='button'] {
-	pointer-events: auto;
-}

@@ -1,11 +1,11 @@
 import { Room } from 'colyseus.js';
 
-import { events } from '../../../shared/examples/tictactoeEvents';
+import { tictactoeEvents } from '../../../shared/examples/tictactoeEvents';
 import tictactoeRoomState from '../../../shared/examples/tictactoeRoomState';
 import store from '../../redux/store';
 import { setUI } from '../../UI/reducer';
 import { setScene } from './actions';
-import TictactoeUI from './UI';
+import UI from './UI';
 
 
 export default class TictactoeScene extends Phaser.Scene {
@@ -26,14 +26,14 @@ export default class TictactoeScene extends Phaser.Scene {
 	
 	public create() {
 		store.dispatch( setScene( this ) );
-		store.dispatch( setUI( TictactoeUI ) );
+		store.dispatch( setUI( UI ) );
 		
 		this.input.on( 'gameobjectup', ( _, rect ) => {
 				if ( !this.room ) return;
 				if ( !this.playing || ( this.room.state.turn ? this.room.state.cross : this.room.state.circle ) !== this.room.sessionId ) return;
 				if ( rect.getData( 'value' ) !== 0 ) return;
 				
-				this.room.send( { event: events.PLAY, index: rect.getData( 'index' ) } );
+				this.room.send( { event: tictactoeEvents.PLAY, index: rect.getData( 'index' ) } );
 			}
 		);
 		
@@ -45,10 +45,10 @@ export default class TictactoeScene extends Phaser.Scene {
 			this.room = room;
 			room.onMessage.add( ( message ) => {
 				switch ( message.event ) {
-				case events.START:
+				case tictactoeEvents.START:
 					this.playing = true;
 					break;
-				case events.OVER:
+				case tictactoeEvents.OVER:
 					this.playing = false;
 					break;
 				}

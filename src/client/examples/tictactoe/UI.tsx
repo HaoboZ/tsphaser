@@ -1,24 +1,26 @@
-import { Button, TextField, Typography } from '@material-ui/core';
+import { Button, Container, Grid, Paper, TextField, Typography } from '@material-ui/core';
+import { withTheme, WithTheme } from '@material-ui/core/styles';
 import { Room } from 'colyseus.js';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { Route } from 'react-router-dom';
 
-import { events } from '../../../shared/examples/tictactoeEvents';
+import { tictactoeEvents } from '../../../shared/examples/tictactoeEvents';
 import TictactoeRoomState, { Player, playResult } from '../../../shared/examples/tictactoeRoomState';
 import Server from '../../connect/server';
 import { StoreState } from '../../redux/store';
-import Grid from '../../UI/grid';
 import TictactoeScene from './game';
 import { TictactoeState } from './reducer';
 
 
-interface InjectedProps extends RouteComponentProps, TictactoeState {
+interface InjectedProps extends RouteComponentProps, WithTheme, TictactoeState {
 }
 
 // @ts-ignore
 @withRouter
+//@ts-ignore
+@withTheme
 // @ts-ignore
 @connect( ( state: StoreState ) => state.tictactoe )
 export default class TictactoeUI extends React.PureComponent {
@@ -52,63 +54,72 @@ export default class TictactoeUI extends React.PureComponent {
 	
 	private components = {
 		home:  () => {
+			const { theme } = this.props;
 			const { input } = this.state;
 			
-			return <Grid>
-				<div style={{ display: 'grid' }}>
-					<Button
-						variant='contained'
-						onClick={() => {
-							const room: Room<TictactoeRoomState> = Server.client.join( 'tictactoe' );
-							this.setState( { showID: false } );
-							this.roomEvents( room );
-						}}>
-						Quick Match
-					</Button>
-					<Button
-						variant='contained'
-						onClick={() => {
-							const room: Room<TictactoeRoomState> = Server.client.join( 'tictactoe', { private: true } );
-							this.setState( { showID: true } );
-							this.roomEvents( room );
-						}}>
-						Private Match
-					</Button>
-					<TextField
-						value={input}
-						placeholder='Room ID'
-						onKeyPress={( ev ) => {
-							if ( ev.key === 'Enter' ) {
-								const room: Room<TictactoeRoomState> = Server.client.join( 'tictactoe', { id: this.state.input } );
-								this.setState( { showID: true } );
-								this.roomEvents( room );
-							}
-						}}
-						onChange={( event ) => {
-							this.setState( { input: event.target.value } );
-						}}
-					/>
-				</div>
-			</Grid>;
-		},
-		lobby: () => {
-			const { room, showID, enemy, self } = this.state;
-			
-			return <>
-				<Grid row='1fr 80% 1fr'>
-					<div style={{ display: 'grid', gridRow: '2' }}>
-						<Typography>
-							{showID ? `Room ID: ${room.id}` : ''}
-						</Typography>
+			return <Container className='pEvents centerGrid'>
+				<Paper>
+					<Grid container direction='column' alignItems='center'>
 						<Button
 							variant='contained'
+							style={{ margin: theme.spacing() }}
 							onClick={() => {
-								room.send( { event: events.START } );
+								const room: Room<TictactoeRoomState> = Server.client.join( 'tictactoe' );
+								this.setState( { showID: false } );
+								this.roomEvents( room );
+							}}>
+							Quick Match
+						</Button>
+						<Button
+							variant='contained'
+							style={{ margin: theme.spacing() }}
+							onClick={() => {
+								const room: Room<TictactoeRoomState> = Server.client.join( 'tictactoe', { private: true } );
+								this.setState( { showID: true } );
+								this.roomEvents( room );
+							}}>
+							Private Match
+						</Button>
+						<TextField
+							style={{ margin: theme.spacing() }}
+							value={input}
+							placeholder='Room ID'
+							onKeyPress={( ev ) => {
+								if ( ev.key === 'Enter' ) {
+									const room: Room<TictactoeRoomState> = Server.client.join( 'tictactoe', { id: this.state.input } );
+									this.setState( { showID: true } );
+									this.roomEvents( room );
+								}
+							}}
+							onChange={( event ) => {
+								this.setState( { input: event.target.value } );
+							}}
+						/>
+					</Grid>
+				</Paper>
+			</Container>;
+		},
+		lobby: () => {
+			const { theme } = this.props;
+			const { room, showID, enemy, self } = this.state;
+			
+			return <Container className='pEvents centerGrid' style={{ gridTemplateRows: '1fr 80% 1fr' }}>
+				<Paper style={{ gridRow: '2' }}>
+					<Grid container direction='column' alignItems='center'>
+						{showID ? <Typography style={{ margin: theme.spacing() }}>
+							Room ID: {room.id}
+						</Typography> : null}
+						<Button
+							style={{ margin: theme.spacing() }}
+							variant='contained'
+							onClick={() => {
+								room.send( { event: tictactoeEvents.START } );
 							}}
 						>
 							Ready
 						</Button>
 						<Button
+							style={{ margin: theme.spacing() }}
 							variant='contained'
 							onClick={() => {
 								room.leave();
@@ -116,29 +127,29 @@ export default class TictactoeUI extends React.PureComponent {
 						>
 							Exit
 						</Button>
-					</div>
-					<Typography style={{
-						justifySelf: 'start',
-						paddingLeft: 40,
-						gridRow:     '3'
-					}} color={self.ready ? self.turn ? 'primary' : 'textPrimary' : 'error'}>
-						{self.name}
-					</Typography>
-					<Typography style={{
-						justifySelf:  'end',
-						paddingRight: 40,
-						gridRow:      '1'
-					}} color={enemy.ready ? enemy.turn ? 'primary' : 'textPrimary' : 'error'}>
-						{enemy.name}
-					</Typography>
-				</Grid>
-			</>;
+					</Grid>
+				</Paper>
+				<Typography style={{
+					justifySelf: 'start',
+					paddingLeft: 40,
+					gridRow:     '3'
+				}} color={self.ready ? self.turn ? 'primary' : 'textPrimary' : 'error'}>
+					{self.name}
+				</Typography>
+				<Typography style={{
+					justifySelf:  'end',
+					paddingRight: 40,
+					gridRow:      '1'
+				}} color={enemy.ready ? enemy.turn ? 'primary' : 'textPrimary' : 'error'}>
+					{enemy.name}
+				</Typography>
+			</Container>;
 		},
 		game:  () => {
 			const { room, enemy, self } = this.state;
 			
 			return <>
-				<Grid row='1fr 80% 1fr'>
+				<Container className='pEvents centerGrid' style={{ gridTemplateRows: '1fr 80% 1fr' }}>
 					<Typography style={{
 						justifySelf: 'start',
 						paddingLeft: 40,
@@ -153,12 +164,12 @@ export default class TictactoeUI extends React.PureComponent {
 					}} color={enemy.ready ? enemy.turn ? 'primary' : 'textPrimary' : 'error'}>
 						{enemy.name}
 					</Typography>
-				</Grid>
+				</Container>
 				<Button
 					variant='contained'
 					style={{ position: 'absolute', top: 0 }}
 					onClick={() => {
-						room.send( { event: events.OVER } );
+						room.send( { event: tictactoeEvents.OVER } );
 					}}
 				>
 					Quit
@@ -166,13 +177,15 @@ export default class TictactoeUI extends React.PureComponent {
 			</>;
 		},
 		over:  () => {
-			return <Grid className='pEvents' onClick={() => {
+			return <Container className='pEvents centerGrid' onClick={() => {
 				this.props.history.push( '/lobby' );
 			}}>
-				<Typography variant='h1'>
-					{this.state.result}
-				</Typography>
-			</Grid>;
+				<Paper>
+					<Typography variant='h1'>
+						{this.state.result}
+					</Typography>
+				</Paper>
+			</Container>;
 		}
 	};
 	
@@ -196,10 +209,10 @@ export default class TictactoeUI extends React.PureComponent {
 		} );
 		room.onMessage.add( ( message ) => {
 			switch ( message.event ) {
-			case events.START:
+			case tictactoeEvents.START:
 				this.props.history.push( '/game' );
 				break;
-			case events.OVER:
+			case tictactoeEvents.OVER:
 				if ( message.state === playResult.TIE ) this.setState( { result: 'It\'s a TIE!' } );
 				else if ( room.sessionId === message.winner ) this.setState( { result: 'You WIN!' } );
 				else this.setState( { result: 'You LOSE!' } );

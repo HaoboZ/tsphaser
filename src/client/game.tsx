@@ -30,7 +30,7 @@ export default class Game extends React.PureComponent {
 			scene:    [ Load, ChatScene, MovementScene, TictactoeScene ]
 		} );
 		
-		game.scene.start( 'Load', { start: 'Tictactoe' } );
+		game.scene.start( 'Load', { start: 'Chat' } );
 	}
 	
 	public render() {

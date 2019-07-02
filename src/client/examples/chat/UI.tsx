@@ -1,18 +1,14 @@
-import { Button, List, ListItem, ListItemText, TextField, Typography, WithTheme } from '@material-ui/core';
-import { withTheme } from '@material-ui/core/styles';
+import { Button, Container, List, ListItem, ListItemText, Paper, TextField, Typography } from '@material-ui/core';
 import * as React from 'react';
 import { connect } from 'react-redux';
 
 import { StoreState } from '../../redux/store';
-import Grid from '../../UI/grid';
 import { ChatState } from './reducer';
 
 
-interface InjectedProps extends ChatState, WithTheme {
+interface InjectedProps extends ChatState {
 }
 
-// @ts-ignore
-@withTheme
 // @ts-ignore
 @connect( ( state: StoreState ) => state.chat )
 export default class ChatUI extends React.PureComponent {
@@ -26,21 +22,19 @@ export default class ChatUI extends React.PureComponent {
 	};
 	
 	render() {
-		const { room, theme } = this.props;
-		if ( !room.hasJoined ) return null;
+		const { room } = this.props;
+		if ( !room || !room.hasJoined ) return null;
 		
-		return <Grid row='1fr 80% 1fr' column='1fr 50% 1fr'>
-			<Grid style={{
-				backgroundColor: theme.palette.background.default,
-				gridArea:        '2 / 2'
-			}}
-			      row='1fr 50px' column='1fr 2fr 1fr'
-			      className='pEvents'
-			>
+		return <Container className='pEvents centerGrid' style={{ gridTemplate: '1fr 80% 1fr / 1fr 50% 1fr' }}>
+			<Paper style={{
+				display:      'grid',
+				gridArea:     '2 / 2',
+				gridTemplate: '1fr 50px / 1fr 2fr 1fr'
+			}}>
 				{this.components.log()}
 				{this.components.control()}
-			</Grid>
-		</Grid>;
+			</Paper>
+		</Container>;
 	}
 	
 	private components = {

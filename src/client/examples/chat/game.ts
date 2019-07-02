@@ -1,10 +1,8 @@
-import * as React from 'react';
-
 import Server from '../../connect/server';
 import store from '../../redux/store';
 import { setUI } from '../../UI/reducer';
 import { sendMessage, setRoom } from './actions';
-import ChatUI from './UI';
+import UI from './UI';
 
 
 export default class ChatScene extends Phaser.Scene {
@@ -20,7 +18,7 @@ export default class ChatScene extends Phaser.Scene {
 		} );
 		
 		store.dispatch( setRoom( room ) );
-		store.dispatch( setUI( ChatUI ) );
+		store.dispatch( setUI( UI ) );
 	}
 	
 }
