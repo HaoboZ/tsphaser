@@ -1,4 +1,4 @@
-# TSPhaser
+# TS Phaser
 
 Basic starter with typescript, phaser, colyseus, and material ui.
 

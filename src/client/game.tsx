@@ -12,23 +12,24 @@ export default class Game extends React.PureComponent {
 	
 	componentDidMount() {
 		const game = new Phaser.Game( {
-			type:     Phaser.AUTO,
-			// @ts-ignore
-			pixelArt: true,
-			scale:    {
+			title:   'TS Phaser',
+			type:    Phaser.AUTO,
+			render:  {
+				pixelArt: true
+			},
+			scale:   {
 				mode:       config.fill ? Phaser.Scale.RESIZE : Phaser.Scale.FIT,
 				parent:     'phaser-game',
 				autoCenter: Phaser.Scale.CENTER_BOTH,
-				
 				...config.size
 			},
-			physics:  {
+			physics: {
 				default: 'arcade',
 				arcade:  {
 					debug: config.debug
 				}
 			},
-			scene:    [ Load, Examples, ChatScene, MovementScene, TictactoeScene ]
+			scene:   [ Load, Examples, ChatScene, MovementScene, TictactoeScene ]
 		} );
 		
 		game.scene.start( 'Load', { start: 'Examples' } );
