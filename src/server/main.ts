@@ -32,7 +32,6 @@ app.get( '*', ( req, res ) => {
 	res.sendFile( index );
 } );
 
-
 gameServer.register( 'chat', ChatRoom ).then();
 gameServer.register( 'movement', MoveRoom ).then();
 gameServer.register( 'tictactoe', TictactoeRoom ).then();

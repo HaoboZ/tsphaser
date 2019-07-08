@@ -3,7 +3,9 @@ import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import * as React from 'react';
 import { connect } from 'react-redux';
 
+import Examples from '../examples/examples';
 import { StoreState } from '../redux/store';
+import { UIState } from './reducer';
 import './style.less';
 
 
@@ -13,22 +15,20 @@ export const theme = createMuiTheme( {
 	}
 } );
 
-interface Props {
-	ui?
+interface InjectedProps extends UIState {
 }
 
 // @ts-ignore
-@connect( ( state: StoreState ) => ( { ui: state.ui } ) )
-export default class UI extends React.PureComponent<Props> {
+@connect( ( state: StoreState ) => state.ui )
+export default class UI extends React.PureComponent {
+	
+	props: InjectedProps | any;
 	
 	render() {
-		console.log( this.props.ui.element );
 		return <MuiThemeProvider theme={theme}>
 			<CssBaseline/>
 			<div id='ui'>
-				{this.props.ui.element ?
-					typeof this.props.ui.element === 'function' || 'displayName' in this.props.ui.element ?
-						React.createElement( this.props.ui.element ) : this.props.ui.element : null}
+				{this.props.ready ? <Examples/> : null}
 			</div>
 		</MuiThemeProvider>;
 	}

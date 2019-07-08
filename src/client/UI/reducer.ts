@@ -1,28 +1,21 @@
-import * as React from 'react';
+import { READY } from './actions';
 
-
-const UI = 'setUI';
-
-export const setUI = ( element: React.ComponentClass | React.ReactElement, scene: Phaser.Scene = null ) => ( {
-	type: UI,
-	element,
-	scene
-} );
 
 export interface UIState {
-	element: React.ComponentClass | React.ReactElement
-	scene: Phaser.Scene
+	ready: boolean
+	game: Phaser.Game
 }
 
-const initState: UIState = { element: null, scene: null };
+const initState: UIState = { ready: false, game: null };
 
 export const UIReducer = (
 	state = initState,
-	action: { type: string, element?: React.ComponentClass | React.ReactElement, scene?: Phaser.Scene }
+	action: { type: string, game? }
 ) => {
-	if ( action.type === UI ) {
-		return { ...state, element: action.element, scene: action.scene };
-	} else {
+	switch ( action.type ) {
+	case READY:
+		return { ...state, ready: true, game: action.game };
+	default:
 		return state;
 	}
 };

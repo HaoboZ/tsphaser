@@ -8,11 +8,11 @@ export default class ChatRoom extends Room {
 	}
 	
 	onJoin( client ) {
-		this.broadcast( `${client.sessionId} joined ${this.roomId}.` );
+		this.broadcast( `${client.sessionId} joined.` );
 	}
 	
 	onLeave( client ) {
-		this.broadcast( `${client.sessionId} left ${this.roomId}.` );
+		this.broadcast( `${client.sessionId} left.` );
 	}
 	
 	onMessage( client, data ) {

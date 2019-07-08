@@ -1,10 +1,8 @@
 import * as React from 'react';
 
-import config from './config';
-import ChatScene from './examples/chat/scene';
-import Examples from './examples/examples';
-import MovementScene from './examples/movement/scene';
-import TictactoeScene from './examples/tictactoe/scene';
+import config from '../config';
+import MovementScene from '../examples/movement/scene';
+import TictactoeScene from '../examples/tictactoe/scene';
 import Load from './load';
 
 
@@ -29,10 +27,10 @@ export default class Game extends React.PureComponent {
 					debug: config.debug
 				}
 			},
-			scene:   [ Load, Examples, ChatScene, MovementScene, TictactoeScene ]
+			scene:   [ Load, MovementScene, TictactoeScene ]
 		} );
 		
-		game.scene.start( 'Load', { start: 'Examples' } );
+		game.scene.start( 'Load' );
 	}
 	
 	public render() {

@@ -1,29 +1,21 @@
-import { Room } from 'colyseus.js';
-
-import { MESSAGE, ROOM } from './actions';
+import { CLEAR, MESSAGE } from './actions';
 
 
 export interface ChatState {
-	room: Room
 	log: string[]
 }
 
 const initState: ChatState = {
-	room: null,
-	log:  []
+	log: []
 };
 
 export const chatReducer = (
 	state = initState,
-	action: {
-		type: string
-		room?: Room
-		message?: string
-	}
+	action: { type: string, message? }
 ) => {
 	switch ( action.type ) {
-	case ROOM:
-		return { ...state, room: action.room };
+	case CLEAR:
+		return { ...state, log: [] };
 	case MESSAGE:
 		const log = state.log.slice();
 		log.push( action.message );

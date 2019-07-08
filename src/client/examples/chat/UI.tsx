@@ -1,28 +1,47 @@
 import { Button, Container, List, ListItem, ListItemText, Paper, TextField, Typography } from '@material-ui/core';
+import { Room } from 'colyseus.js';
 import * as React from 'react';
-import { connect } from 'react-redux';
+import { connect, DispatchProp } from 'react-redux';
 
+import Server from '../../connect/server';
 import { StoreState } from '../../redux/store';
+import { UIState } from '../../UI/reducer';
+import { clearLog, sendMessage } from './actions';
 import { ChatState } from './reducer';
 
 
-interface InjectedProps extends ChatState {
+interface InjectedProps extends DispatchProp, UIState, ChatState {
 }
 
 // @ts-ignore
-@connect( ( state: StoreState ) => state.chat )
+@connect( ( state: StoreState ) => ( { ...state.ui, ...state.chat } ) )
 export default class ChatUI extends React.PureComponent {
 	
 	props: InjectedProps;
 	
 	state: {
+		room: Room
 		input: string
 	} = {
+		room:  null,
 		input: ''
 	};
 	
+	public componentDidMount(): void {
+		const room = Server.client.join( 'chat' );
+		this.setState( { room } );
+		room.onMessage.add( ( message ) => {
+			this.props.dispatch( sendMessage( message ) );
+		} );
+	}
+	
+	public componentWillUnmount(): void {
+		this.state.room.leave();
+		this.props.dispatch( clearLog() );
+	}
+	
 	render() {
-		const { room } = this.props;
+		const { room } = this.state;
 		if ( !room || !room.hasJoined ) return null;
 		
 		return <Container className='pEvents centerGrid' style={{ gridTemplate: '1fr 80% 1fr / 1fr 50% 1fr' }}>
@@ -56,7 +75,7 @@ export default class ChatUI extends React.PureComponent {
 		control: () => {
 			return <>
 				<Typography style={{ gridArea: '2 / 1' }} align='center'>
-					{this.props.room.sessionId}
+					{this.state.room.sessionId}
 				</Typography>
 				<TextField
 					value={this.state.input}
@@ -80,7 +99,7 @@ export default class ChatUI extends React.PureComponent {
 	
 	private sendMessage = () => {
 		if ( !this.state.input.length ) return;
-		this.props.room.send( { message: this.state.input } );
+		this.state.room.send( { message: this.state.input } );
 		this.setState( { input: '' } );
 	};
 	

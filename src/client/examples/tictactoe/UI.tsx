@@ -43,12 +43,21 @@ export default class TictactoeUI extends React.PureComponent {
 		enemy:  { name: '', ready: false } as any
 	};
 	
+	public componentDidMount(): void {
+		this.props.game.scene.start( 'Tictactoe' );
+	}
+	
+	public componentWillUnmount(): void {
+		const scene = this.props.game.scene.getScene( 'Tictactoe' ) as Scene;
+		scene.scene.stop();
+	}
+	
 	render() {
 		return <>
-			<Route exact path='/' component={this.components.home}/>
-			<Route path='/lobby' component={this.components.lobby}/>
-			<Route path='/game' component={this.components.game}/>
-			<Route path='/over' component={this.components.over}/>
+			<Route exact path={this.props.match.url} component={this.components.home}/>
+			<Route path={`${this.props.match.url}/lobby`} component={this.components.lobby}/>
+			<Route path={`${this.props.match.url}/game`} component={this.components.game}/>
+			<Route path={`${this.props.match.url}/over`} component={this.components.over}/>
 		</>;
 	}
 	
@@ -178,7 +187,7 @@ export default class TictactoeUI extends React.PureComponent {
 		},
 		over:  () => {
 			return <Container className='pEvents centerGrid' onClick={() => {
-				this.props.history.push( '/lobby' );
+				this.props.history.push( `${this.props.match.url}/lobby` );
 			}}>
 				<Paper>
 					<Typography variant='h1'>
@@ -191,7 +200,7 @@ export default class TictactoeUI extends React.PureComponent {
 	
 	private roomEvents( room: Room<TictactoeRoomState> ) {
 		room.onJoin.add( () => {
-			( this.props.scene as Scene ).setRoom( room );
+			( this.props.game.scene.getScene( 'Tictactoe' ) as Scene ).setRoom( room );
 			
 			room.state.players.onAdd = ( player, key ) => {
 				this.setState( { [ room.sessionId === key ? 'self' : 'enemy' ]: player } );
@@ -205,29 +214,29 @@ export default class TictactoeUI extends React.PureComponent {
 		} );
 		room.onStateChange.addOnce( () => {
 			this.setState( { room } );
-			this.props.history.push( '/lobby' );
+			this.props.history.push( `${this.props.match.url}/lobby` );
 		} );
 		room.onMessage.add( ( message ) => {
 			switch ( message.event ) {
 			case tictactoeEvents.START:
-				this.props.history.push( '/game' );
+				this.props.history.push( `${this.props.match.url}/game` );
 				break;
 			case tictactoeEvents.OVER:
 				if ( message.state === playResult.TIE ) this.setState( { result: 'It\'s a TIE!' } );
 				else if ( room.sessionId === message.winner ) this.setState( { result: 'You WIN!' } );
 				else this.setState( { result: 'You LOSE!' } );
-				this.props.history.push( '/over' );
+				this.props.history.push( `${this.props.match.url}/over` );
 				break;
 			}
 		} );
 		room.onLeave.add( () => {
-			( this.props.scene as Scene ).setRoom();
+			( this.props.game.scene.getScene( 'Tictactoe' ) as Scene ).setRoom();
 			this.setState( {
 				showID: false,
 				self:   { name: '', ready: false },
 				enemy:  { name: '', ready: false }
 			} );
-			this.props.history.push( '/' );
+			this.props.history.push( this.props.match.url );
 		} );
 	}
 	

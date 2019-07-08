@@ -5,15 +5,11 @@ import config from '../../server/config';
 
 const Server = new class {
 	
-	private _client: Client;
-	
 	public init() {
-		this._client = new Client( `ws://${window.location.host}:${config.port}` );
+		this.client = new Client( `ws://${window.location.host}:${config.port}` );
 	}
 	
-	public get client() {
-		return this._client;
-	}
+	public client: Client;
 	
 };
 export default Server;
