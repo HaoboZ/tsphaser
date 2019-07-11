@@ -3,6 +3,7 @@ import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import * as React from 'react';
 import { connect } from 'react-redux';
 
+import config from '../config';
 import Examples from '../examples/examples';
 import { StoreState } from '../redux/store';
 import { UIState } from './reducer';
@@ -27,7 +28,7 @@ export default class UI extends React.PureComponent {
 	render() {
 		return <MuiThemeProvider theme={theme}>
 			<CssBaseline/>
-			<div id='ui'>
+			<div id='ui' className={config.constantScale ? 'constantScale' : ''}>
 				{this.props.ready ? <Examples/> : null}
 			</div>
 		</MuiThemeProvider>;

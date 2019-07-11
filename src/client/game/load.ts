@@ -1,3 +1,4 @@
+import config from '../config';
 import store from '../redux/store';
 import { readyUI } from '../UI/actions';
 
@@ -25,11 +26,12 @@ export default class Load extends Phaser.Scene {
 	}
 	
 	private onResize = () => {
-		$( '#ui' )
-			.innerWidth( this.game.scale.width )
-			.innerHeight( this.game.scale.height )
-			.css( 'transform',
-				`translate(-50%, -50%) scale(${1 / this.game.scale.displayScale.x}, ${1 / this.game.scale.displayScale.y})` );
+		if ( config.constantScale )
+			$( '#ui' )
+				.innerWidth( this.game.scale.width )
+				.innerHeight( this.game.scale.height )
+				.css( 'transform',
+					`translate(-50%, -50%) scale(${1 / this.game.scale.displayScale.x}, ${1 / this.game.scale.displayScale.y})` );
 	};
 	
 	private loadBar( height: number ) {
@@ -38,8 +40,8 @@ export default class Load extends Phaser.Scene {
 			2, this.scale.gameSize.height - height,
 			'Loading...',
 			{
-				font: `${height * 0.9}px monospace`,
-				fill: '#ffffff'
+				font:          `${height * 0.9}px monospace`,
+				constantScale: '#ffffff'
 			}
 		);
 		

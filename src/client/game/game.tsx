@@ -16,7 +16,7 @@ export default class Game extends React.PureComponent {
 				pixelArt: true
 			},
 			scale:   {
-				mode:       config.fill ? Phaser.Scale.RESIZE : Phaser.Scale.FIT,
+				mode:       config.constantScale ? Phaser.Scale.RESIZE : Phaser.Scale.FIT,
 				parent:     'phaser-game',
 				autoCenter: Phaser.Scale.CENTER_BOTH,
 				...config.size
