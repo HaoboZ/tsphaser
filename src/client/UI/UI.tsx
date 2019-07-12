@@ -16,22 +16,15 @@ export const theme = createMuiTheme( {
 	}
 } );
 
-interface InjectedProps extends UIState {
+interface Props extends UIState {
 }
 
-// @ts-ignore
-@connect( ( state: StoreState ) => state.ui )
-export default class UI extends React.PureComponent {
-	
-	props: InjectedProps | any;
-	
-	render() {
-		return <MuiThemeProvider theme={theme}>
-			<CssBaseline/>
-			<div id='ui' className={config.constantScale ? 'constantScale' : ''}>
-				{this.props.ready ? <Examples/> : null}
-			</div>
-		</MuiThemeProvider>;
-	}
-	
-}
+export default connect( ( state: StoreState ) => state.ui )
+( function UI( props: Props ) {
+	return <MuiThemeProvider theme={theme}>
+		<CssBaseline/>
+		<div id='ui' className={config.constantScale ? 'constantScale' : ''}>
+			{props.ready ? <Examples/> : null}
+		</div>
+	</MuiThemeProvider>;
+} );

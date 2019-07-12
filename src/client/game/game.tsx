@@ -6,9 +6,8 @@ import TictactoeScene from '../examples/tictactoe/scene';
 import Load from './load';
 
 
-export default class Game extends React.PureComponent {
-	
-	componentDidMount() {
+export default function Game() {
+	React.useEffect( () => {
 		const game = new Phaser.Game( {
 			title:   'TS Phaser',
 			type:    Phaser.AUTO,
@@ -16,7 +15,7 @@ export default class Game extends React.PureComponent {
 				pixelArt: true
 			},
 			scale:   {
-				mode:       config.constantScale ? Phaser.Scale.RESIZE : Phaser.Scale.FIT,
+				mode:       config.constantScale ? Phaser.Scale.FIT : Phaser.Scale.RESIZE,
 				parent:     'phaser-game',
 				autoCenter: Phaser.Scale.CENTER_BOTH,
 				...config.size
@@ -31,10 +30,7 @@ export default class Game extends React.PureComponent {
 		} );
 		
 		game.scene.start( 'Load' );
-	}
+	} );
 	
-	public render() {
-		return <div id='phaser-game'/>;
-	}
-	
+	return <div id='phaser-game'/>;
 }

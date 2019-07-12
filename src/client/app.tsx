@@ -9,25 +9,16 @@ import store from './redux/store';
 import UI from './UI/UI';
 
 
-class App extends React.PureComponent {
-	
-	constructor() {
-		// @ts-ignore
-		super( ...arguments );
-		Server.init();
-	}
-	
-	render() {
-		return <Provider store={store}>
-			<BrowserRouter>
-				<UI/>
-				<Game/>
-			</BrowserRouter>
-		</Provider>;
-	}
-	
+function App() {
+	return <Provider store={store}>
+		<BrowserRouter>
+			<UI/>
+			<Game/>
+		</BrowserRouter>
+	</Provider>;
 }
 
 $( () => {
+	Server.init();
 	ReactDOM.render( <App/>, $( '#root' )[ 0 ] );
 } );

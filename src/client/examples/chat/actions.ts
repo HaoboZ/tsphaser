@@ -1,7 +1,7 @@
 export const MESSAGE = 'chatMESSAGE';
 export const CLEAR = 'chatCLEAR';
 
-export const sendMessage = ( message: string ) => ( {
+export const roomMessage = ( message: string ) => ( {
 	type: MESSAGE,
 	message
 } );

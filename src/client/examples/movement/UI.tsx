@@ -6,27 +6,21 @@ import { UIState } from '../../UI/reducer';
 import Scene from './scene';
 
 
-interface InjectedProps extends DispatchProp, UIState {
+interface Props extends DispatchProp, UIState {
 }
 
-// @ts-ignore
-@connect( ( state: StoreState ) => state.ui )
-export default class MovementUI extends React.PureComponent {
+export default connect( ( state: StoreState ) => state.ui )
+( function MovementUI( props: Props ) {
 	
-	props: InjectedProps;
+	React.useEffect( () => {
+		props.game.scene.start( 'Movement' );
+		
+		return () => {
+			const scene = props.game.scene.getScene( 'Movement' ) as Scene;
+			scene.room.leave();
+			scene.scene.stop();
+		};
+	}, [] );
 	
-	public componentDidMount(): void {
-		this.props.game.scene.start( 'Movement' );
-	}
-	
-	public componentWillUnmount(): void {
-		const scene = this.props.game.scene.getScene( 'Movement' ) as Scene;
-		scene.room.leave();
-		scene.scene.stop();
-	}
-	
-	render() {
-		return null;
-	}
-	
-}
+	return null;
+} );
