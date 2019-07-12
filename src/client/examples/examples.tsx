@@ -33,7 +33,7 @@ export default withRouter<any>
 						</Button>
 						<Button
 							variant='contained'
-							style={{ margin: theme.spacing() }}
+							style={{ margin: theme.spacing(), marginTop: 0 }}
 							onClick={() => {
 								props.history.push( '/movement' );
 							}}>
@@ -41,7 +41,7 @@ export default withRouter<any>
 						</Button>
 						<Button
 							variant='contained'
-							style={{ margin: theme.spacing() }}
+							style={{ margin: theme.spacing(), marginTop: 0 }}
 							onClick={() => {
 								props.history.push( '/tictactoe' );
 							}}>

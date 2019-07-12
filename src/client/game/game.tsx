@@ -32,5 +32,5 @@ export default function Game() {
 		game.scene.start( 'Load' );
 	} );
 	
-	return <div id='phaser-game'/>;
+	return <div id='phaser-game' style={{ zIndex: -1 }}/>;
 }

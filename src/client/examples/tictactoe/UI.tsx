@@ -102,7 +102,7 @@ export default withRouter<any>
 						</Button>
 						<Button
 							variant='contained'
-							style={{ margin: theme.spacing() }}
+							style={{ margin: theme.spacing(), marginTop: 0 }}
 							onClick={() => {
 								const room: Room<TictactoeRoomState> = Server.client.join( 'tictactoe', { private: true } );
 								setShowID( true );
@@ -111,7 +111,7 @@ export default withRouter<any>
 							Private Match
 						</Button>
 						<TextField
-							style={{ margin: theme.spacing() }}
+							style={{ margin: theme.spacing(), marginTop: 0 }}
 							value={input}
 							placeholder='Room ID'
 							onKeyPress={( ev ) => {
@@ -139,7 +139,7 @@ export default withRouter<any>
 							Room ID: {room.id}
 						</Typography> : null}
 						<Button
-							style={{ margin: theme.spacing() }}
+							style={{ margin: theme.spacing(), marginTop: 0 }}
 							variant='contained'
 							onClick={() => {
 								room.send( { event: tictactoeEvents.START } );
@@ -148,7 +148,7 @@ export default withRouter<any>
 							Ready
 						</Button>
 						<Button
-							style={{ margin: theme.spacing() }}
+							style={{ margin: theme.spacing(), marginTop: 0 }}
 							variant='contained'
 							onClick={() => {
 								room.leave();
