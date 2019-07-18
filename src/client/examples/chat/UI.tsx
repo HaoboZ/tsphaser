@@ -1,33 +1,26 @@
 import { Button, Container, List, ListItem, ListItemText, Paper, TextField, Typography } from '@material-ui/core';
 import { Room } from 'colyseus.js';
 import * as React from 'react';
-import { connect, DispatchProp } from 'react-redux';
 
 import Server from '../../connect/server';
-import { StoreState } from '../../redux/store';
-import { UIState } from '../../UI/reducer';
-import { clearLog, roomMessage } from './actions';
-import { ChatState } from './reducer';
 
 
-interface Props extends DispatchProp, UIState, ChatState {
-}
-
-export default connect( ( state: StoreState ) => ( { ...state.ui, ...state.chat } ) )
-( function ChatUI( props: Props ) {
+export default function ChatUI() {
 	const [ room, setRoom ]   = React.useState<Room>(),
+	      [ log, setLog ]     = React.useState( [] ),
 	      [ input, setInput ] = React.useState( '' );
 	
 	React.useEffect( () => {
 		const room = Server.client.join( 'chat' );
 		setRoom( room );
 		room.onMessage.add( ( message ) => {
-			props.dispatch( roomMessage( message ) );
+			log.push( message );
+			setLog( log );
 		} );
 		
 		return () => {
 			room.leave();
-			props.dispatch( clearLog() );
+			setLog( [] );
 		};
 	}, [] );
 	
@@ -41,7 +34,6 @@ export default connect( ( state: StoreState ) => ( { ...state.ui, ...state.chat 
 	
 	const components = {
 		log:     () => {
-			const { log } = props;
 			let newLog = [];
 			for ( let i = 0; i < 10; ++i )
 				newLog[ i ] = log.length >= 10 - i
@@ -90,4 +82,4 @@ export default connect( ( state: StoreState ) => ( { ...state.ui, ...state.chat 
 			{components.control()}
 		</Paper>
 	</Container>;
-} );
+}

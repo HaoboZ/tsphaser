@@ -11,12 +11,13 @@ interface Props extends DispatchProp, UIState {
 
 export default connect( ( state: StoreState ) => state.ui )
 ( function MovementUI( props: Props ) {
+	const { game } = props;
 	
 	React.useEffect( () => {
-		props.game.scene.start( 'Movement' );
+		game.scene.start( 'Movement' );
 		
 		return () => {
-			const scene = props.game.scene.getScene( 'Movement' ) as Scene;
+			const scene = game.scene.getScene( 'Movement' ) as Scene;
 			scene.room.leave();
 			scene.scene.stop();
 		};
