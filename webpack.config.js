@@ -3,14 +3,14 @@ const BrowserSyncPlugin = require( 'browser-sync-webpack-plugin' );
 const BundleAnalyzerPlugin = require( 'webpack-bundle-analyzer' ).BundleAnalyzerPlugin;
 
 module.exports = {
-	entry:     path.join( __dirname, 'src/client/app.tsx' ),
-	output:    {
+	entry:        path.join( __dirname, 'src/client/app.tsx' ),
+	output:       {
 		path:     path.join( __dirname, 'public', 'build' ),
-		filename: 'bundle.js'
+		filename: '[name].bundle.js'
 	},
-	devtool:   'source-map',
-	mode:      'development',
-	module:    {
+	devtool:      'source-map',
+	mode:         'development',
+	module:       {
 		rules: [
 			{
 				test:   /\.tsx?$/,
@@ -26,20 +26,25 @@ module.exports = {
 			}
 		]
 	},
-	externals: {
+	externals:    {
 		'react':       'React',
 		'react-dom':   'ReactDOM',
 		'redux':       'Redux',
 		'react-redux': 'ReactRedux'
 	},
-	plugins:   [
+	plugins:      [
 		new BrowserSyncPlugin( {
 			host:      'localhost',
 			ghostMode: false
 		} ),
 		new BundleAnalyzerPlugin()
 	],
-	resolve:   {
+	resolve:      {
 		extensions: [ '.js', '.jsx', '.ts', '.tsx', '.css', '.less' ]
+	},
+	optimization: {
+		splitChunks: {
+			chunks: 'all'
+		}
 	}
 };

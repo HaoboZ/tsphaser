@@ -14,10 +14,9 @@ import TictactoeUI from './tictactoe/UI';
 interface Props extends RouteComponentProps, UIState {
 }
 
-
-export default withRouter<any>
+export default withRouter
 ( connect( ( state: StoreState ) => state.ui )
-( function Examples( props: Props | any ) {
+( function Examples( props: Props ) {
 	return <>
 		<Route exact path='/' render={
 			() => <Container className='pEvents centerGrid'>
