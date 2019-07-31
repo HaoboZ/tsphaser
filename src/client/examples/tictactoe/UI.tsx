@@ -87,7 +87,7 @@ export default withRouter
 	}
 	
 	const components = {
-		home:  () => <Container className='pEvents centerGrid'>
+		home:  () => <Container className='pEvents center'>
 			<Paper>
 				<Grid container direction='column' alignItems='center'>
 					<Button
@@ -128,7 +128,7 @@ export default withRouter
 				</Grid>
 			</Paper>
 		</Container>,
-		lobby: () => <Container className='pEvents centerGrid' style={{ gridTemplateRows: '1fr 80% 1fr' }}>
+		lobby: () => <Container className='pEvents center' style={{ gridTemplateRows: '1fr 80% 1fr' }}>
 			<Paper style={{ gridRow: '2' }}>
 				<Grid container direction='column' alignItems='center'>
 					{showID ? <Typography style={{ margin: theme.spacing() }}>
@@ -170,7 +170,7 @@ export default withRouter
 			</Typography>
 		</Container>,
 		game:  () => <>
-			<Container className='pEvents centerGrid' style={{ gridTemplateRows: '1fr 80% 1fr' }}>
+			<Container className='pEvents center' style={{ gridTemplateRows: '1fr 80% 1fr' }}>
 				<Typography style={{
 					justifySelf: 'start',
 					paddingLeft: 40,

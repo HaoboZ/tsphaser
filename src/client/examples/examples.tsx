@@ -19,7 +19,7 @@ export default withRouter
 ( function Examples( props: Props ) {
 	return <>
 		<Route exact path='/' render={
-			() => <Container className='pEvents centerGrid'>
+			() => <Container className='pEvents center'>
 				<Paper>
 					<Grid container direction='column' alignItems='center'>
 						<Button

@@ -72,7 +72,7 @@ export default function ChatUI() {
 		}
 	};
 	
-	return <Container className='pEvents centerGrid' style={{ gridTemplate: '1fr 80% 1fr / 1fr 50% 1fr' }}>
+	return <Container className='pEvents center' style={{ gridTemplate: '1fr 80% 1fr / 1fr 50% 1fr' }}>
 		<Paper style={{
 			display:      'grid',
 			gridArea:     '2 / 2',
