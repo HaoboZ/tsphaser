@@ -3,7 +3,7 @@ import { Client } from 'colyseus.js';
 import config from '../../server/config';
 
 
-const Server = new class {
+const Connect = new class {
 	
 	public init() {
 		this.client = new Client( `ws://${window.location.host}:${config.port}` );
@@ -12,4 +12,4 @@ const Server = new class {
 	public client: Client;
 	
 };
-export default Server;
+export default Connect;

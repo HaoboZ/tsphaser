@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 import { Route, RouteComponentProps, withRouter } from 'react-router';
 
 import { StoreState } from '../redux/store';
+import { theme } from '../UI';
 import { UIState } from '../UI/reducer';
-import { theme } from '../UI/UI';
-import ChatUI from './chat/UI';
-import MovementUI from './movement/UI';
-import TictactoeUI from './tictactoe/UI';
+import ChatUI from './chat';
+import MovementUI from './movement';
+import TictactoeUI from './tictactoe';
 
 
 interface Props extends RouteComponentProps, UIState {

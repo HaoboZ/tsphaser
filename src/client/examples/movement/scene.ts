@@ -2,7 +2,7 @@ import { Room } from 'colyseus.js';
 
 import { moveConfig } from '../../../shared/examples/moveConfig';
 import MoveRoomState from '../../../shared/examples/moveRoomState';
-import Server from '../../connect/server';
+import Connect from '../../connect';
 
 
 const { FPS, WORLD, PLAYER, SPEED } = moveConfig;
@@ -24,7 +24,7 @@ export default class MovementScene extends Phaser.Scene {
 	public create() {
 		this.self = null;
 		
-		this.room = Server.client.join( 'movement' );
+		this.room = Connect.client.join( 'movement' );
 		this.room.onJoin.add( () => {
 			this.loadField();
 			this.playerStateChange();

@@ -7,7 +7,7 @@ import { Route, RouteComponentProps, withRouter } from 'react-router';
 
 import { tictactoeEvents } from '../../../shared/examples/tictactoeEvents';
 import TictactoeRoomState, { Player, playResult } from '../../../shared/examples/tictactoeRoomState';
-import Server from '../../connect/server';
+import Connect from '../../connect';
 import { StoreState } from '../../redux/store';
 import { UIState } from '../../UI/reducer';
 import Scene from './scene';
@@ -94,7 +94,7 @@ export default withRouter
 						variant='contained'
 						style={{ margin: theme.spacing() }}
 						onClick={() => {
-							const room: Room<TictactoeRoomState> = Server.client.join( 'tictactoe' );
+							const room: Room<TictactoeRoomState> = Connect.client.join( 'tictactoe' );
 							setShowID( false );
 							roomEvents( room );
 						}}>
@@ -104,7 +104,7 @@ export default withRouter
 						variant='contained'
 						style={{ margin: theme.spacing(), marginTop: 0 }}
 						onClick={() => {
-							const room: Room<TictactoeRoomState> = Server.client.join( 'tictactoe', { private: true } );
+							const room: Room<TictactoeRoomState> = Connect.client.join( 'tictactoe', { private: true } );
 							setShowID( true );
 							roomEvents( room );
 						}}>
@@ -116,7 +116,7 @@ export default withRouter
 						placeholder='Room ID'
 						onKeyPress={( ev ) => {
 							if ( ev.key === 'Enter' ) {
-								const room: Room<TictactoeRoomState> = Server.client.join( 'tictactoe', { id: input } );
+								const room: Room<TictactoeRoomState> = Connect.client.join( 'tictactoe', { id: input } );
 								setShowID( true );
 								roomEvents( room );
 							}

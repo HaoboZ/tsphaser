@@ -3,10 +3,10 @@ import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 
-import Server from './connect/server';
-import Game from './game/game';
+import Connect from './connect';
+import Game from './game';
 import store from './redux/store';
-import UI from './UI/UI';
+import UI from './UI';
 
 
 function App() {
@@ -19,6 +19,6 @@ function App() {
 }
 
 $( () => {
-	Server.init();
+	Connect.init();
 	ReactDOM.render( <App/>, $( '#root' )[ 0 ] );
 } );

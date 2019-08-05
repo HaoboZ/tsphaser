@@ -11,4 +11,4 @@ Basic starter with typescript, phaser, colyseus, and material ui.
 
 ## Examples
 
-Modify line 33 src/client/game.tsx to start on either 'Chat', 'Movement', or 'Tictactoe' to run those examples.
+Modify line 33 src/client/game/index.tsx to start on either 'Chat', 'Movement', or 'Tictactoe' to run those examples.

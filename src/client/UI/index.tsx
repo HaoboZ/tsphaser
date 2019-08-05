@@ -4,7 +4,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 import config from '../config';
-import Examples from '../examples/examples';
+import Examples from '../examples';
 import { StoreState } from '../redux/store';
 import { UIState } from './reducer';
 import './style.less';

@@ -2,7 +2,7 @@ import { Button, Container, List, ListItem, ListItemText, Paper, TextField, Typo
 import { Room } from 'colyseus.js';
 import * as React from 'react';
 
-import Server from '../../connect/server';
+import Connect from '../../connect';
 
 
 export default function ChatUI() {
@@ -11,7 +11,7 @@ export default function ChatUI() {
 	      [ input, setInput ] = React.useState( '' );
 	
 	React.useEffect( () => {
-		const room = Server.client.join( 'chat' );
+		const room = Connect.client.join( 'chat' );
 		setRoom( room );
 		room.onMessage.add( ( message ) => {
 			log.push( message );
