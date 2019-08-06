@@ -4,7 +4,7 @@ import { moveConfig } from '../../../shared/examples/moveConfig';
 import MoveRoomState from '../../../shared/examples/moveRoomState';
 
 
-export default class MoveRoom extends Room<MoveRoomState> {
+export default class extends Room<MoveRoomState> {
 	
 	onInit( options ) {
 		console.log( `MoveRoom ${this.roomId} created!`, options );

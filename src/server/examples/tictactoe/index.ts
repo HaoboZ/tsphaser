@@ -4,7 +4,7 @@ import { tictactoeEvents } from '../../../shared/examples/tictactoeEvents';
 import TictactoeRoomState, { playResult, roomStatus } from '../../../shared/examples/tictactoeRoomState';
 
 
-export default class TictactoeRoom extends Room<TictactoeRoomState> {
+export default class extends Room<TictactoeRoomState> {
 	
 	maxClients = 2;
 	

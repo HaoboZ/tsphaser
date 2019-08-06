@@ -6,7 +6,7 @@ import TictactoeScene from '../examples/tictactoe/scene';
 import Load from './load';
 
 
-export default function Game() {
+export default function () {
 	React.useEffect( () => {
 		const game = new Phaser.Game( {
 			title:   'TS Phaser',

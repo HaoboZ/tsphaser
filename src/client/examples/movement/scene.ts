@@ -7,7 +7,7 @@ import Connect from '../../connect';
 
 const { FPS, WORLD, PLAYER, SPEED } = moveConfig;
 
-export default class MovementScene extends Phaser.Scene {
+export default class extends Phaser.Scene {
 	
 	public room: Room<MoveRoomState>;
 	

@@ -20,7 +20,7 @@ interface Props extends UIState {
 }
 
 export default connect( ( state: StoreState ) => state.ui )
-( function UI( props: Props ) {
+( function ( props: Props ) {
 	return <MuiThemeProvider theme={theme}>
 		<CssBaseline/>
 		<div id='ui' className={config.constantScale ? 'constantScale' : ''}>

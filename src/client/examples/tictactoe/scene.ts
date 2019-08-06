@@ -4,7 +4,7 @@ import { tictactoeEvents } from '../../../shared/examples/tictactoeEvents';
 import tictactoeRoomState from '../../../shared/examples/tictactoeRoomState';
 
 
-export default class TictactoeScene extends Phaser.Scene {
+export default class extends Phaser.Scene {
 	
 	private room: Room<tictactoeRoomState>;
 	

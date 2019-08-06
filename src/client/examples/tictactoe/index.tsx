@@ -19,7 +19,7 @@ interface Props extends RouteComponentProps, WithTheme, UIState {
 export default withRouter
 ( withTheme
 ( connect( ( state: StoreState ) => state.ui )
-( function TictactoeUI( props: Props ) {
+( function ( props: Props ) {
 	const { history, match, theme, game } = props;
 	
 	const [ room, setRoom ]     = React.useState<Room>( null ),

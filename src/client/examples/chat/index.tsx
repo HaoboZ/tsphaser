@@ -5,7 +5,7 @@ import * as React from 'react';
 import Connect from '../../connect';
 
 
-export default function ChatUI() {
+export default function () {
 	const [ room, setRoom ]   = React.useState<Room>(),
 	      [ log, setLog ]     = React.useState( [] ),
 	      [ input, setInput ] = React.useState( '' );

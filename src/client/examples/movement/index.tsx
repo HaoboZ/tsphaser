@@ -10,7 +10,7 @@ interface Props extends DispatchProp, UIState {
 }
 
 export default connect( ( state: StoreState ) => state.ui )
-( function MovementUI( props: Props ) {
+( function ( props: Props ) {
 	const { game } = props;
 	
 	React.useEffect( () => {

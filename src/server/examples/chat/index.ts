@@ -1,7 +1,7 @@
 import { Room } from 'colyseus';
 
 
-export default class ChatRoom extends Room {
+export default class extends Room {
 	
 	onInit( options ) {
 		console.log( `ChatRoom ${this.roomId} created!`, options );

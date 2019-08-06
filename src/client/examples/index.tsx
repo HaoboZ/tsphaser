@@ -16,7 +16,7 @@ interface Props extends RouteComponentProps, UIState {
 
 export default withRouter
 ( connect( ( state: StoreState ) => state.ui )
-( function Examples( props: Props ) {
+( function ( props: Props ) {
 	return <>
 		<Route exact path='/' render={
 			() => <Container className='pEvents center'>
