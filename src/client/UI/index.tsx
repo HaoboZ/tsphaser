@@ -19,7 +19,7 @@ export const theme = createMuiTheme( {
 interface Props extends UIState {
 }
 
-export default connect( ( state: StoreState ) => state.ui )
+const UI = connect( ( state: StoreState ) => state.ui )
 ( function ( props: Props ) {
 	return <MuiThemeProvider theme={theme}>
 		<CssBaseline/>
@@ -28,3 +28,4 @@ export default connect( ( state: StoreState ) => state.ui )
 		</div>
 	</MuiThemeProvider>;
 } );
+export default UI;

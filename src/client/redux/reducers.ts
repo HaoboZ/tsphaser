@@ -3,11 +3,12 @@ import { combineReducers } from 'redux';
 import { UIReducer, UIState } from '../UI/reducer';
 
 
-export default () => combineReducers(
+const reducers = () => combineReducers(
 	{
 		ui: UIReducer
 	}
-)
+);
+export default reducers;
 
 export interface state {
 	ui: UIState

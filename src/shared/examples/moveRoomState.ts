@@ -16,7 +16,7 @@ class Player extends Schema {
 	
 }
 
-export default class extends Schema {
+export default class MoveRoomState extends Schema {
 	
 	@type( { map: Player } )
 	players = new MapSchema<Player>();

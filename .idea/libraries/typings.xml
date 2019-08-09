@@ -8,6 +8,7 @@
     <CLASSES>
       <root url="file://$PROJECT_DIR$/src/client/typings" />
     </CLASSES>
+    <JAVADOC />
     <SOURCES />
   </library>
 </component>

@@ -3,9 +3,10 @@ import { createStore } from 'redux';
 import reducers, { state } from './reducers';
 
 
-export default createStore(
+const store = createStore(
 	reducers()
 );
+export default store;
 
 export interface StoreState extends state {
 }

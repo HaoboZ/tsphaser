@@ -14,7 +14,7 @@ import TictactoeUI from './tictactoe';
 interface Props extends RouteComponentProps, UIState {
 }
 
-export default withRouter
+const Examples = withRouter
 ( connect( ( state: StoreState ) => state.ui )
 ( function ( props: Props ) {
 	return <>
@@ -55,3 +55,4 @@ export default withRouter
 		<Route path='/tictactoe' component={TictactoeUI}/>
 	</>;
 } ) );
+export default Examples;

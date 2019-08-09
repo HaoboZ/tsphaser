@@ -9,7 +9,7 @@ import Scene from './scene';
 interface Props extends DispatchProp, UIState {
 }
 
-export default connect( ( state: StoreState ) => state.ui )
+const MovementUI = connect( ( state: StoreState ) => state.ui )
 ( function ( props: Props ) {
 	const { game } = props;
 	
@@ -25,3 +25,4 @@ export default connect( ( state: StoreState ) => state.ui )
 	
 	return null;
 } );
+export default MovementUI;

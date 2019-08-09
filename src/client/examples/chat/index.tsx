@@ -5,7 +5,7 @@ import * as React from 'react';
 import Connect from '../../connect';
 
 
-export default function () {
+const ChatUI = function () {
 	const [ room, setRoom ]   = React.useState<Room>(),
 	      [ log, setLog ]     = React.useState( [] ),
 	      [ input, setInput ] = React.useState( '' );
@@ -82,4 +82,5 @@ export default function () {
 			{components.control()}
 		</Paper>
 	</Container>;
-}
+};
+export default ChatUI;

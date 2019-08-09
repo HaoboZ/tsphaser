@@ -36,7 +36,7 @@ export class Player extends Schema {
 }
 
 
-export default class extends Schema {
+export default class TictactoeRoomState extends Schema {
 	
 	@type( { map: Player } )
 	players = new MapSchema<Player>();

@@ -3,7 +3,7 @@ import store from '../redux/store';
 import { readyUI } from '../UI/actions';
 
 
-export default class extends Phaser.Scene {
+export default class Load extends Phaser.Scene {
 	
 	progressBar: Phaser.GameObjects.Graphics;
 	loadingText: Phaser.GameObjects.Text;

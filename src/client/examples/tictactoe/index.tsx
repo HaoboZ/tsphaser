@@ -16,7 +16,7 @@ import Scene from './scene';
 interface Props extends RouteComponentProps, WithTheme, UIState {
 }
 
-export default withRouter
+const TictactoeUI = withRouter
 ( withTheme
 ( connect( ( state: StoreState ) => state.ui )
 ( function ( props: Props ) {
@@ -213,3 +213,4 @@ export default withRouter
 		<Route path={`${match.url}/over`} component={components.over}/>
 	</>;
 } ) ) );
+export default TictactoeUI;
