@@ -2,7 +2,7 @@ import { Room } from 'colyseus.js';
 
 import { moveConfig } from '../../../shared/examples/moveConfig';
 import MoveRoomState from '../../../shared/examples/moveRoomState';
-import Connect from '../../connect';
+import Connect from '../../library/connect';
 
 
 const { FPS, WORLD, PLAYER, SPEED } = moveConfig;

@@ -7,9 +7,9 @@ import { Route, RouteComponentProps, withRouter } from 'react-router';
 
 import { tictactoeEvents } from '../../../shared/examples/tictactoeEvents';
 import TictactoeRoomState, { Player, playResult } from '../../../shared/examples/tictactoeRoomState';
-import Connect from '../../connect';
-import { StoreState } from '../../redux/store';
-import { UIState } from '../../UI/reducer';
+import Connect from '../../library/connect';
+import { StoreState } from '../../library/redux/store';
+import { UIState } from '../../library/UI/reducer';
 import Scene from './scene';
 
 

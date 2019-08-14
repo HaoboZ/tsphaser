@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { connect, DispatchProp } from 'react-redux';
 
-import { StoreState } from '../../redux/store';
-import { UIState } from '../../UI/reducer';
+import { StoreState } from '../../library/redux/store';
+import { UIState } from '../../library/UI/reducer';
 import Scene from './scene';
 
 

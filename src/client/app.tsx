@@ -3,10 +3,10 @@ import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 
-import Connect from './connect';
-import Game from './game';
-import store from './redux/store';
-import UI from './UI';
+import Connect from './library/connect';
+import Game from './library/game';
+import store from './library/redux/store';
+import UI from './library/UI';
 
 
 function App() {

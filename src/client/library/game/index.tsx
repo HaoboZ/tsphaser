@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import config from '../config';
-import MovementScene from '../examples/movement/scene';
-import TictactoeScene from '../examples/tictactoe/scene';
+import config from '../../config';
+import MovementScene from '../../examples/movement/scene';
+import TictactoeScene from '../../examples/tictactoe/scene';
 import Load from './load';
 
 

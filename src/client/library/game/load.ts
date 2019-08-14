@@ -1,4 +1,4 @@
-import config from '../config';
+import config from '../../config';
 import store from '../redux/store';
 import { readyUI } from '../UI/actions';
 

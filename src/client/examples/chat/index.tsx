@@ -2,7 +2,7 @@ import { Button, Container, List, ListItem, ListItemText, Paper, TextField, Typo
 import { Room } from 'colyseus.js';
 import * as React from 'react';
 
-import Connect from '../../connect';
+import Connect from '../../library/connect';
 
 
 const ChatUI = function () {

@@ -3,9 +3,9 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Route, RouteComponentProps, withRouter } from 'react-router';
 
-import { StoreState } from '../redux/store';
-import { theme } from '../UI';
-import { UIState } from '../UI/reducer';
+import { StoreState } from '../library/redux/store';
+import { theme } from '../library/UI';
+import { UIState } from '../library/UI/reducer';
 import ChatUI from './chat';
 import MovementUI from './movement';
 import TictactoeUI from './tictactoe';
