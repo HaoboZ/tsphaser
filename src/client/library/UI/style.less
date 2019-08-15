@@ -1,7 +1,7 @@
 #ui {
 	position: absolute;
 	pointer-events: none;
-
+	
 	width: 100%;
 	height: 100%;
 }
@@ -20,4 +20,8 @@ input, button, .pEvents, [role$='button'] {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+}
+
+div[role="group"][tabindex] {
+	height: 100%;
 }

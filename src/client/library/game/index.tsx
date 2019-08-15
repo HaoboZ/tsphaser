@@ -1,12 +1,15 @@
 import * as React from 'react';
 
 import config from '../../config';
-import MovementScene from '../../examples/movement/scene';
-import TictactoeScene from '../../examples/tictactoe/scene';
 import Load from './load';
 
 
-export default function Game() {
+interface Props {
+	scene: Phaser.Types.Core.GameConfig['scene']
+	config?: Phaser.Types.Core.GameConfig
+}
+
+export default function Game( props: Props ) {
 	React.useEffect( () => {
 		const game = new Phaser.Game( {
 			title:   'TS Phaser',
@@ -26,11 +29,12 @@ export default function Game() {
 					debug: config.debug
 				}
 			},
-			scene:   [ Load, MovementScene, TictactoeScene ]
+			scene:   [ Load ].concat( props.scene as [] ),
+			...props.config
 		} );
 		
 		game.scene.start( 'Load' );
-	} );
+	}, [] );
 	
 	return <div id='phaser-game' style={{ zIndex: -1 }}/>;
 }

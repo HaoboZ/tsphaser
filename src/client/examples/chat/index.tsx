@@ -1,18 +1,20 @@
 import { Button, Container, List, ListItem, ListItemText, Paper, TextField, Typography } from '@material-ui/core';
+import { RouteComponentProps } from '@reach/router';
 import { Room } from 'colyseus.js';
 import * as React from 'react';
 
 import Connect from '../../library/connect';
 
 
-const ChatUI = function () {
+export default function ChatUI( props: RouteComponentProps ) {
 	const [ room, setRoom ]   = React.useState<Room>(),
 	      [ log, setLog ]     = React.useState( [] ),
 	      [ input, setInput ] = React.useState( '' );
-	
 	React.useEffect( () => {
 		const room = Connect.client.join( 'chat' );
-		setRoom( room );
+		room.onJoin.add( () => {
+			setRoom( room );
+		} );
 		room.onMessage.add( ( message ) => {
 			log.push( message );
 			setLog( log );
@@ -82,5 +84,4 @@ const ChatUI = function () {
 			{components.control()}
 		</Paper>
 	</Container>;
-};
-export default ChatUI;
+}
