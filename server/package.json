@@ -5,13 +5,17 @@
 		"build": "ts-node app.ts"
 	},
 	"dependencies": {
+		"cookie-parser": "latest",
 		"colyseus": "latest",
 		"express": "latest",
+		"morgan": "latest",
 		"ts-node": "latest",
 		"typescript": "latest"
 	},
 	"devDependencies": {
 		"@types/express": "latest",
+		"@types/cookie-parser": "latest",
+		"@types/morgan": "latest",
 		"@types/node": "latest",
 		"ts-node-dev": "latest"
 	}

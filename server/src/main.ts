@@ -1,6 +1,8 @@
 import { Server } from 'colyseus';
+import * as cookieParser from 'cookie-parser';
 import * as express from 'express';
 import { createServer } from 'http';
+import * as logger from 'morgan';
 import * as path from 'path';
 
 import config from './config';
@@ -17,11 +19,13 @@ const port: any = process.env.PORT || config.port;
 const gameServer: Server = new Server( {
 	server: createServer( app )
 } );
-gameServer.listen( port, undefined, undefined,
-	() => {
-		if ( config.debug ) console.log( `Listening on port ${port}` );
-	}
-);
+gameServer.listen( port, undefined, undefined, () => {
+	if ( config.debug ) console.log( `Listening on port ${port}` );
+} );
+
+if ( config.debug ) app.use( logger( 'dev' ) );
+app.use( express.json() );
+app.use( cookieParser() );
 
 app.use( '/', express.static( path.join( __basedir, 'public' ) ) );
 app.use( '/assets', express.static( path.join( __basedir, 'assets' ) ) );
