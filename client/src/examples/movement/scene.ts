@@ -1,7 +1,7 @@
 import { Room } from 'colyseus.js';
 
-import { moveConfig } from '../../../shared/examples/moveConfig';
-import MoveRoomState from '../../../shared/examples/moveRoomState';
+import { moveConfig } from '../../../../server/shared/examples/moveConfig';
+import MoveRoomState from '../../../../server/shared/examples/moveRoomState';
 import Connect from '../../library/connect';
 
 

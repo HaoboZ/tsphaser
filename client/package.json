@@ -1,0 +1,49 @@
+{
+	"scripts": {
+		"start": "webpack --watch",
+		"build": "webpack"
+	},
+	"size-limit": [
+		{
+			"path": "src/client/app.tsx"
+		}
+	],
+	"dependencies": {
+		"@material-ui/core": "latest",
+		"@material-ui/icons": "latest",
+		"@reach/router": "latest",
+		"colyseus.js": "latest",
+		"jquery": "latest",
+		"phaser": "latest",
+		"react": "latest",
+		"react-dom": "latest",
+		"react-redux": "latest",
+		"redux": "latest",
+		"typescript": "latest"
+	},
+	"devDependencies": {
+		"@babel/core": "latest",
+		"@babel/plugin-proposal-decorators": "latest",
+		"@babel/preset-env": "latest",
+		"@babel/preset-react": "latest",
+		"@babel/preset-typescript": "latest",
+		"@types/jquery": "latest",
+		"@types/reach__router": "latest",
+		"@types/react": "latest",
+		"@types/react-dom": "latest",
+		"@types/react-redux": "latest",
+		"babel-cli": "latest",
+		"babel-loader": "latest",
+		"babel-plugin-import": "latest",
+		"babel-plugin-transform-class-properties": "latest",
+		"browser-sync": "latest",
+		"browser-sync-webpack-plugin": "latest",
+		"css-loader": "latest",
+		"less": "latest",
+		"less-loader": "latest",
+		"style-loader": "latest",
+		"webpack": "latest",
+		"webpack-bundle-analyzer": "latest",
+		"webpack-cli": "latest"
+	}
+}

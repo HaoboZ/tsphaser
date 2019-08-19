@@ -1,6 +1,6 @@
 import { Client } from 'colyseus.js';
 
-import config from '../../../server/config';
+import config from '../../../../server/src/config';
 
 
 const Connect = new class {

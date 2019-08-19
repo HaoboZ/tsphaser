@@ -3,7 +3,7 @@ const BrowserSyncPlugin = require( 'browser-sync-webpack-plugin' );
 const BundleAnalyzerPlugin = require( 'webpack-bundle-analyzer' ).BundleAnalyzerPlugin;
 
 module.exports = {
-	entry:        path.join( __dirname, 'src/client/app.tsx' ),
+	entry:        path.join( __dirname, 'src/app.tsx' ),
 	output:       {
 		path:     path.join( __dirname, 'public', 'build' ),
 		filename: '[name].bundle.js'

@@ -1,3 +1,0 @@
-<component name="DependencyValidationManager">
-  <scope name="Client" pattern="file[tsphaser]:src/client//*||file[tsphaser]:src/shared//*||file[tsphaser]:assets//*||file[tsphaser]:public//*||file:webpack.config.js" />
-</component>

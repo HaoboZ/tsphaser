@@ -1,11 +1,9 @@
 {
 	"include": [
-		"main.ts",
-		"**/*",
-		"../common/**/*"
+		"src"
 	],
-	"exclude": [
-		"../../node_modules"
+	"files": [
+		"node_modules/phaser/types/phaser.d.ts"
 	],
 	/* Basic Options */
 	"compilerOptions": {
@@ -20,7 +18,7 @@
 		/* Report errors in .js files. */
 		"checkJs": true,
 		/* Specify JSX code generation: 'preserve', 'react-native', or 'react'. */
-		//		"jsx": "react",
+		"jsx": "react",
 		/* Generates corresponding '.d.ts' file. */
 		//		"declaration": true,
 		/* Generates corresponding '.map' file. */
@@ -28,9 +26,9 @@
 		/* Skip type checking of declaration files. */
 		"skipLibCheck": true,
 		/* Concatenate and emit output to single file. */
-		//		"outFile": "./",
+		//		"outFile": "public/build/bundle.js",
 		/* Redirect output structure to the directory. */
-		"outDir": "../../build/server",
+		"outDir": "public/build",
 		/* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
 		//		"rootDir": "./",
 		/* Do not emit comments to output. */
@@ -56,7 +54,7 @@
 		/* Enable strict checking of property initialization in classes. */
 		//		"strictPropertyInitialization": true,
 		/* Raise error on 'this' expressions with an implied 'any' type. */
-		//		"noImplicitThis": true,
+		"noImplicitThis": false,
 		/* Parse in strict mode and emit "use strict" for each source file. */
 		//		"alwaysStrict": true,
 		
@@ -82,13 +80,11 @@
 		/* List of root folders whose combined content represents the structure of the project at runtime. */
 		//		"rootDirs": [],
 		/* List of folders to include type definitions from. */
-		"typeRoots": [
-			"../../node_modules/@types"
-		],
+		//		"typeRoots": [],
 		/* Type declaration files to be included in compilation. */
 		//		"types": [],
 		/* Allow default imports from modules with no default export. This does not affect code emit, just typechecking. */
-		//		"allowSyntheticDefaultImports": true,
+		"allowSyntheticDefaultImports": true,
 		/* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */
 		//		"esModuleInterop": true,
 		/* Do not resolve the real path of symlinks. */
@@ -100,7 +96,7 @@
 		/* Specify the location where debugger should locate map files instead of generated locations. */
 		//		"mapRoot": "./",
 		/* Emit a single file with source maps instead of having a separate file. */
-		//		"inlineSourceMap": true,
+		"inlineSourceMap": true,
 		/* Emit the source alongside the sourcemaps within a single file; requires '--inlineSourceMap' or '--sourceMap' to be set. */
 		//		"inlineSources": true,
 		

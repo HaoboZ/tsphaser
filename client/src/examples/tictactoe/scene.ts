@@ -1,7 +1,7 @@
 import { Room } from 'colyseus.js';
 
-import { tictactoeEvents } from '../../../shared/examples/tictactoeEvents';
-import tictactoeRoomState from '../../../shared/examples/tictactoeRoomState';
+import { tictactoeEvents } from '../../../../server/shared/examples/tictactoeEvents';
+import tictactoeRoomState from '../../../../server/shared/examples/tictactoeRoomState';
 
 
 export default class TictactoeScene extends Phaser.Scene {

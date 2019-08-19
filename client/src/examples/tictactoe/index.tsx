@@ -5,8 +5,8 @@ import { Room } from 'colyseus.js';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 
-import { tictactoeEvents } from '../../../shared/examples/tictactoeEvents';
-import TictactoeRoomState, { Player, playResult } from '../../../shared/examples/tictactoeRoomState';
+import { tictactoeEvents } from '../../../../server/shared/examples/tictactoeEvents';
+import TictactoeRoomState, { Player, playResult } from '../../../../server/shared/examples/tictactoeRoomState';
 import Connect from '../../library/connect';
 import { StoreState } from '../../library/redux/store';
 import Scene from './scene';

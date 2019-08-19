@@ -1,0 +1,18 @@
+{
+	"main": "app.ts",
+	"scripts": {
+		"start": "ts-node-dev app.ts",
+		"build": "ts-node app.ts"
+	},
+	"dependencies": {
+		"colyseus": "latest",
+		"express": "latest",
+		"ts-node": "latest",
+		"typescript": "latest"
+	},
+	"devDependencies": {
+		"@types/express": "latest",
+		"@types/node": "latest",
+		"ts-node-dev": "latest"
+	}
+}

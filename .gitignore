@@ -29,5 +29,5 @@ out/
 # Editor-based Rest Client
 .idea/httpRequests
 
-node_modules/
-build/
+*/**/node_modules/
+*/**/build/
