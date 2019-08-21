@@ -13,8 +13,8 @@ export default class Load extends Phaser.Scene {
 	}
 	
 	public preload() {
-		this.onResize();
-		this.game.scale.on( Phaser.Scale.Events.RESIZE, this.onResize );
+		this.onResize( this.scale.gameSize );
+		this.scale.on( Phaser.Scale.Events.RESIZE, this.onResize );
 		
 		// load assets
 		this.loadBar( 24 );
@@ -25,13 +25,13 @@ export default class Load extends Phaser.Scene {
 		this.scene.stop();
 	}
 	
-	private onResize = () => {
+	private onResize = ( gameSize: Phaser.Structs.Size ) => {
 		if ( config.constantScale )
 			$( '#ui' )
-				.innerWidth( this.game.scale.width )
-				.innerHeight( this.game.scale.height )
+				.innerWidth( gameSize.width )
+				.innerHeight( gameSize.height )
 				.css( 'transform',
-					`translate(-50%, -50%) scale(${1 / this.game.scale.displayScale.x}, ${1 / this.game.scale.displayScale.y})` );
+					`translate(-50%, -50%) scale(${1 / this.scale.displayScale.x}, ${1 / this.scale.displayScale.y})` );
 	};
 	
 	private loadBar( height: number ) {
