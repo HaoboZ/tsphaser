@@ -14,7 +14,7 @@ export default class Load extends Phaser.Scene {
 	
 	public preload() {
 		this.onResize();
-		this.game.scale.on( 'resize', this.onResize );
+		this.game.scale.on( Phaser.Scale.Events.RESIZE, this.onResize );
 		
 		// load assets
 		this.loadBar( 24 );
@@ -45,7 +45,7 @@ export default class Load extends Phaser.Scene {
 			}
 		);
 		
-		this.load.on( 'progress', ( value ) => {
+		this.load.on( Phaser.Loader.Events.PROGRESS, ( value ) => {
 			this.loadingText.setText( `Loading... ${Math.floor( value * 100 )}%` );
 			
 			this.progressBar.clear();

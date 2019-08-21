@@ -49,7 +49,7 @@ export default class extends Phaser.Scene {
 		} );
 		this.players = this.physics.add.group();
 		
-		this.scale.on( 'resize', ( { width, height } ) => {
+		this.scale.on( Phaser.Scale.Events.RESIZE, ( { width, height } ) => {
 			this.cameras.resize( width, height );
 		} );
 	}

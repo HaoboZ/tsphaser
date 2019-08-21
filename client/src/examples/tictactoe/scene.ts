@@ -21,7 +21,7 @@ export default class TictactoeScene extends Phaser.Scene {
 	}
 	
 	public create() {
-		this.input.on( 'gameobjectup', ( _, rect ) => {
+		this.input.on( Phaser.Input.Events.GAMEOBJECT_UP, ( _, rect ) => {
 				if ( !this.room ) return;
 				if ( !this.playing || ( this.room.state.turn ? this.room.state.cross : this.room.state.circle ) !== this.room.sessionId ) return;
 				if ( rect.getData( 'value' ) !== 0 ) return;
@@ -30,7 +30,7 @@ export default class TictactoeScene extends Phaser.Scene {
 			}
 		);
 		
-		this.scale.on( 'resize', this.resize );
+		this.scale.on( Phaser.Scale.Events.RESIZE, this.resize );
 	}
 	
 	public setRoom( room?: Room ) {

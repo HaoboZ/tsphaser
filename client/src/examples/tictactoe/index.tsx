@@ -61,15 +61,15 @@ export default function TictactoeUI( props: RouteComponentProps ) {
 		} );
 		room.onMessage.add( ( message ) => {
 			switch ( message.event ) {
-				case tictactoeEvents.START:
-					props.navigate( 'game' );
-					break;
-				case tictactoeEvents.OVER:
-					if ( message.state === playResult.TIE ) setResult( 'It\'s a TIE!' );
-					else if ( room.sessionId === message.winner ) setResult( 'You WIN!' );
-					else setResult( 'You LOSE!' );
-					props.navigate( 'over' );
-					break;
+			case tictactoeEvents.START:
+				props.navigate( 'game' );
+				break;
+			case tictactoeEvents.OVER:
+				if ( message.state === playResult.TIE ) setResult( 'It\'s a TIE!' );
+				else if ( room.sessionId === message.winner ) setResult( 'You WIN!' );
+				else setResult( 'You LOSE!' );
+				props.navigate( 'over' );
+				break;
 			}
 		} );
 		room.onLeave.add( () => {
