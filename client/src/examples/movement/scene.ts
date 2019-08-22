@@ -7,7 +7,7 @@ import Connect from '../../library/connect';
 
 const { FPS, WORLD, PLAYER, SPEED } = moveConfig;
 
-export default class extends Phaser.Scene {
+export default class MovementScene extends Phaser.Scene {
 	
 	public room: Room<MoveRoomState>;
 	
@@ -16,10 +16,6 @@ export default class extends Phaser.Scene {
 	
 	private self: Phaser.GameObjects.Rectangle;
 	private players: Phaser.GameObjects.Group;
-	
-	constructor() {
-		super( 'Movement' );
-	}
 	
 	public create() {
 		this.self = null;

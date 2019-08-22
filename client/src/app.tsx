@@ -13,7 +13,7 @@ import UI from './library/UI';
 function App() {
 	return <Provider store={store}>
 		<UI/>
-		<Game scene={[ MovementScene, TictactoeScene ]}/>
+		<Game/>
 	</Provider>;
 }
 

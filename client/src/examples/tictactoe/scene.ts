@@ -11,10 +11,6 @@ export default class TictactoeScene extends Phaser.Scene {
 	private board: Phaser.GameObjects.Sprite[] = [];
 	playing = false;
 	
-	constructor() {
-		super( 'Tictactoe' );
-	}
-	
 	public preload() {
 		this.load.spritesheet( 'piece', 'assets/examples/piece.png',
 			{ frameWidth: 192, frameHeight: 192 } );
