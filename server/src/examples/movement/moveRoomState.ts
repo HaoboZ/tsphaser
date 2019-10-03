@@ -1,6 +1,6 @@
 import { MapSchema, Schema, type } from '@colyseus/schema';
 
-import { colors } from '../constants';
+import { colors } from '../../../../shared/constants';
 
 
 class Player extends Schema {

@@ -15,14 +15,6 @@ declare const __basedir;
 
 // set up server
 const app: express.Application = express();
-const port: any = process.env.PORT || config.port;
-const gameServer: Server = new Server( {
-	server: createServer( app )
-} );
-gameServer.listen( port, undefined, undefined, () => {
-	if ( config.debug ) console.log( `Listening on port ${port}` );
-} );
-
 if ( config.debug ) app.use( logger( 'dev' ) );
 app.use( express.json() );
 app.use( cookieParser() );
@@ -36,6 +28,15 @@ app.get( '*', ( req, res ) => {
 	res.sendFile( index );
 } );
 
-gameServer.register( 'chat', ChatRoom ).then();
-gameServer.register( 'movement', MoveRoom ).then();
-gameServer.register( 'tictactoe', TictactoeRoom ).then();
+const port: any = process.env.PORT || config.port;
+const gameServer: Server = new Server( {
+	server:  createServer( app ),
+	express: app
+} );
+gameServer.listen( port, undefined, undefined, () => {
+	if ( config.debug ) console.log( `Listening on port ${port}` );
+} );
+
+gameServer.define( 'chat', ChatRoom );
+gameServer.define( 'movement', MoveRoom );
+gameServer.define( 'tictactoe', TictactoeRoom );

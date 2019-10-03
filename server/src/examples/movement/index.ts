@@ -1,12 +1,12 @@
 import { Client, Room } from 'colyseus';
 
-import { moveConfig } from '../../../shared/examples/moveConfig';
-import MoveRoomState from '../../../shared/examples/moveRoomState';
+import { moveConfig } from './moveConfig';
+import MoveRoomState from './moveRoomState';
 
 
 export default class Movement extends Room<MoveRoomState> {
 	
-	onInit( options ) {
+	onCreate( options ) {
 		console.log( `MoveRoom ${this.roomId} created!`, options );
 		this.setState( new MoveRoomState() );
 		this.setPatchRate( 1000 / moveConfig.FPS );

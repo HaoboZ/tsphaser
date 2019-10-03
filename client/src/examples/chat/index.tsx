@@ -10,23 +10,29 @@ export default function ChatUI( props: RouteComponentProps ) {
 	const [ room, setRoom ]   = React.useState<Room>(),
 	      [ log, setLog ]     = React.useState( [] ),
 	      [ input, setInput ] = React.useState( '' );
+	
 	React.useEffect( () => {
-		const room = Connect.client.join( 'chat' );
-		room.onJoin.add( () => {
+		let roomRef;
+		Connect.client.joinOrCreate( 'chat' ).then( ( room ) => {
 			setRoom( room );
-		} );
-		room.onMessage.add( ( message ) => {
-			log.push( message );
-			setLog( log );
+			roomRef = room;
+			room.onMessage( ( message ) => {
+				log.push( message );
+				setLog( log );
+			} );
+			room.onLeave( () => {
+				setRoom( null );
+				roomRef = null;
+			} );
 		} );
 		
 		return () => {
-			room.leave();
+			if ( roomRef ) roomRef.leave();
 			setLog( [] );
 		};
 	}, [] );
 	
-	if ( !room || !room.hasJoined ) return null;
+	if ( !room ) return null;
 	
 	const sendMessage = () => {
 		if ( !input.length ) return;

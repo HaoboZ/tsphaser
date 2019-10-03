@@ -1,7 +1,7 @@
 import { Room } from 'colyseus.js';
 
-import { tictactoeEvents } from '../../../../server/shared/examples/tictactoeEvents';
-import tictactoeRoomState from '../../../../server/shared/examples/tictactoeRoomState';
+import { tictactoeEvents } from '../../../../server/src/examples/tictactoe/tictactoeEvents';
+import tictactoeRoomState from '../../../../server/src/examples/tictactoe/tictactoeRoomState';
 
 
 export default class TictactoeScene extends Phaser.Scene {
@@ -27,31 +27,35 @@ export default class TictactoeScene extends Phaser.Scene {
 		);
 		
 		this.scale.on( Phaser.Scale.Events.RESIZE, this.resize );
+		
+		this.events.on( 'shutdown', () => {
+			this.room.leave();
+		} );
 	}
 	
 	public setRoom( room?: Room ) {
-		if ( room ) {
-			this.room = room;
-			room.onMessage.add( ( message ) => {
-				switch ( message.event ) {
-				case tictactoeEvents.START:
-					this.playing = true;
-					break;
-				case tictactoeEvents.OVER:
-					this.playing = false;
-					break;
-				}
-			} );
-			for ( let i = 0; i < 9; i++ ) {
-				this.board[ i ] = this.add.sprite( 0, 0, 'piece' )
-					.setData( 'index', i )
-					.setInteractive();
-			}
-			this.resize();
-			this.room.state.board.onAdd = this.room.state.board.onChange = ( item, index ) => {
-				this.board[ index ].setData( 'value', item );
-				this.board[ index ].setFrame( item );
-			};
+				if ( room ) {
+					this.room = room;
+					room.onMessage( ( message ) => {
+						switch ( message.event ) {
+						case tictactoeEvents.START:
+							this.playing = true;
+							break;
+						case tictactoeEvents.OVER:
+							this.playing = false;
+							break;
+						}
+					} );
+					for ( let i = 0; i < 9; i++ ) {
+						this.board[ i ] = this.add.sprite( 0, 0, 'piece' )
+							.setData( 'index', i )
+							.setInteractive();
+					}
+					this.resize();
+					this.room.state.board.onAdd = this.room.state.board.onChange = ( item, index ) => {
+						this.board[ index ].setData( 'value', item );
+						this.board[ index ].setFrame( item );
+					};
 		} else {
 			// remove all items begin displayed
 			for ( const tile of this.board )

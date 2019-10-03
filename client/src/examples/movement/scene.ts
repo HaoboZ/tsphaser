@@ -1,7 +1,7 @@
 import { Room } from 'colyseus.js';
 
-import { moveConfig } from '../../../../server/shared/examples/moveConfig';
-import MoveRoomState from '../../../../server/shared/examples/moveRoomState';
+import { moveConfig } from '../../../../server/src/examples/movement/moveConfig';
+import MoveRoomState from '../../../../server/src/examples/movement/moveRoomState';
 import Connect from '../../library/connect';
 
 
@@ -20,10 +20,14 @@ export default class MovementScene extends Phaser.Scene {
 	public create() {
 		this.self = null;
 		
-		this.room = Connect.client.join( 'movement' );
-		this.room.onJoin.add( () => {
+		Connect.client.joinOrCreate( 'movement' ).then( ( room ) => {
+			this.room = room;
 			this.loadField();
 			this.playerStateChange();
+		} );
+		
+		this.events.on( 'shutdown', () => {
+			this.room.leave();
 		} );
 	}
 	

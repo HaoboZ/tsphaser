@@ -5,8 +5,8 @@ import { Room } from 'colyseus.js';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 
-import { tictactoeEvents } from '../../../../server/shared/examples/tictactoeEvents';
-import TictactoeRoomState, { Player, playResult } from '../../../../server/shared/examples/tictactoeRoomState';
+import { tictactoeEvents } from '../../../../server/src/examples/tictactoe/tictactoeEvents';
+import TictactoeRoomState, { Player, playResult } from '../../../../server/src/examples/tictactoe/tictactoeRoomState';
 import Connect from '../../library/connect';
 import { StoreState } from '../../library/redux/store';
 import Scene from './scene';
@@ -29,37 +29,34 @@ export default function TictactoeUI( props: RouteComponentProps ) {
 		store.game.scene.start( 'Tictactoe' );
 		
 		return () => {
-			const scene = store.game.scene.getScene( 'Tictactoe' ) as Scene;
-			scene.scene.stop();
+			store.game.scene.stop( 'Tictactoe' );
 		};
 	}, [] );
 	
 	
 	function roomEvents( room: Room<TictactoeRoomState> ) {
-		room.onJoin.add( () => {
-			( store.game.scene.getScene( 'Tictactoe' ) as Scene ).setRoom( room );
-			
-			room.state.players.onAdd = ( player, key ) => {
-				if ( room.sessionId === key )
-					setSelf( player );
-				else
-					setEnemy( player );
-			};
-			room.state.players.onChange = () => {
-				forceUpdate();
-			};
-			room.state.players.onRemove = ( player, key ) => {
-				if ( room.sessionId === key )
-					setSelf( { name: '', ready: false } as any );
-				else
-					setEnemy( { name: '', ready: false } as any );
-			};
-		} );
-		room.onStateChange.addOnce( () => {
+		( store.game.scene.getScene( 'Tictactoe' ) as Scene ).setRoom( room );
+		
+		room.state.players.onAdd = ( player, key ) => {
+			if ( room.sessionId === key )
+				setSelf( player );
+			else
+				setEnemy( player );
+		};
+		room.state.players.onChange = () => {
+			forceUpdate();
+		};
+		room.state.players.onRemove = ( player, key ) => {
+			if ( room.sessionId === key )
+				setSelf( { name: '', ready: false } as any );
+			else
+				setEnemy( { name: '', ready: false } as any );
+		};
+		room.onStateChange.once( () => {
 			setRoom( room );
 			props.navigate( 'lobby' );
 		} );
-		room.onMessage.add( ( message ) => {
+		room.onMessage( ( message ) => {
 			switch ( message.event ) {
 			case tictactoeEvents.START:
 				props.navigate( 'game' );
@@ -72,7 +69,7 @@ export default function TictactoeUI( props: RouteComponentProps ) {
 				break;
 			}
 		} );
-		room.onLeave.add( () => {
+		room.onLeave( () => {
 			( store.game.scene.getScene( 'Tictactoe' ) as Scene ).setRoom();
 			setShowID( false );
 			setSelf( { name: '', ready: false } as any );
@@ -88,9 +85,10 @@ export default function TictactoeUI( props: RouteComponentProps ) {
 					      variant='contained'
 					      style={{ margin: theme.spacing() }}
 					      onClick={() => {
-						      const room: Room<TictactoeRoomState> = Connect.client.join( 'tictactoe' );
 						      setShowID( false );
-						      roomEvents( room );
+						      Connect.client.joinOrCreate( 'tictactoe' ).then( ( room ) => {
+							      roomEvents( room );
+						      } );
 					      }}>
 					      Quick Match
 				      </Button>
@@ -98,9 +96,10 @@ export default function TictactoeUI( props: RouteComponentProps ) {
 					      variant='contained'
 					      style={{ margin: theme.spacing(), marginTop: 0 }}
 					      onClick={() => {
-						      const room: Room<TictactoeRoomState> = Connect.client.join( 'tictactoe', { private: true } );
+						      Connect.client.create( 'tictactoe', { private: true } ).then( ( room ) => {
+							      roomEvents( room );
+						      } );
 						      setShowID( true );
-						      roomEvents( room );
 					      }}>
 					      Private Match
 				      </Button>
@@ -110,7 +109,9 @@ export default function TictactoeUI( props: RouteComponentProps ) {
 					      placeholder='Room ID'
 					      onKeyPress={( ev ) => {
 						      if ( ev.key === 'Enter' ) {
-							      const room: Room<TictactoeRoomState> = Connect.client.join( 'tictactoe', { id: input } );
+							      Connect.client.join( input ).then( ( room ) => {
+								      roomEvents( room );
+							      } );
 							      setShowID( true );
 							      roomEvents( room );
 						      }

@@ -3,7 +3,6 @@ import * as React from 'react';
 import { useSelector } from 'react-redux';
 
 import { StoreState } from '../../library/redux/store';
-import Scene from './scene';
 
 
 export default function MovementUI( props: RouteComponentProps ) {
@@ -13,9 +12,7 @@ export default function MovementUI( props: RouteComponentProps ) {
 		store.game.scene.start( 'Movement' );
 		
 		return () => {
-			const scene = store.game.scene.getScene( 'Movement' ) as Scene;
-			scene.room.leave();
-			scene.scene.stop();
+			store.game.scene.stop( 'Movement' );
 		};
 	}, [] );
 	

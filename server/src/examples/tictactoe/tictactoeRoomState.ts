@@ -1,6 +1,6 @@
 import { ArraySchema, MapSchema, Schema, type } from '@colyseus/schema';
 
-import { names } from '../constants';
+import { names } from '../../../../shared/constants';
 
 
 export enum playResult {

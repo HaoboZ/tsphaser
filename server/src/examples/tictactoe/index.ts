@@ -1,27 +1,23 @@
 import { Client, Room } from 'colyseus';
 
-import { tictactoeEvents } from '../../../shared/examples/tictactoeEvents';
-import TictactoeRoomState, { playResult, roomStatus } from '../../../shared/examples/tictactoeRoomState';
+import { tictactoeEvents } from './tictactoeEvents';
+import TictactoeRoomState, { playResult, roomStatus } from './tictactoeRoomState';
 
 
 export default class Tictactoe extends Room<TictactoeRoomState> {
 	
 	maxClients = 2;
 	
-	_private = false;
-	
-	public requestJoin( options: any, isNew?: boolean ): number | boolean {
-		return isNew || !this._private ? !( 'id' in options ) : options.id === this.roomId;
-	}
-	
-	public onInit( options: any ): void {
+	public onCreate( options: any ): void {
 		console.log( `TictactoeRoom ${this.roomId} created!`, options );
-		this._private = options.private;
+		if ( options.private ) {
+			this.setPrivate();
+		}
 		
 		this.setState( new TictactoeRoomState() );
 	}
 	
-	public onJoin( client: Client ): void | Promise<any> {
+	onJoin( client: Client ): void | Promise<any> {
 		console.log( client.sessionId, 'joined', this.roomId );
 		this.state.addPlayer( client.sessionId );
 	}

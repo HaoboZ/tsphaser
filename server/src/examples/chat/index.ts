@@ -3,7 +3,7 @@ import { Room } from 'colyseus';
 
 export default class Chat extends Room {
 	
-	onInit( options ) {
+	onCreate( options ) {
 		console.log( `ChatRoom ${this.roomId} created!`, options );
 	}
 	
