@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 
 import Connect from './library/connect';
@@ -9,6 +9,10 @@ import UI from './library/UI';
 
 
 function App() {
+	React.useEffect( () => {
+		Connect.init();
+	}, [] );
+	
 	return <Provider store={store}>
 		<UI/>
 		<Game/>
@@ -16,6 +20,5 @@ function App() {
 }
 
 $( () => {
-	Connect.init();
-	ReactDOM.render( <App/>, $( '#root' )[ 0 ] );
+	render( <App/>, $( '#root' )[ 0 ] );
 } );
