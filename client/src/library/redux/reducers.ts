@@ -3,7 +3,7 @@ import { combineReducers } from 'redux';
 import { UIReducer, UIState } from '../UI/reducer';
 
 
-const reducers = () => combineReducers(
+const reducers = combineReducers(
 	{
 		ui: UIReducer
 	}
