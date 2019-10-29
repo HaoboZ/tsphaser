@@ -1,19 +1,22 @@
 const path = require( 'path' );
-const BrowserSyncPlugin = require( 'browser-sync-webpack-plugin' );
-const BundleAnalyzerPlugin = require( 'webpack-bundle-analyzer' ).BundleAnalyzerPlugin;
+const webpack = require( 'webpack' );
 
 module.exports = {
-	entry:        path.join( __dirname, 'src/app.tsx' ),
+	entry:        [
+		'webpack-hot-middleware/client',
+		path.join( __dirname, '..', 'client', 'src', 'app.tsx' )
+	],
 	output:       {
-		path:     path.join( __dirname, 'public', 'build' ),
-		filename: '[name].bundle.js'
+		path:       path.join( __dirname, '..', 'client', 'public', 'build' ),
+		filename:   '[name].bundle.js',
+		publicPath: '/build'
 	},
 	devtool:      'source-map',
 	mode:         'development',
 	module:       {
 		rules: [
 			{
-				test:   /\.tsx?$/,
+				test:   /\.[tj]sx?$/,
 				loader: [ 'babel-loader' ]
 			},
 			{
@@ -32,14 +35,9 @@ module.exports = {
 		'redux':       'Redux',
 		'react-redux': 'ReactRedux'
 	},
-	plugins:      [
-		new BrowserSyncPlugin( {
-			host:      'localhost',
-			ghostMode: false
-		} ),
-		new BundleAnalyzerPlugin()
-	],
+	plugins:      [ new webpack.HotModuleReplacementPlugin() ],
 	resolve:      {
+		alias:      { 'react-dom': '@hot-loader/react-dom' },
 		extensions: [ '.js', '.jsx', '.ts', '.tsx', '.css', '.less' ]
 	},
 	optimization: {

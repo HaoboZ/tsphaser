@@ -1,6 +1,7 @@
 import { CssBaseline } from '@material-ui/core';
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import * as React from 'react';
+import { hot } from 'react-hot-loader/root';
 import { useSelector } from 'react-redux';
 
 import config from '../../config';
@@ -9,19 +10,17 @@ import { StoreState } from '../redux/store';
 import './style.less';
 
 
-export const theme = createMuiTheme( {
-	palette: {
-		type: 'dark'
-	}
-} );
-
-export default function UI() {
+export default hot( () => {
 	const store = useSelector( ( state: StoreState ) => state.ui );
 	
-	return <MuiThemeProvider theme={theme}>
+	return <ThemeProvider theme={createMuiTheme( {
+		palette: {
+			type: 'dark'
+		}
+	} )}>
 		<CssBaseline/>
 		<div id='ui' className={config.constantScale ? 'constantScale' : ''}>
 			{store.ready ? <Index/> : null}
 		</div>
-	</MuiThemeProvider>;
-}
+	</ThemeProvider>;
+} );

@@ -5,12 +5,13 @@ import Load from './load';
 
 
 interface Props {
-	config?: Phaser.Types.Core.GameConfig
+	config?: Phaser.Types.Core.GameConfig,
+	scene?: { [ name: string ]: typeof Phaser.Scene }
 }
 
 export default function Game( props: Props ) {
 	React.useEffect( () => {
-		new Phaser.Game( {
+		const game = new Phaser.Game( {
 			title:   'TS Phaser',
 			type:    Phaser.AUTO,
 			render:  {
@@ -28,9 +29,14 @@ export default function Game( props: Props ) {
 					debug: config.debug
 				}
 			},
-			scene:   Load,
+			scene:   [ Load ],
 			...props.config
 		} );
+		
+		if ( 'scene' in props )
+			for ( const scene in props.scene ) {
+				game.scene.add( scene, props.scene[ scene ] );
+			}
 	}, [] );
 	
 	return <div id='phaser-game' style={{ zIndex: -1 }}/>;
