@@ -10,14 +10,16 @@ import { StoreState } from '../redux/store';
 import './style.less';
 
 
+export const theme = createMuiTheme( {
+	palette: {
+		type: 'dark'
+	}
+} );
+
 export default hot( () => {
 	const store = useSelector( ( state: StoreState ) => state.ui );
 	
-	return <ThemeProvider theme={createMuiTheme( {
-		palette: {
-			type: 'dark'
-		}
-	} )}>
+	return <ThemeProvider theme={theme}>
 		<CssBaseline/>
 		<div id='ui' className={config.constantScale ? 'constantScale' : ''}>
 			{store.ready ? <Index/> : null}
