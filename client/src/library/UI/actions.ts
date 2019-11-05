@@ -6,12 +6,3 @@ export function readyUI( game: Phaser.Game ) {
 		game
 	};
 }
-
-export const SETTINGS = 'saveSettings';
-
-export function saveSettings( settings: any ) {
-	return {
-		type: SETTINGS,
-		settings
-	};
-}
